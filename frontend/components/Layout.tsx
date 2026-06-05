@@ -104,18 +104,18 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
       <header className="md:hidden sticky top-0 z-40 bg-gray-950/80 backdrop-blur-xl border-b border-white/[0.04] px-4 py-3 flex items-center justify-between safe-top">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)] border border-emerald-400/20">
-            <ShieldCheck className="text-gray-950" size={16} strokeWidth={2.5} />
+            <ShieldCheck className="text-gray-950" size={18} strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="text-xs font-bold text-white tracking-tight leading-none">Sena Finance</h1>
-            <p className="text-[7px] text-emerald-400/60 font-bold uppercase tracking-[0.15em] mt-0.5">Self-Hosted</p>
+            <h1 className="text-sm font-bold text-white tracking-tight leading-none">Sena Finance</h1>
+            <p className="text-[9px] text-emerald-400/60 font-bold uppercase tracking-[0.15em] mt-0.5">Self-Hosted</p>
           </div>
         </div>
         {user && (
-          <div className="flex items-center gap-2">
-            <div className="text-right mr-1">
-              <p className="text-[10px] font-bold text-white leading-none">{user.name || user.email.split('@')[0]}</p>
-              <p className="text-[7px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">{user.role}</p>
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <p className="text-xs font-bold text-white leading-none">{user.name || user.email.split('@')[0]}</p>
+              <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">{user.role}</p>
             </div>
             <button
               onClick={() => setIsProfileModalOpen(true)}
@@ -221,7 +221,7 @@ const MobileNavItem = ({ icon, label, active, onClick }: { icon: any, label: str
     <div className={`transition-transform duration-200 ${active ? 'scale-105' : ''}`}>
       {icon}
     </div>
-    <span className={`text-[8px] font-bold tracking-wide ${active ? 'text-emerald-400' : 'text-gray-500'}`}>
+    <span className={`text-[10px] mt-0.5 font-bold tracking-wide ${active ? 'text-emerald-400' : 'text-gray-500'}`}>
       {label}
     </span>
   </button>

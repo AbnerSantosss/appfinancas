@@ -114,8 +114,8 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
               )}
 
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <Mail size={12} className="text-[#00FFBB]" /> ENDEREÇO DE EMAIL
+                <label className="text-xs font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
+                  <Mail size={14} className="text-[#00FFBB]" /> ENDEREÇO DE EMAIL
                 </label>
                 <input
                   type="email"
@@ -131,7 +131,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-[#00FFBB] hover:bg-[#00FFBB]/90 text-[#0A111F] py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-[#00FFBB]/10 cursor-pointer"
+                className="w-full bg-[#00FFBB] hover:bg-[#00FFBB]/90 text-[#0A111F] py-3.5 rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-[#00FFBB]/10 cursor-pointer"
               >
                 {isLoading ? <div className="loader-spinner" /> : <Send size={13} />}
                 SOLICITAR NOVA SENHA
@@ -144,9 +144,9 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                   setError('');
                   setSuccess('');
                 }}
-                className="w-full bg-[#0F172A] hover:bg-[#0F172A]/80 text-[#64748B] hover:text-[#F8FAFC] py-2.5 rounded-xl font-bold uppercase tracking-wider text-[9px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer border border-white/5"
+                className="w-full bg-[#0F172A] hover:bg-[#0F172A]/80 text-[#64748B] hover:text-[#F8FAFC] py-3 rounded-xl font-bold uppercase tracking-wider text-[11px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer border border-white/5"
               >
-                <ArrowLeft size={12} />
+                <ArrowLeft size={14} />
                 Voltar para o Login
               </button>
             </form>
@@ -243,8 +243,8 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                 )}
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                    <Mail size={12} className="text-[#00FFBB]" /> ENDEREÇO DE EMAIL
+                  <label className="text-xs font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
+                    <Mail size={14} className="text-[#00FFBB]" /> ENDEREÇO DE EMAIL
                   </label>
                   <input
                     type="email"
@@ -258,8 +258,8 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                    <KeyRound size={12} className="text-[#00FFBB]" /> SENHA DE ACESSO
+                  <label className="text-xs font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
+                    <KeyRound size={14} className="text-[#00FFBB]" /> SENHA DE ACESSO
                   </label>
                   <div className="relative">
                     <input
@@ -286,7 +286,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                         setError('');
                         setSuccess('');
                       }}
-                      className="text-[9px] font-bold text-[#00FFBB] hover:text-[#00FFBB]/80 uppercase tracking-wider transition-colors cursor-pointer mt-1"
+                      className="text-[10px] font-bold text-[#00FFBB] hover:text-[#00FFBB]/80 uppercase tracking-wider transition-colors cursor-pointer mt-2 inline-block py-1 px-2 -mr-2"
                     >
                       ESQUECI MINHA SENHA
                     </button>
@@ -296,7 +296,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-[#00FFBB] hover:bg-[#00FFBB]/90 text-[#0A111F] py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-[#00FFBB]/10 cursor-pointer"
+                  className="w-full bg-[#00FFBB] hover:bg-[#00FFBB]/90 text-[#0A111F] py-3.5 rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-[#00FFBB]/10 cursor-pointer"
                 >
                   {isLoading ? <div className="loader-spinner" /> : <ArrowRight size={15} />}
                   ACESSAR PAINEL
