@@ -7,7 +7,7 @@ import ExpenseForm from './components/ExpenseForm';
 import Settings from './components/Settings';
 import { Expense } from './types';
 import { startOfMonth } from 'date-fns';
-import { AlertTriangle, Trash2, ShieldAlert, X, RefreshCw, LogIn, Mail, KeyRound, Eye, EyeOff, ShieldCheck, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { AlertTriangle, Trash2, ShieldAlert, X, RefreshCw, LogIn, Mail, KeyRound, Eye, EyeOff, ShieldCheck, ArrowLeft, CheckCircle2, ArrowRight, Hexagon, Send } from 'lucide-react';
 import { isExpenseActiveInMonth, isMonthPaid } from './utils';
 import {
   authApi,
@@ -67,29 +67,54 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-[#0A111F] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
       {/* Background glow effects */}
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 bg-cyan-500/5 blur-[100px] rounded-full pointer-events-none" />
+      {isForgotPassword ? (
+        <>
+          <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-amber-500/10 blur-[100px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 bg-orange-500/5 blur-[100px] rounded-full pointer-events-none" />
+        </>
+      ) : (
+        <>
+          <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#00FFBB]/10 blur-[100px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 bg-[#00FFBB]/5 blur-[100px] rounded-full pointer-events-none" />
+        </>
+      )}
 
       <div className="w-full max-w-md relative z-10">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-[0_0_30px_rgba(16,185,129,0.3)] border border-emerald-400/20">
-            <ShieldCheck className="text-gray-950" size={30} strokeWidth={2} />
+        {/* Logo e Cabeçalho */}
+        {isForgotPassword ? (
+          <div className="text-center mb-8 flex flex-col items-center">
+            <div className="w-16 h-16 bg-[#111C2B] border border-amber-500/20 rounded-2xl flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(245,158,11,0.15)]">
+              <KeyRound className="text-amber-500" size={30} strokeWidth={2} />
+            </div>
+            <h1 className="text-2xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight flex items-center gap-2 justify-center">
+              Recuperar <span className="text-amber-500">Acesso</span>
+            </h1>
+            <p className="text-[9px] text-amber-500/60 font-bold uppercase tracking-[0.2em] mt-2">
+              Redefina suas credenciais com segurança
+            </p>
           </div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight leading-tight">
-            Sena Family <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-300">Finance</span>
-          </h1>
-          <p className="text-[10px] text-emerald-400/70 font-bold uppercase tracking-[0.2em] mt-1.5">Portal de Acesso Seguro</p>
-        </div>
+        ) : (
+          <div className="text-center mb-8 flex flex-col items-center">
+            <div className="w-16 h-16 bg-[#111C2B] border border-[#00FFBB]/20 rounded-2xl flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(0,255,187,0.15)]">
+              <Hexagon className="text-[#00FFBB]" size={30} strokeWidth={2} />
+            </div>
+            <h1 className="text-2xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight flex items-center gap-2 justify-center">
+              Hub <span className="text-[#00FFBB]">Financeiro</span>
+            </h1>
+            <p className="text-[9px] text-[#00FFBB]/60 font-bold uppercase tracking-[0.2em] mt-2">
+              Organize todas suas finanças em um unico lugar
+            </p>
+          </div>
+        )}
 
         {/* Form */}
         {isForgotPassword ? (
-          <form onSubmit={handleForgotPasswordSubmit} className="glass-panel rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <form onSubmit={handleForgotPasswordSubmit} className="bg-[#111C2B] border border-amber-500/20 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl shadow-amber-950/10 animate-in fade-in zoom-in-95 duration-200">
             <div>
-              <h2 className="text-md font-bold text-white tracking-tight">Recuperar Senha</h2>
-              <p className="text-[10px] text-gray-400 leading-relaxed mt-1">
+              <h2 className="text-md font-bold text-[#F8FAFC] tracking-tight">Esqueceu sua senha?</h2>
+              <p className="text-[10px] text-[#64748B] leading-relaxed mt-1">
                 Insira o seu e-mail cadastrado. Geraremos uma nova senha temporária e a enviaremos para o seu e-mail (requer SMTP configurado).
               </p>
             </div>
@@ -102,15 +127,15 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
             )}
 
             {success && (
-              <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-3 flex items-start gap-2.5">
-                <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />
-                <p className="text-xs text-emerald-400 font-medium leading-relaxed">{success}</p>
+              <div className="bg-[#00FFBB]/10 border border-[#00FFBB]/20 rounded-xl px-4 py-3 flex items-start gap-2.5">
+                <CheckCircle2 size={16} className="text-[#00FFBB] shrink-0 mt-0.5" />
+                <p className="text-xs text-[#00FFBB] font-medium leading-relaxed">{success}</p>
               </div>
             )}
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                <Mail size={12} className="text-emerald-400" /> Endereço de Email
+              <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
+                <Mail size={12} className="text-amber-500" /> ENDEREÇO DE EMAIL
               </label>
               <input
                 type="email"
@@ -119,17 +144,17 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                 placeholder="seu@email.com"
                 required
                 autoFocus
-                className="w-full glass-input"
+                className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition-all duration-300"
               />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-emerald-500/10 cursor-pointer"
+              className="w-full bg-amber-500 hover:bg-amber-400 text-[#0A111F] py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-amber-500/10 cursor-pointer"
             >
-              {isLoading ? <div className="loader-spinner" /> : <RefreshCw size={15} />}
-              Enviar Senha Temporária
+              {isLoading ? <div className="loader-spinner" /> : <Send size={13} />}
+              SOLICITAR NOVA SENHA
             </button>
 
             <button
@@ -139,14 +164,14 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                 setError('');
                 setSuccess('');
               }}
-              className="w-full bg-slate-900/60 hover:bg-slate-900 text-gray-300 py-2.5 rounded-xl font-bold uppercase tracking-wider text-[9px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer border border-white/5"
+              className="w-full bg-[#0F172A] hover:bg-[#0F172A]/80 text-[#64748B] hover:text-[#F8FAFC] py-2.5 rounded-xl font-bold uppercase tracking-wider text-[9px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer border border-white/5"
             >
               <ArrowLeft size={12} />
               Voltar para o Login
             </button>
           </form>
         ) : (
-          <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <form onSubmit={handleSubmit} className="bg-[#111C2B] border border-white/[0.04] backdrop-blur-2xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             {error && (
               <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl px-4 py-3 flex items-start gap-2.5">
                 <AlertTriangle size={16} className="text-rose-500 shrink-0 mt-0.5" />
@@ -155,8 +180,8 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
             )}
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                <Mail size={12} className="text-emerald-400" /> Endereço de Email
+              <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
+                <Mail size={12} className="text-[#00FFBB]" /> ENDEREÇO DE EMAIL
               </label>
               <input
                 type="email"
@@ -165,27 +190,14 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                 placeholder="seu@email.com"
                 required
                 autoFocus
-                className="w-full glass-input"
+                className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-[#00FFBB]/50 focus:ring-2 focus:ring-[#00FFBB]/20 focus:outline-none transition-all duration-300"
               />
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                  <KeyRound size={12} className="text-emerald-400" /> Senha de Acesso
-                </label>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsForgotPassword(true);
-                    setError('');
-                    setSuccess('');
-                  }}
-                  className="text-[9px] font-bold text-emerald-400 hover:text-emerald-300 uppercase tracking-wider transition-colors cursor-pointer"
-                >
-                  Esqueci minha senha
-                </button>
-              </div>
+              <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
+                <KeyRound size={12} className="text-[#00FFBB]" /> SENHA DE ACESSO
+              </label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -193,14 +205,27 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Sua senha secreta"
                   required
-                  className="w-full glass-input pr-12"
+                  className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-[#00FFBB]/50 focus:ring-2 focus:ring-[#00FFBB]/20 focus:outline-none transition-all duration-300 pr-12"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-300 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-[#64748B] hover:text-[#F8FAFC] transition-colors"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              <div className="text-right">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsForgotPassword(true);
+                    setError('');
+                    setSuccess('');
+                  }}
+                  className="text-[9px] font-bold text-[#00FFBB] hover:text-[#00FFBB]/80 uppercase tracking-wider transition-colors cursor-pointer mt-1"
+                >
+                  ESQUECI MINHA SENHA
                 </button>
               </div>
             </div>
@@ -208,16 +233,16 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-emerald-500/10 cursor-pointer"
+              className="w-full bg-[#00FFBB] hover:bg-[#00FFBB]/90 text-[#0A111F] py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-[#00FFBB]/10 cursor-pointer"
             >
-              {isLoading ? <div className="loader-spinner" /> : <LogIn size={15} />}
-              Acessar Painel
+              {isLoading ? <div className="loader-spinner" /> : <ArrowRight size={15} />}
+              ACESSAR PAINEL
             </button>
           </form>
         )}
 
-        <p className="text-center mt-6 text-[8px] text-gray-600 font-bold uppercase tracking-[0.25em]">
-          Self-Hosted • v5.0.0 • Encryption Enabled
+        <p className="text-center mt-6 text-[8px] text-[#64748B] font-bold uppercase tracking-[0.25em]">
+          SELF-HOSTED • V5.0.0 • ENCRYPTION ENABLED
         </p>
       </div>
     </div>
