@@ -1,7 +1,6 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Expense, ExpenseType } from '../types';
-import { X, Calendar, DollarSign, Tag, MessageSquare, Loader2, Zap, Droplets, Wifi, CreditCard, Calculator, CheckSquare, Home, HeartPulse, GraduationCap } from 'lucide-react';
+import { X, Calendar, DollarSign, Tag, MessageSquare, Zap, Droplets, Wifi, CreditCard, Calculator, CheckSquare, Home, HeartPulse, GraduationCap } from 'lucide-react';
 import { startOfMonth, format, parseISO, addMonths, subMonths } from 'date-fns';
 
 interface ExpenseFormProps {
@@ -124,68 +123,89 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSave, onClose, initialData 
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-slate-950/90 backdrop-blur-md">
-      <div className="bg-slate-900 border border-white/10 w-full sm:max-w-md sm:rounded-2xl rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom sm:zoom-in duration-300 overflow-hidden max-h-[95vh] sm:max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-gray-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="glass-panel w-full sm:max-w-md sm:rounded-3xl rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 overflow-hidden max-h-[95vh] sm:max-h-[90vh] flex flex-col border-white/[0.08]">
+        
         {/* Header */}
-        <div className="p-4 sm:p-5 flex justify-between items-center border-b border-white/5 bg-white/5 shrink-0">
-          <h3 className="text-sm sm:text-base font-black text-white uppercase tracking-widest">
+        <div className="p-4 sm:p-5 flex justify-between items-center border-b border-white/[0.04] bg-white/[0.01] shrink-0">
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider">
             {initialData ? 'Editar Lançamento' : 'Novo Lançamento'}
           </h3>
           <button 
             onClick={onClose} 
-            className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-xl transition-colors active:scale-90"
+            className="w-9 h-9 flex items-center justify-center hover:bg-white/5 rounded-xl transition-all active:scale-90 cursor-pointer"
           >
-            <X size={18} className="text-slate-500" />
+            <X size={18} className="text-gray-400" />
           </button>
         </div>
 
-        {/* Form body — scrollable */}
+        {/* Form body */}
         <form onSubmit={handleSubmit} className="p-4 sm:p-5 space-y-4 overflow-y-auto no-scrollbar flex-1">
           
-          {/* Atalhos */}
+          {/* Shortcuts */}
           <div className="space-y-2">
-            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Atalhos Rápidos</label>
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Atalhos Rápidos</label>
             <div className="flex flex-wrap gap-2">
               {COMMON_SHORTCUTS.map(s => (
                 <button
                   key={s.label}
                   type="button"
                   onClick={() => handleShortcut(s)}
-                  className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl border transition-all active:scale-95 ${category === s.category ? 'bg-emerald-500 border-emerald-500 text-slate-950' : 'bg-slate-950 border-white/5 text-slate-400 hover:border-white/20'}`}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border transition-all duration-200 active:scale-95 cursor-pointer text-xs font-semibold ${description === s.label ? 'bg-emerald-500 border-emerald-500 text-gray-950 shadow-[0_2px_10px_rgba(16,185,129,0.2)]' : 'bg-gray-950/60 border-white/[0.04] text-gray-400 hover:border-white/[0.1] hover:bg-gray-950'}`}
                 >
                   {s.icon}
-                  <span className="text-[9px] font-black uppercase">{s.label}</span>
+                  <span>{s.label}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Descrição */}
+          {/* Description */}
           <div className="space-y-1.5">
-            <label className="text-[10px] font-black text-slate-500 uppercase flex items-center gap-1.5 tracking-widest"><Tag size={10} /> Descrição</label>
+            <label className="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-2 tracking-wider">
+              <Tag size={12} className="text-emerald-400" /> Descrição do Lançamento
+            </label>
             <input 
               autoFocus 
               required 
               type="text" 
               value={description} 
               onChange={e => setDescription(e.target.value)} 
-              placeholder="Ex: Aluguel, Compra Mercado..." 
-              className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 transition-all placeholder:text-slate-800" 
+              placeholder="Ex: Aluguel, Mercado, Assinatura..." 
+              className="w-full glass-input" 
             />
           </div>
 
-          {/* Tipo selector */}
-          <div className="flex bg-slate-950 p-1 rounded-xl border border-white/5 gap-1">
-            <button type="button" onClick={() => setType('FIXED')} className={`flex-1 py-2.5 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all ${type === 'FIXED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]' : 'text-slate-600'}`}>Fixo</button>
-            <button type="button" onClick={() => setType('INSTALLMENT')} className={`flex-1 py-2.5 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all ${type === 'INSTALLMENT' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]' : 'text-slate-600'}`}>Parcelado</button>
-            <button type="button" onClick={() => setType('ONCE')} className={`flex-1 py-2.5 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all ${type === 'ONCE' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]' : 'text-slate-600'}`}>Único</button>
+          {/* Type selector */}
+          <div className="flex bg-gray-950/80 p-1 rounded-xl border border-white/[0.04] gap-1">
+            <button 
+              type="button" 
+              onClick={() => setType('FIXED')} 
+              className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer ${type === 'FIXED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_12px_rgba(16,185,129,0.1)]' : 'text-gray-500 hover:text-gray-400'}`}
+            >
+              Fixo
+            </button>
+            <button 
+              type="button" 
+              onClick={() => setType('INSTALLMENT')} 
+              className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer ${type === 'INSTALLMENT' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_12px_rgba(16,185,129,0.1)]' : 'text-gray-500 hover:text-gray-400'}`}
+            >
+              Parcelado
+            </button>
+            <button 
+              type="button" 
+              onClick={() => setType('ONCE')} 
+              className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer ${type === 'ONCE' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_12px_rgba(16,185,129,0.1)]' : 'text-gray-500 hover:text-gray-400'}`}
+            >
+              Único
+            </button>
           </div>
 
-          {/* Valor + Data */}
+          {/* Value + Date grid */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="text-[10px] font-black text-slate-500 uppercase flex items-center gap-1.5 tracking-widest">
-                <DollarSign size={10} /> {type === 'FIXED' ? 'Valor Mensal' : 'Valor'}
+              <label className="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-1.5 tracking-wider">
+                <DollarSign size={12} className="text-emerald-400" /> {type === 'FIXED' ? 'Valor Mensal' : 'Valor Parcela'}
               </label>
               <input 
                 required 
@@ -195,28 +215,31 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSave, onClose, initialData 
                 value={value} 
                 onChange={e => handleValueChange(e.target.value)} 
                 placeholder="0,00" 
-                className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 transition-all font-black" 
+                className="w-full glass-input" 
               />
             </div>
+            
             <div className="space-y-1.5">
-              <label className="text-[10px] font-black text-slate-500 uppercase flex items-center gap-1.5 tracking-widest"><Calendar size={10} /> {type === 'ONCE' ? 'Mês do Gasto' : 'Mês Inicial'}</label>
+              <label className="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-1.5 tracking-wider">
+                <Calendar size={12} className="text-emerald-400" /> {type === 'ONCE' ? 'Mês do Gasto' : 'Mês Inicial'}
+              </label>
               <input 
                 required 
                 type="month" 
                 value={startMonth} 
                 onChange={e => setStartMonth(e.target.value)} 
-                className="w-full bg-slate-950 border border-white/5 rounded-xl px-3 py-3 text-xs text-white focus:outline-none focus:border-emerald-500/50 transition-all font-bold uppercase" 
+                className="w-full glass-input" 
               />
             </div>
           </div>
 
-          {/* Installment fields */}
+          {/* Installment specific fields */}
           {type === 'INSTALLMENT' && (
-            <div className="space-y-3 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/10 animate-in slide-in-from-top-2 duration-300">
+            <div className="space-y-3.5 p-4 bg-emerald-500/[0.01] rounded-2xl border border-emerald-500/10 animate-in slide-in-from-top-2 duration-300">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <label className="text-[9px] font-black text-emerald-500/70 uppercase tracking-widest flex items-center gap-1.5">
-                    <Calculator size={10} /> Valor Total
+                  <label className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <Calculator size={11} /> Valor Total Compra
                   </label>
                   <input 
                     type="number" 
@@ -224,12 +247,12 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSave, onClose, initialData 
                     inputMode="decimal"
                     value={totalValue} 
                     onChange={e => handleTotalValueChange(e.target.value)} 
-                    placeholder="Total da compra" 
-                    className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 transition-all font-black" 
+                    placeholder="Opcional" 
+                    className="w-full glass-input" 
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[9px] font-black text-emerald-500/70 uppercase tracking-widest">Qtd Parcelas</label>
+                  <label className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">Quantidade Parcelas</label>
                   <input 
                     required 
                     type="number" 
@@ -238,14 +261,14 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSave, onClose, initialData 
                     max="120" 
                     value={installments} 
                     onChange={e => handleInstallmentsChange(e.target.value)} 
-                    className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 transition-all font-black" 
+                    className="w-full glass-input" 
                   />
                 </div>
               </div>
               
               <div className="space-y-1.5">
-                <label className="text-[9px] font-black text-emerald-400 uppercase tracking-widest flex items-center gap-1.5">
-                  <CheckSquare size={10} /> Já foram pagas quantas?
+                <label className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <CheckSquare size={11} /> Quantas parcelas já foram pagas?
                 </label>
                 <input 
                   type="number" 
@@ -254,42 +277,65 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSave, onClose, initialData 
                   max={installments}
                   value={alreadyPaidCount} 
                   onChange={e => handleAlreadyPaidChange(e.target.value)} 
-                  className="w-full bg-slate-950 border border-emerald-500/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 transition-all font-black" 
+                  className="w-full glass-input border-emerald-500/20" 
                 />
-                <p className="text-[8px] text-slate-600 font-bold uppercase tracking-widest pl-1 mt-1">O sistema recalcula o início para você estar na parcela correta hoje.</p>
+                <p className="text-[9px] text-gray-500 leading-normal pl-1">
+                   O sistema recalculará a data de início para corresponder à parcela atual hoje.
+                </p>
               </div>
             </div>
           )}
 
-          {/* Notas */}
+          {/* Notes */}
           <div className="space-y-1.5">
-            <label className="text-[10px] font-black text-slate-500 uppercase flex items-center gap-1.5 tracking-widest"><MessageSquare size={10} /> Notas</label>
+            <label className="text-[10px] font-bold text-gray-400 uppercase flex items-center gap-2 tracking-wider">
+              <MessageSquare size={12} className="text-emerald-400" /> Observações / Notas
+            </label>
             <textarea 
               value={notes} 
               onChange={e => setNotes(e.target.value)} 
-              placeholder="Opcional: Detalhes sobre este lançamento..." 
+              placeholder="Opcional: Detalhes sobre a despesa..." 
               rows={2} 
-              className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500/50 transition-all font-medium resize-none placeholder:text-slate-800" 
+              className="w-full glass-input resize-none" 
             />
           </div>
 
-          {/* Submit buttons */}
-          <div className="pt-2 flex gap-3">
+          {/* Category Selector hidden but synced */}
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Categoria</label>
+            <select
+              value={category}
+              onChange={e => setCategory(e.target.value)}
+              className="w-full glass-input"
+            >
+              <option value="Geral" className="bg-gray-950 text-white">Geral</option>
+              <option value="Moradia" className="bg-gray-950 text-white">Moradia</option>
+              <option value="Saúde" className="bg-gray-950 text-white">Saúde</option>
+              <option value="Educação" className="bg-gray-950 text-white">Educação</option>
+              <option value="Energia" className="bg-gray-950 text-white">Energia</option>
+              <option value="Água" className="bg-gray-950 text-white">Água</option>
+              <option value="Internet" className="bg-gray-950 text-white">Internet</option>
+              <option value="Cartão" className="bg-gray-950 text-white">Cartão</option>
+            </select>
+          </div>
+
+          {/* Form Actions */}
+          <div className="pt-3 flex gap-3.5 border-t border-white/[0.04] shrink-0">
             <button 
               type="button" 
               onClick={onClose} 
               disabled={isSubmitting} 
-              className="flex-1 py-3.5 text-[10px] text-slate-500 font-black uppercase tracking-widest hover:text-white transition-colors disabled:opacity-50 active:scale-95 rounded-xl"
+              className="flex-1 py-3 text-xs text-gray-400 hover:text-white font-bold uppercase tracking-wider transition-colors disabled:opacity-50 active:scale-95 cursor-pointer rounded-xl"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-[2] bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[10px] font-black uppercase tracking-widest py-3.5 rounded-xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="flex-[2] bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 text-xs font-bold uppercase tracking-wider py-3 rounded-xl transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
             >
-              {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : null}
-              {initialData ? 'Atualizar' : 'Finalizar Lançamento'}
+              {isSubmitting ? <div className="loader-spinner" /> : null}
+              {initialData ? 'Salvar Alterações' : 'Criar Lançamento'}
             </button>
           </div>
         </form>

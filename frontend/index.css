@@ -1,52 +1,142 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* ─── Global Styles ──────────────────────────────────── */
+/* ─── Global Styles & Typography ─────────────────────── */
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #020617; /* slate-950 */
-  color: #f8fafc; /* slate-50 */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #030712; /* gray-950 para um dark mode mais profundo e moderno */
+  color: #f3f4f6; /* gray-100 */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Prevent pull-to-refresh on mobile */
   overscroll-behavior-y: contain;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.02) 0%, transparent 40%);
+  background-attachment: fixed;
 }
 
-/* ─── Mobile Touch Optimizations ─────────────────────── */
+/* ─── Custom Scrollbar (Estilo Premium) ──────────────── */
 
-/* Prevent tap highlight on iOS */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(3, 7, 18, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.15);
+  border-radius: 9999px;
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.4);
+}
+
+/* ─── Premium Glassmorphism & Effects ───────────────── */
+
+.glass-panel {
+  background: rgba(17, 24, 39, 0.65); /* gray-900/65 */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 
+    0 4px 30px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.03);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-2px);
+  background: rgba(17, 24, 39, 0.8);
+  border-color: rgba(16, 185, 129, 0.2);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 0 25px rgba(16, 185, 129, 0.05),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+/* ─── Premium Form Inputs ───────────────────────────── */
+
+.glass-input {
+  background: rgba(3, 7, 18, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 14px !important;
+  color: #ffffff !important;
+  padding: 12px 16px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  outline: none !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.glass-input:focus {
+  border-color: rgba(16, 185, 129, 0.45) !important;
+  box-shadow: 
+    0 0 0 2px rgba(16, 185, 129, 0.15),
+    0 0 20px rgba(16, 185, 129, 0.1),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.glass-input::placeholder {
+  color: rgba(156, 163, 175, 0.4) !important;
+}
+
+/* ─── Touch Optimizations ──────────────────────────── */
+
 * {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Ensure inputs are at least 16px to prevent iOS zoom */
 input, select, textarea {
-  font-size: 16px !important;
+  font-size: 16px !important; /* Evita zoom forçado no iOS */
 }
 @media (min-width: 640px) {
   input, select, textarea {
-    font-size: inherit !important;
+    font-size: 14px !important;
   }
 }
 
-/* Safe area padding for notched devices */
 .safe-top { padding-top: env(safe-area-inset-top); }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 
-/* ─── Hide Scrollbar ─────────────────────────────────── */
+/* ─── Hide Scrollbars ───────────────────────────────── */
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* ─── Custom Animations ──────────────────────────────── */
 
-@keyframes bounce-slow {
-  0%, 100% { transform: translateY(-5%); }
-  50% { transform: translateY(0); }
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.4; }
 }
-.animate-bounce-slow { animation: bounce-slow 3s infinite; }
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 4s infinite ease-in-out;
+}
+
+/* Spinner de carregamento modernizado */
+.loader-spinner {
+  border: 2px solid rgba(16, 185, 129, 0.1);
+  border-top: 2px solid #10b981;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 /* ─── Number Input Spinner Removal ───────────────────── */
 

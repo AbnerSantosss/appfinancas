@@ -137,6 +137,18 @@ export const authApi = {
 
   me: () => api.get<AuthUser>('/auth/me'),
 
+  updateProfile: async (name: string) => {
+    const user = await api.put<AuthUser>('/auth/profile', { name });
+    setStoredUser(user);
+    return user;
+  },
+
+  changePassword: (currentPassword: string, newPassword: string) =>
+    api.put<{ success: boolean }>('/auth/change-password', { currentPassword, newPassword }),
+
+  forgotPassword: (email: string) =>
+    api.post<{ success: boolean; message: string }>('/auth/forgot-password', { email }),
+
   logout: () => {
     clearAuth();
     window.location.reload();
@@ -183,7 +195,53 @@ export const expensesApi = {
 
 // ─── Settings API ───────────────────────────────────────
 
+export interface SmtpConfigResponse {
+  configured: boolean;
+  config: { host: string; port: number; user: string; pass: string; from: string } | null;
+}
+
 export const settingsApi = {
   getSalary: () => api.get<{ salary: number }>('/settings/salary'),
   updateSalary: (salary: number) => api.put<{ success: boolean; salary: number }>('/settings/salary', { salary }),
+
+  getSmtp: () => api.get<SmtpConfigResponse>('/settings/smtp'),
+  updateSmtp: (config: { host: string; port: number; user: string; pass: string; from: string }) =>
+    api.put<{ success: boolean }>('/settings/smtp', config),
+  testSmtp: (config: { host: string; port: number; user: string; pass: string; from: string }) =>
+    api.post<{ success: boolean; message: string }>('/settings/smtp/test', config),
+};
+
+// ─── Admin API (User Management) ────────────────────────
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  name: string | null;
+  role: string;
+  createdAt: string;
+  expenseCount: number;
+}
+
+export interface InviteResult {
+  user: AdminUser;
+  emailSent: boolean;
+}
+
+export interface ResetPasswordResult {
+  newPassword: string;
+  emailSent: boolean;
+  userEmail: string;
+}
+
+export const adminApi = {
+  listUsers: () => api.get<AdminUser[]>('/auth/users'),
+
+  inviteUser: (email: string, password: string, name?: string) =>
+    api.post<InviteResult>('/auth/invite', { email, password, name }),
+
+  resetPassword: (userId: string) =>
+    api.post<ResetPasswordResult>(`/auth/reset-password/${userId}`),
+
+  deleteUser: (userId: string) =>
+    api.delete<{ success: boolean; deletedEmail: string }>(`/auth/users/${userId}`),
 };

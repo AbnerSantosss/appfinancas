@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { settingsService } from '../services/settings.service';
-import { requireAuth, AuthRequest } from '../middlewares/auth.middleware';
+import { emailService } from '../services/email.service';
+import { requireAuth, requireRole, AuthRequest } from '../middlewares/auth.middleware';
 
 const router = Router();
 
@@ -35,6 +36,86 @@ router.put('/salary', async (req: AuthRequest, res) => {
 
     await settingsService.updateSalary(parseFloat(salary));
     res.json({ success: true, salary: parseFloat(salary) });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── SMTP Settings (master only) ────────────────────────
+
+/**
+ * GET /api/settings/smtp
+ * Retorna a configuração SMTP (sem a senha completa).
+ */
+router.get('/smtp', requireRole('master'), async (_req: AuthRequest, res) => {
+  try {
+    const config = await settingsService.getSmtpConfig();
+    if (!config) {
+      res.json({ configured: false, config: null });
+      return;
+    }
+    // Mascara a senha
+    res.json({
+      configured: true,
+      config: {
+        ...config,
+        pass: config.pass ? '••••••••' : '',
+      },
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * PUT /api/settings/smtp
+ * Salva a configuração SMTP.
+ */
+router.put('/smtp', requireRole('master'), async (req: AuthRequest, res) => {
+  try {
+    const { host, port, user, pass, from } = req.body;
+
+    if (!host || !user || !pass) {
+      res.status(400).json({ error: 'Host, usuário e senha SMTP são obrigatórios.' });
+      return;
+    }
+
+    await settingsService.updateSmtpConfig({
+      host,
+      port: parseInt(port) || 587,
+      user,
+      pass,
+      from: from || 'noreply@senafinance.com',
+    });
+
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * POST /api/settings/smtp/test
+ * Testa a conexão SMTP com a configuração fornecida.
+ */
+router.post('/smtp/test', requireRole('master'), async (req: AuthRequest, res) => {
+  try {
+    const { host, port, user, pass, from } = req.body;
+
+    if (!host || !user || !pass) {
+      res.status(400).json({ error: 'Host, usuário e senha SMTP são obrigatórios.' });
+      return;
+    }
+
+    const result = await emailService.testConnection({
+      host,
+      port: parseInt(port) || 587,
+      user,
+      pass,
+      from: from || 'noreply@senafinance.com',
+    });
+
+    res.json(result);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

@@ -1,6 +1,6 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { LayoutDashboard, ReceiptText, PlusCircle, Settings, ShieldCheck, Sliders, LogOut } from 'lucide-react';
+import { ProfileModal } from './ProfileModal';
 
 interface AuthUser {
   id: string;
@@ -15,24 +15,30 @@ interface LayoutProps {
   setActiveTab: (tab: string) => void;
   user?: AuthUser;
   onLogout?: () => void;
+  onUserUpdate?: (user: AuthUser) => void;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user, onLogout }) => {
+const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user, onLogout, onUserUpdate }) => {
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
   return (
-    <div className="flex flex-col min-h-screen bg-slate-950 pb-28 md:pb-0 md:pl-64 selection:bg-emerald-500/30">
-      {/* ── Sidebar Desktop ──────────────────────────── */}
-      <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-slate-900/40 backdrop-blur-3xl border-r border-white/5 p-6 shadow-2xl z-40">
+    <div className="flex flex-col min-h-screen bg-gray-950 pb-24 md:pb-0 md:pl-64 selection:bg-emerald-500/20">
+      
+      {/* ── Sidebar Desktop (Premium Glassmorphic) ─────── */}
+      <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-gray-900/40 backdrop-blur-2xl border-r border-white/[0.04] p-6 shadow-2xl z-40">
         <div className="mb-10 group cursor-default">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.4)] group-hover:rotate-12 transition-transform">
-              <ShieldCheck className="text-slate-950" size={18} strokeWidth={3} />
+          <div className="flex items-center gap-3 mb-1.5">
+            <div className="w-9 h-9 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.35)] group-hover:rotate-12 transition-transform duration-300 border border-emerald-400/20">
+              <ShieldCheck className="text-gray-950" size={20} strokeWidth={2.5} />
             </div>
-            <h1 className="text-lg font-black text-white tracking-tighter">Sena Family Finance</h1>
+            <h1 className="text-md font-bold text-white tracking-tight leading-tight">
+              Sena <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-300">Finance</span>
+            </h1>
           </div>
-          <p className="text-[9px] text-emerald-500/50 font-black uppercase tracking-[0.2em] pl-1">Gestão Inteligente</p>
+          <p className="text-[9px] text-emerald-400/50 font-bold uppercase tracking-[0.25em] pl-1 animate-pulse-subtle">Gestão Familiar Self-Hosted</p>
         </div>
         
-        <nav className="space-y-2">
+        <nav className="space-y-1.5">
           <NavItem 
             icon={<LayoutDashboard size={18} />} 
             label="Início" 
@@ -47,64 +53,84 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
           />
           <NavItem 
             icon={<Sliders size={18} />} 
-            label="Opções" 
+            label="Configurações" 
             active={activeTab === 'settings'} 
             onClick={() => setActiveTab('settings')} 
           />
         </nav>
 
-        <div className="mt-auto pt-6 border-t border-white/5 space-y-3">
-           <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl">
-             <p className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mb-1">Servidor Próprio</p>
-             <p className="text-[9px] font-bold text-slate-500 leading-relaxed italic">Self-Hosted API Ativo.</p>
-           </div>
+        {/* User profile & server status */}
+        <div className="mt-auto pt-6 border-t border-white/[0.04] space-y-4">
+          <div className="p-3.5 bg-white/[0.02] border border-white/[0.04] rounded-2xl">
+            <div className="flex items-center gap-1.5 mb-1">
+              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping" />
+              <p className="text-[8px] font-bold text-emerald-400 uppercase tracking-widest">Servidor Online</p>
+            </div>
+            <p className="text-[9px] font-medium text-gray-500 leading-normal">Ambiente seguro hospedado localmente.</p>
+          </div>
 
-           {user && (
-             <div className="px-2">
-               <div className="flex items-center justify-between">
-                 <div className="min-w-0">
-                   <p className="text-[10px] font-black text-white truncate">{user.name || user.email}</p>
-                   <p className="text-[7px] font-bold text-slate-600 uppercase tracking-widest">{user.role}</p>
-                 </div>
-                 {onLogout && (
-                   <button
-                     onClick={onLogout}
-                     className="p-2 text-slate-600 hover:text-rose-500 hover:bg-rose-500/10 rounded-lg transition-all"
-                     title="Sair"
-                   >
-                     <LogOut size={14} />
-                   </button>
-                 )}
-               </div>
-             </div>
-           )}
+          {user && (
+            <div className="px-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] font-bold text-white truncate">{user.name || user.email}</p>
+                  <p className="text-[8px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">{user.role}</p>
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <button
+                    onClick={() => setIsProfileModalOpen(true)}
+                    className="p-2 text-gray-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-xl transition-all duration-200 cursor-pointer"
+                    title="Editar Perfil"
+                  >
+                    <Settings size={14} />
+                  </button>
+                  {onLogout && (
+                    <button
+                      onClick={onLogout}
+                      className="p-2 text-gray-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all duration-200 cursor-pointer"
+                      title="Sair da Conta"
+                    >
+                      <LogOut size={14} />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </aside>
 
-      {/* ── Mobile Header (Topo) ─────────────────────── */}
-      <header className="md:hidden sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-white/5 px-4 py-3 flex items-center justify-between safe-top">
+      {/* ── Mobile Header (Premium Style) ─────────────── */}
+      <header className="md:hidden sticky top-0 z-40 bg-gray-950/80 backdrop-blur-xl border-b border-white/[0.04] px-4 py-3 flex items-center justify-between safe-top">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 bg-emerald-500 rounded-lg flex items-center justify-center shadow-[0_0_10px_rgba(16,185,129,0.3)]">
-            <ShieldCheck className="text-slate-950" size={14} strokeWidth={3} />
+          <div className="w-8 h-8 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)] border border-emerald-400/20">
+            <ShieldCheck className="text-gray-950" size={16} strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="text-sm font-black text-white tracking-tighter leading-tight">Sena Finance</h1>
-            <p className="text-[7px] text-emerald-500/50 font-black uppercase tracking-[0.15em]">Self-Hosted</p>
+            <h1 className="text-xs font-bold text-white tracking-tight leading-none">Sena Finance</h1>
+            <p className="text-[7px] text-emerald-400/60 font-bold uppercase tracking-[0.15em] mt-0.5">Self-Hosted</p>
           </div>
         </div>
         {user && (
           <div className="flex items-center gap-2">
-            <div className="text-right">
-              <p className="text-[9px] font-black text-white leading-tight">{user.name || user.email.split('@')[0]}</p>
-              <p className="text-[6px] font-bold text-slate-600 uppercase tracking-widest">{user.role}</p>
+            <div className="text-right mr-1">
+              <p className="text-[10px] font-bold text-white leading-none">{user.name || user.email.split('@')[0]}</p>
+              <p className="text-[7px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">{user.role}</p>
             </div>
+            <button
+              onClick={() => setIsProfileModalOpen(true)}
+              className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-xl transition-all duration-200 cursor-pointer"
+              title="Editar Perfil"
+            >
+              <Settings size={15} />
+            </button>
             {onLogout && (
               <button
                 onClick={onLogout}
-                className="w-9 h-9 flex items-center justify-center text-slate-500 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all active:scale-90"
+                className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all duration-200 cursor-pointer"
                 title="Sair"
               >
-                <LogOut size={16} />
+                <LogOut size={15} />
               </button>
             )}
           </div>
@@ -116,36 +142,51 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
         {children}
       </main>
 
-      {/* ── Mobile Bottom Navigation ─────────────────── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-2xl border-t border-white/10 px-2 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] z-50 shadow-[0_-4px_30px_rgba(0,0,0,0.5)]">
-        <div className="flex items-center justify-around max-w-md mx-auto">
+      {/* ── Mobile Bottom Navigation (Floating Dock) ───── */}
+      <nav className="md:hidden fixed bottom-4 left-4 right-4 bg-gray-900/75 backdrop-blur-2xl border border-white/[0.08] px-3 py-2 rounded-2xl z-50 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]">
+        <div className="flex items-center justify-around max-w-md mx-auto relative">
           <MobileNavItem 
-            icon={<LayoutDashboard size={22} />} 
+            icon={<LayoutDashboard size={20} />} 
             label="Início"
             active={activeTab === 'dashboard'} 
             onClick={() => setActiveTab('dashboard')} 
           />
+          
+          {/* FAB Central flutuante */}
+          <div className="relative -mt-6">
+            <button 
+              onClick={() => setActiveTab('expenses')}
+              className="bg-gradient-to-tr from-emerald-500 to-teal-400 text-gray-950 w-12 h-12 rounded-xl shadow-[0_4px_20px_rgba(16,185,129,0.35)] active:scale-95 transition-all flex items-center justify-center border border-emerald-400/20 cursor-pointer"
+              title="Novo Lançamento"
+            >
+              <PlusCircle size={24} strokeWidth={2} />
+            </button>
+          </div>
+
           <MobileNavItem 
-            icon={<ReceiptText size={22} />} 
-            label="Faturas"
+            icon={<ReceiptText size={20} />} 
+            label="Lançamentos"
             active={activeTab === 'expenses'} 
             onClick={() => setActiveTab('expenses')} 
           />
-          {/* FAB central */}
-          <button 
-            onClick={() => setActiveTab('expenses')}
-            className="bg-emerald-500 text-slate-950 w-14 h-14 rounded-2xl -mt-7 shadow-[0_4px_20px_rgba(16,185,129,0.4)] active:scale-90 transition-all border-4 border-slate-950 flex items-center justify-center"
-          >
-            <PlusCircle size={26} strokeWidth={2.5} />
-          </button>
           <MobileNavItem 
-            icon={<Sliders size={22} />} 
-            label="Opções"
+            icon={<Sliders size={20} />} 
+            label="Configurações"
             active={activeTab === 'settings'} 
             onClick={() => setActiveTab('settings')} 
           />
         </div>
       </nav>
+
+      {/* ── Profile Edit Modal ───────────────────────── */}
+      {user && onUserUpdate && (
+        <ProfileModal
+          user={user}
+          isOpen={isProfileModalOpen}
+          onClose={() => setIsProfileModalOpen(false)}
+          onUserUpdate={onUserUpdate}
+        />
+      )}
     </div>
   );
 };
@@ -154,16 +195,16 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
 const NavItem = ({ icon, label, active, onClick }: { icon: any, label: string, active: boolean, onClick: () => void }) => (
   <button 
     onClick={onClick}
-    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all border ${
+    className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl transition-all duration-200 border cursor-pointer ${
       active 
-        ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.05)]' 
-        : 'border-transparent text-slate-500 hover:text-slate-300 hover:bg-white/5'
+        ? 'bg-emerald-500/10 border-emerald-500/15 text-emerald-400 shadow-[0_2px_10px_rgba(16,185,129,0.02)] font-semibold' 
+        : 'border-transparent text-gray-400 hover:text-gray-200 hover:bg-white/[0.03]'
     }`}
   >
-    <div className={`${active ? 'drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]' : ''}`}>
+    <div className={`transition-transform duration-200 ${active ? 'scale-110 text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]' : 'text-gray-400'}`}>
       {icon}
     </div>
-    <span className="font-bold uppercase tracking-widest text-[10px]">{label}</span>
+    <span className="text-xs tracking-wide">{label}</span>
   </button>
 );
 
@@ -171,14 +212,16 @@ const NavItem = ({ icon, label, active, onClick }: { icon: any, label: string, a
 const MobileNavItem = ({ icon, label, active, onClick }: { icon: any, label: string, active: boolean, onClick: () => void }) => (
   <button 
     onClick={onClick}
-    className={`flex flex-col items-center justify-center gap-0.5 min-w-[56px] min-h-[44px] py-1 px-2 rounded-xl transition-all duration-300 active:scale-90 ${
+    className={`flex flex-col items-center justify-center gap-0.5 min-w-[50px] py-1 px-2.5 rounded-xl transition-all duration-200 active:scale-90 cursor-pointer ${
       active 
-        ? 'text-emerald-400 drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]' 
-        : 'text-slate-600'
+        ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]' 
+        : 'text-gray-500'
     }`}
   >
-    {icon}
-    <span className={`text-[8px] font-black uppercase tracking-wider ${active ? 'text-emerald-400' : 'text-slate-700'}`}>
+    <div className={`transition-transform duration-200 ${active ? 'scale-105' : ''}`}>
+      {icon}
+    </div>
+    <span className={`text-[8px] font-bold tracking-wide ${active ? 'text-emerald-400' : 'text-gray-500'}`}>
       {label}
     </span>
   </button>

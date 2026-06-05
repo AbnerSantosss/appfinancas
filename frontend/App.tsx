@@ -4,9 +4,10 @@ import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import ExpenseList from './components/ExpenseList';
 import ExpenseForm from './components/ExpenseForm';
+import Settings from './components/Settings';
 import { Expense } from './types';
 import { startOfMonth } from 'date-fns';
-import { LayoutDashboard, AlertTriangle, Trash2, ShieldAlert, Lock, X, RefreshCw, Wallet, PiggyBank, Save, CheckCircle, CloudOff, LogIn, Mail, KeyRound, Eye, EyeOff, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, Trash2, ShieldAlert, X, RefreshCw, LogIn, Mail, KeyRound, Eye, EyeOff, ShieldCheck, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { isExpenseActiveInMonth, isMonthPaid } from './utils';
 import {
   authApi,
@@ -25,7 +26,9 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +36,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
 
     setIsLoading(true);
     setError('');
+    setSuccess('');
 
     try {
       const result = await authApi.login(email, password);
@@ -44,77 +48,176 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
     }
   };
 
+  const handleForgotPasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || isLoading) return;
+
+    setIsLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const result = await authApi.forgotPassword(email);
+      setSuccess(result.message || 'Uma nova senha temporária foi enviada para o seu e-mail.');
+    } catch (err: any) {
+      setError(err.message || 'Falha ao solicitar nova senha.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 sm:p-6">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+      {/* Background glow effects */}
+      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 bg-cyan-500/5 blur-[100px] rounded-full pointer-events-none" />
+
+      <div className="w-full max-w-md relative z-10">
         {/* Logo */}
-        <div className="text-center mb-10">
-          <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-[0_0_40px_rgba(16,185,129,0.3)]">
-            <ShieldCheck className="text-slate-950" size={32} strokeWidth={2.5} />
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-[0_0_30px_rgba(16,185,129,0.3)] border border-emerald-400/20">
+            <ShieldCheck className="text-gray-950" size={30} strokeWidth={2} />
           </div>
-          <h1 className="text-2xl font-black text-white tracking-tighter">Sena Family Finance</h1>
-          <p className="text-[9px] text-emerald-500/60 font-black uppercase tracking-[0.3em] mt-1">Acesso Seguro</p>
+          <h1 className="text-2xl font-extrabold text-white tracking-tight leading-tight">
+            Sena Family <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-300">Finance</span>
+          </h1>
+          <p className="text-[10px] text-emerald-400/70 font-bold uppercase tracking-[0.2em] mt-1.5">Portal de Acesso Seguro</p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-slate-900/60 backdrop-blur-3xl border border-white/5 rounded-[2rem] p-8 shadow-2xl space-y-5">
-          {error && (
-            <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl px-4 py-3 flex items-center gap-2">
-              <AlertTriangle size={14} className="text-rose-500 shrink-0" />
-              <p className="text-[10px] text-rose-400 font-bold">{error}</p>
+        {isForgotPassword ? (
+          <form onSubmit={handleForgotPasswordSubmit} className="glass-panel rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div>
+              <h2 className="text-md font-bold text-white tracking-tight">Recuperar Senha</h2>
+              <p className="text-[10px] text-gray-400 leading-relaxed mt-1">
+                Insira o seu e-mail cadastrado. Geraremos uma nova senha temporária e a enviaremos para o seu e-mail (requer SMTP configurado).
+              </p>
             </div>
-          )}
 
-          <div className="space-y-1.5">
-            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
-              <Mail size={10} /> Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="seu@email.com"
-              required
-              autoFocus
-              className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3.5 text-white font-bold text-sm focus:border-emerald-500/50 outline-none transition-all placeholder:text-slate-800"
-            />
-          </div>
+            {error && (
+              <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl px-4 py-3 flex items-start gap-2.5">
+                <AlertTriangle size={16} className="text-rose-500 shrink-0 mt-0.5" />
+                <p className="text-xs text-rose-400 font-medium leading-relaxed">{error}</p>
+              </div>
+            )}
 
-          <div className="space-y-1.5">
-            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
-              <KeyRound size={10} /> Senha
-            </label>
-            <div className="relative">
+            {success && (
+              <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-3 flex items-start gap-2.5">
+                <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />
+                <p className="text-xs text-emerald-400 font-medium leading-relaxed">{success}</p>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                <Mail size={12} className="text-emerald-400" /> Endereço de Email
+              </label>
               <input
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="seu@email.com"
                 required
-                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3.5 pr-12 text-white font-bold text-sm focus:border-emerald-500/50 outline-none transition-all placeholder:text-slate-800"
+                autoFocus
+                className="w-full glass-input"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-slate-600 hover:text-slate-400 transition-colors"
-              >
-                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
             </div>
-          </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-4 rounded-xl font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 shadow-lg shadow-emerald-500/20"
-          >
-            {isLoading ? <RefreshCw size={14} className="animate-spin" /> : <LogIn size={14} />}
-            Entrar
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-emerald-500/10 cursor-pointer"
+            >
+              {isLoading ? <div className="loader-spinner" /> : <RefreshCw size={15} />}
+              Enviar Senha Temporária
+            </button>
 
-        <p className="text-center mt-6 text-[7px] text-slate-700 font-bold uppercase tracking-[0.3em]">
-          Self-Hosted • v5.0.0 • Secured
+            <button
+              type="button"
+              onClick={() => {
+                setIsForgotPassword(false);
+                setError('');
+                setSuccess('');
+              }}
+              className="w-full bg-slate-900/60 hover:bg-slate-900 text-gray-300 py-2.5 rounded-xl font-bold uppercase tracking-wider text-[9px] flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer border border-white/5"
+            >
+              <ArrowLeft size={12} />
+              Voltar para o Login
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleSubmit} className="glass-panel rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            {error && (
+              <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl px-4 py-3 flex items-start gap-2.5">
+                <AlertTriangle size={16} className="text-rose-500 shrink-0 mt-0.5" />
+                <p className="text-xs text-rose-400 font-medium leading-relaxed">{error}</p>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                <Mail size={12} className="text-emerald-400" /> Endereço de Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="seu@email.com"
+                required
+                autoFocus
+                className="w-full glass-input"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                  <KeyRound size={12} className="text-emerald-400" /> Senha de Acesso
+                </label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsForgotPassword(true);
+                    setError('');
+                    setSuccess('');
+                  }}
+                  className="text-[9px] font-bold text-emerald-400 hover:text-emerald-300 uppercase tracking-wider transition-colors cursor-pointer"
+                >
+                  Esqueci minha senha
+                </button>
+              </div>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Sua senha secreta"
+                  required
+                  className="w-full glass-input pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-300 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-emerald-500/10 cursor-pointer"
+            >
+              {isLoading ? <div className="loader-spinner" /> : <LogIn size={15} />}
+              Acessar Painel
+            </button>
+          </form>
+        )}
+
+        <p className="text-center mt-6 text-[8px] text-gray-600 font-bold uppercase tracking-[0.25em]">
+          Self-Hosted • v5.0.0 • Encryption Enabled
         </p>
       </div>
     </div>
@@ -134,13 +237,8 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSavingSalary, setIsSavingSalary] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
-
-  // Se não autenticado, mostra login
-  if (!isAuthenticated() || !user) {
-    return <LoginScreen onLogin={(u) => setUser(u)} />;
-  }
-
   const fetchData = async () => {
+    if (!user) return;
     setIsLoading(true);
     try {
       // Fetch Expenses
@@ -176,8 +274,10 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (user) {
+      fetchData();
+    }
+  }, [user]);
 
   const handleUpdateSalaryDB = async () => {
     setIsSavingSalary(true);
@@ -261,6 +361,11 @@ const App: React.FC = () => {
     authApi.logout();
   };
 
+  // Se não autenticado, mostra login
+  if (!isAuthenticated() || !user) {
+    return <LoginScreen onLogin={(u) => setUser(u)} />;
+  }
+
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -285,90 +390,16 @@ const App: React.FC = () => {
         );
       case 'settings':
         return (
-          <div className="p-4 md:p-8 space-y-6 animate-in fade-in zoom-in duration-500">
-             <div className="bg-slate-900/60 backdrop-blur-3xl p-6 md:p-10 rounded-[2rem] border border-white/5 max-w-2xl mx-auto shadow-2xl">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 bg-emerald-500/20 text-emerald-500 rounded-xl flex items-center justify-center">
-                     <Wallet size={24} />
-                  </div>
-                  <div>
-                    <h2 className="text-lg md:text-xl font-black text-white tracking-tighter">Opções de Conta</h2>
-                    <p className="text-slate-500 text-[8px] md:text-[9px] font-bold uppercase tracking-widest">Configurações e Financeiro</p>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                      <PiggyBank size={14} className="text-emerald-500" /> Salário Mensal Base (R$)
-                    </label>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <div className="relative flex-1">
-                        <input 
-                          type="number" 
-                          value={salary || ''} 
-                          onChange={(e) => setSalary(parseFloat(e.target.value) || 0)}
-                          placeholder="Ex: 5000"
-                          className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white font-black focus:border-emerald-500/50 outline-none transition-all"
-                        />
-                      </div>
-                      <button 
-                        onClick={handleUpdateSalaryDB}
-                        disabled={isSavingSalary}
-                        className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-6 py-3 rounded-xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50"
-                      >
-                        {isSavingSalary ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
-                        Salvar
-                      </button>
-                    </div>
-                    <div className="flex items-center gap-2 mt-2">
-                       <span className="text-[7px] text-emerald-500 font-black uppercase tracking-widest flex items-center gap-1">
-                         <CheckCircle size={8} /> Conectado ao Servidor
-                       </span>
-                    </div>
-                  </div>
-
-                  {/* Info do usuário logado */}
-                  <div className="pt-4 border-t border-white/5 space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                      <Mail size={14} className="text-emerald-500" /> Sessão Ativa
-                    </label>
-                    <div className="bg-slate-950 border border-white/5 rounded-xl px-4 py-3 flex items-center justify-between">
-                      <div>
-                        <p className="text-xs font-black text-white">{user.email}</p>
-                        <p className="text-[8px] text-slate-600 font-bold uppercase tracking-widest">{user.role} • {user.name || 'Sem nome'}</p>
-                      </div>
-                      <button
-                        onClick={handleLogout}
-                        className="text-[8px] font-black text-rose-500 uppercase tracking-widest hover:text-rose-400 transition-colors"
-                      >
-                        Sair
-                      </button>
-                    </div>
-                  </div>
-
-                  {user.role === 'master' && (
-                    <div className="pt-6 border-t border-white/5">
-                      <label className="text-[10px] font-black text-rose-500 uppercase tracking-widest flex items-center gap-2 mb-4">
-                        <ShieldAlert size={14} /> Zona de Perigo
-                      </label>
-                      <button 
-                        onClick={() => setIsResetModalOpen(true)}
-                        className="w-full bg-rose-500/10 text-rose-500 border border-rose-500/20 py-4 rounded-xl hover:bg-rose-500 hover:text-white transition-all font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2"
-                      >
-                        <Trash2 size={14} /> Resetar Banco de Dados
-                      </button>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="mt-8 pt-6 border-t border-white/5 text-center">
-                  <p className="text-[7px] md:text-[9px] text-slate-600 font-bold uppercase tracking-[0.3em]">
-                    Sena Family Finance • v5.0.0 • Self-Hosted
-                  </p>
-                </div>
-             </div>
-          </div>
+          <Settings
+            user={user}
+            salary={salary}
+            setSalary={setSalary}
+            onSalaryUpdate={handleUpdateSalaryDB}
+            isSavingSalary={isSavingSalary}
+            onLogout={handleLogout}
+            onResetDB={() => setIsResetModalOpen(true)}
+            onUserUpdate={(updatedUser) => setUser(updatedUser)}
+          />
         );
       default:
         return <Dashboard expenses={expenses} salary={salary} onTogglePaid={togglePaidStatus} onMarkAllAsPaid={markAllAsPaid} />;
@@ -376,7 +407,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <Layout activeTab={activeTab} setActiveTab={setActiveTab} user={user} onLogout={handleLogout}>
+    <Layout activeTab={activeTab} setActiveTab={setActiveTab} user={user} onLogout={handleLogout} onUserUpdate={(updatedUser) => setUser(updatedUser)}>
       {renderContent()}
 
       {isFormOpen && (
@@ -388,31 +419,46 @@ const App: React.FC = () => {
       )}
 
       {expenseToDelete && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-md">
-          <div className="bg-slate-900 border border-rose-500/30 w-full max-w-sm rounded-[2rem] shadow-2xl animate-in zoom-in duration-300 p-6 md:p-8 text-center">
-            <div className="w-12 h-12 bg-rose-500/20 text-rose-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-gray-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="glass-panel w-full max-w-sm rounded-3xl shadow-2xl animate-in zoom-in-95 duration-300 p-6 md:p-8 text-center border-rose-500/20">
+            <div className="w-14 h-14 bg-rose-500/10 text-rose-400 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-rose-500/20 shadow-[0_0_20px_rgba(239,68,68,0.1)]">
               <AlertTriangle size={24} />
             </div>
-            <h3 className="text-lg font-black text-white mb-1">Confirmar Exclusão?</h3>
-            <p className="text-slate-400 text-[10px] mb-6">Remover permanentemente do servidor?</p>
-            <div className="flex gap-2">
-              <button onClick={() => setExpenseToDelete(null)} className="flex-1 py-3.5 bg-slate-800 text-slate-400 font-black rounded-xl uppercase tracking-widest text-[10px] active:scale-95 transition-all">Não</button>
-              <button onClick={confirmDelete} className="flex-1 py-3.5 bg-rose-500 text-slate-950 font-black rounded-xl uppercase tracking-widest text-[10px] active:scale-95 transition-all">Sim, Excluir</button>
+            <h3 className="text-lg font-bold text-white mb-2 tracking-tight">Confirmar Exclusão?</h3>
+            <p className="text-gray-400 text-xs mb-6 leading-relaxed">Você está prestes a remover esta despesa permanentemente do servidor. Deseja continuar?</p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setExpenseToDelete(null)} 
+                className="flex-1 py-3 bg-gray-800/80 hover:bg-gray-800 text-gray-300 font-semibold rounded-xl text-xs transition-all active:scale-[0.97] cursor-pointer"
+              >
+                Voltar
+              </button>
+              <button 
+                onClick={confirmDelete} 
+                className="flex-1 py-3 bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 text-white font-semibold rounded-xl text-xs shadow-lg shadow-rose-500/10 transition-all active:scale-[0.97] cursor-pointer"
+              >
+                Sim, Excluir
+              </button>
             </div>
           </div>
         </div>
       )}
 
       {isResetModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-md">
-          <div className="bg-slate-900 border border-rose-500/30 w-full max-w-sm rounded-[2rem] shadow-2xl p-6 md:p-8 text-center">
-            <div className="w-12 h-12 bg-rose-500/20 text-rose-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-gray-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="glass-panel w-full max-w-sm rounded-3xl shadow-2xl p-6 md:p-8 text-center border-rose-500/20">
+            <div className="w-14 h-14 bg-rose-500/10 text-rose-400 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-rose-500/20 shadow-[0_0_20px_rgba(239,68,68,0.1)]">
               <ShieldAlert size={24} />
             </div>
-            <h3 className="text-lg font-black text-white mb-1">Resetar Banco?</h3>
-            <p className="text-slate-500 text-[9px] font-bold uppercase mb-6 tracking-widest">Todas as despesas serão apagadas permanentemente.</p>
-            <div className="flex gap-2">
-              <button onClick={() => setIsResetModalOpen(false)} className="flex-1 py-3.5 bg-slate-800 text-slate-400 font-black rounded-xl uppercase tracking-widest text-[10px] active:scale-95 transition-all">Cancelar</button>
+            <h3 className="text-lg font-bold text-white mb-2 tracking-tight">Resetar Banco?</h3>
+            <p className="text-gray-400 text-xs mb-6 leading-relaxed">Atenção: todas as despesas e lançamentos cadastrados serão apagados permanentemente. Esta ação não pode ser desfeita.</p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setIsResetModalOpen(false)} 
+                className="flex-1 py-3 bg-gray-800/80 hover:bg-gray-800 text-gray-300 font-semibold rounded-xl text-xs transition-all active:scale-[0.97] cursor-pointer"
+              >
+                Cancelar
+              </button>
               <button 
                 onClick={async () => {
                   try {
@@ -424,7 +470,7 @@ const App: React.FC = () => {
                     alert("Erro: " + (err.message || "Permissão insuficiente."));
                   }
                 }}
-                className="flex-1 py-3.5 bg-rose-600 hover:bg-rose-500 text-white font-black rounded-xl text-[10px] uppercase tracking-widest transition-all active:scale-95"
+                className="flex-1 py-3 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-400 hover:to-rose-500 text-white font-semibold rounded-xl text-xs shadow-lg shadow-red-500/10 transition-all active:scale-[0.97] cursor-pointer"
               >
                 Confirmar Reset
               </button>
