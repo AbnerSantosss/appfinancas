@@ -71,8 +71,8 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
       {/* Background glow effects */}
       {isForgotPassword ? (
         <>
-          <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-amber-500/10 blur-[100px] rounded-full pointer-events-none" />
-          <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 bg-orange-500/5 blur-[100px] rounded-full pointer-events-none" />
+          <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#00FFBB]/10 blur-[100px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 bg-[#00FFBB]/5 blur-[100px] rounded-full pointer-events-none" />
         </>
       ) : (
         <>
@@ -85,13 +85,13 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
         {/* Logo e Cabeçalho */}
         {isForgotPassword ? (
           <div className="text-center mb-8 flex flex-col items-center">
-            <div className="w-16 h-16 bg-[#111C2B] border border-amber-500/20 rounded-2xl flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(245,158,11,0.15)]">
-              <KeyRound className="text-amber-500" size={30} strokeWidth={2} />
+            <div className="w-16 h-16 bg-[#111C2B] border border-[#00FFBB]/20 rounded-2xl flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(0,255,187,0.15)]">
+              <KeyRound className="text-[#00FFBB]" size={30} strokeWidth={2} />
             </div>
             <h1 className="text-2xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight flex items-center gap-2 justify-center">
-              Recuperar <span className="text-amber-500">Acesso</span>
+              Recuperar <span className="text-[#00FFBB]">Acesso</span>
             </h1>
-            <p className="text-[9px] text-amber-500/60 font-bold uppercase tracking-[0.2em] mt-2">
+            <p className="text-[9px] text-[#00FFBB]/60 font-bold uppercase tracking-[0.2em] mt-2">
               Redefina suas credenciais com segurança
             </p>
           </div>
@@ -111,7 +111,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
 
         {/* Form */}
         {isForgotPassword ? (
-          <form onSubmit={handleForgotPasswordSubmit} className="bg-[#111C2B] border border-amber-500/20 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl shadow-amber-950/10 animate-in fade-in zoom-in-95 duration-200">
+          <form onSubmit={handleForgotPasswordSubmit} className="bg-[#111C2B] border border-white/[0.04] backdrop-blur-2xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             <div>
               <h2 className="text-md font-bold text-[#F8FAFC] tracking-tight">Esqueceu sua senha?</h2>
               <p className="text-[10px] text-[#64748B] leading-relaxed mt-1">
@@ -135,7 +135,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
 
             <div className="space-y-2">
               <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                <Mail size={12} className="text-amber-500" /> ENDEREÇO DE EMAIL
+                <Mail size={12} className="text-[#00FFBB]" /> ENDEREÇO DE EMAIL
               </label>
               <input
                 type="email"
@@ -144,14 +144,14 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                 placeholder="seu@email.com"
                 required
                 autoFocus
-                className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition-all duration-300"
+                className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-[#00FFBB]/50 focus:ring-2 focus:ring-[#00FFBB]/20 focus:outline-none transition-all duration-300"
               />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-amber-500 hover:bg-amber-400 text-[#0A111F] py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-amber-500/10 cursor-pointer"
+              className="w-full bg-[#00FFBB] hover:bg-[#00FFBB]/90 text-[#0A111F] py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-[#00FFBB]/10 cursor-pointer"
             >
               {isLoading ? <div className="loader-spinner" /> : <Send size={13} />}
               SOLICITAR NOVA SENHA
