@@ -18,6 +18,7 @@ import {
   clearAuth,
   AuthUser,
 } from './services/api';
+import { AnimatedBackground } from './components/AnimatedBackground';
 
 // ─── Tela de Login ──────────────────────────────────────
 
@@ -67,93 +68,32 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
   };
 
   return (
-    <div className="min-h-screen bg-[#0A111F] flex md:grid md:grid-cols-12 overflow-hidden relative">
-      
-      {/* ── Painel Esquerdo (Desktop Only - Ilustração Premium) ── */}
-      <div className="hidden md:flex md:col-span-7 lg:col-span-8 bg-[#0D1626]/30 border-r border-white/[0.03] flex-col justify-between p-12 relative overflow-hidden">
-        {/* Background glow effects - Left Panel */}
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#00FFBB]/10 blur-[120px] rounded-full pointer-events-none" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#00FFBB]/5 blur-[120px] rounded-full pointer-events-none" />
+    <>
+      {isForgotPassword ? (
+        <div className="min-h-screen bg-[#0A111F] flex items-center justify-center p-6 sm:p-12 overflow-hidden relative">
+          <AnimatedBackground />
 
-        {/* Header no Painel Esquerdo */}
-        <div className="relative z-10 flex items-center gap-3">
-          <div className="w-9 h-9 bg-[#111C2B] border border-[#00FFBB]/20 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(0,255,187,0.1)]">
-            <Hexagon className="text-[#00FFBB]" size={18} strokeWidth={2} />
-          </div>
-          <h2 className="text-sm font-extrabold text-[#F8FAFC] tracking-tight">
-            Hub <span className="text-[#00FFBB]">Financeiro</span>
-          </h2>
-        </div>
+          {/* Glows de Fundo */}
+          <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#00FFBB]/10 blur-[100px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 bg-[#00FFBB]/5 blur-[100px] rounded-full pointer-events-none" />
 
-        {/* Ilustração e Copy de Finanças */}
-        <div className="relative z-10 flex-1 flex flex-col justify-center items-center max-w-2xl mx-auto text-center px-6">
-          <div className="relative w-full max-w-md aspect-[4/3] rounded-3xl overflow-hidden border border-white/5 shadow-2xl shadow-[#00FFBB]/5 bg-[#111C2B]/30 backdrop-blur-md p-4 group">
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#00FFBB]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <img 
-              src="/login_illustration.png" 
-              alt="Finance illustration" 
-              className="w-full h-full object-cover rounded-2xl group-hover:scale-[1.02] transition-transform duration-700"
-            />
-          </div>
-          <h3 className="text-lg font-bold text-[#F8FAFC] mt-8 tracking-tight">Controle total sobre suas despesas</h3>
-          <p className="text-xs text-[#64748B] mt-2 max-w-sm leading-relaxed">
-            Monitore lançamentos fixos e parcelados, planeje suas economias e visualize relatórios dinâmicos de forma privada e segura.
-          </p>
-        </div>
-
-        {/* Rodapé do Painel Esquerdo */}
-        <div className="relative z-10 text-[8px] text-[#64748B] font-bold uppercase tracking-[0.2em]">
-          Sena Family Finance • Self-Hosted
-        </div>
-      </div>
-
-      {/* ── Painel Direito (Login / Recuperação de Senha) ── */}
-      <div className="w-full md:col-span-5 lg:col-span-4 flex flex-col justify-center items-center p-6 sm:p-12 relative overflow-y-auto min-h-screen">
-        {/* Glows para Mobile */}
-        <div className="md:hidden absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#00FFBB]/10 blur-[100px] rounded-full pointer-events-none" />
-        <div className="md:hidden absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 bg-[#00FFBB]/5 blur-[100px] rounded-full pointer-events-none" />
-        
-        {/* Glows para Desktop */}
-        <div className="hidden md:block absolute top-1/3 right-10 w-72 h-72 bg-[#00FFBB]/10 blur-[100px] rounded-full pointer-events-none" />
-        <div className="hidden md:block absolute bottom-1/3 right-10 w-72 h-72 bg-[#00FFBB]/5 blur-[100px] rounded-full pointer-events-none" />
-
-        <div className="w-full max-w-sm relative z-10 space-y-6">
-          {/* Header Mobile (Oculto no Desktop) */}
-          <div className="md:hidden text-center mb-6 flex flex-col items-center">
-            <div className="w-14 h-14 bg-[#111C2B] border border-[#00FFBB]/20 rounded-2xl flex items-center justify-center mb-3 shadow-[0_0_35px_rgba(0,255,187,0.15)]">
-              {isForgotPassword ? (
+          <div className="w-full max-w-sm relative z-10 space-y-6">
+            {/* Header Centralizado */}
+            <div className="text-center mb-6 flex flex-col items-center animate-in fade-in slide-in-from-top-4 duration-500">
+              <div className="w-14 h-14 bg-[#111C2B] border border-[#00FFBB]/20 rounded-2xl flex items-center justify-center mb-3 shadow-[0_0_35px_rgba(0,255,187,0.15)]">
                 <KeyRound className="text-[#00FFBB]" size={26} />
-              ) : (
-                <Hexagon className="text-[#00FFBB]" size={26} />
-              )}
+              </div>
+              <h1 className="text-xl font-extrabold text-[#F8FAFC] tracking-tight">
+                Recuperar <span className="text-[#00FFBB]">Acesso</span>
+              </h1>
+              <p className="text-[8px] text-[#00FFBB]/60 font-bold uppercase tracking-[0.15em] mt-1.5">
+                Redefina suas credenciais com segurança
+              </p>
             </div>
-            <h1 className="text-xl font-extrabold text-[#F8FAFC] tracking-tight">
-              {isForgotPassword ? (
-                <>Recuperar <span className="text-[#00FFBB]">Acesso</span></>
-              ) : (
-                <>Hub <span className="text-[#00FFBB]">Financeiro</span></>
-              )}
-            </h1>
-            <p className="text-[8px] text-[#00FFBB]/60 font-bold uppercase tracking-[0.15em] mt-1.5">
-              {isForgotPassword ? "Redefina suas credenciais com segurança" : "Organize todas suas finanças em um unico lugar"}
-            </p>
-          </div>
 
-          {/* Header Desktop (Oculto no Mobile) */}
-          <div className="hidden md:block mb-4 text-center">
-            <h2 className="text-xl font-extrabold text-[#F8FAFC] tracking-tight">
-              {isForgotPassword ? "Recuperar Acesso" : "Portal de Acesso"}
-            </h2>
-            <p className="text-[10px] text-[#64748B] font-bold uppercase tracking-wider mt-1.5">
-              {isForgotPassword ? "Esqueceu sua senha?" : "Insira suas credenciais para entrar"}
-            </p>
-          </div>
-
-          {/* Formulários */}
-          {isForgotPassword ? (
+            {/* Formulário de Recuperação */}
             <form onSubmit={handleForgotPasswordSubmit} className="bg-[#111C2B] border border-white/[0.04] backdrop-blur-2xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
               <div>
-                <h2 className="md:hidden text-md font-bold text-[#F8FAFC] tracking-tight">Esqueceu sua senha?</h2>
                 <p className="text-[10px] text-[#64748B] leading-relaxed mt-1">
                   Insira o seu e-mail cadastrado. Geraremos uma nova senha temporária e a enviaremos para o seu e-mail (requer SMTP configurado).
                 </p>
@@ -210,84 +150,168 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                 Voltar para o Login
               </button>
             </form>
-          ) : (
-            <form onSubmit={handleSubmit} className="bg-[#111C2B] border border-white/[0.04] backdrop-blur-2xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-              {error && (
-                <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl px-4 py-3 flex items-start gap-2.5">
-                  <AlertTriangle size={16} className="text-rose-500 shrink-0 mt-0.5" />
-                  <p className="text-xs text-rose-400 font-medium leading-relaxed">{error}</p>
-                </div>
-              )}
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <Mail size={12} className="text-[#00FFBB]" /> ENDEREÇO DE EMAIL
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="seu@email.com"
-                  required
-                  autoFocus
-                  className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-[#00FFBB]/50 focus:ring-2 focus:ring-[#00FFBB]/20 focus:outline-none transition-all duration-300"
+            {/* Rodapé */}
+            <p className="text-center mt-6 text-[8px] text-[#64748B] font-bold uppercase tracking-[0.25em]">
+              SELF-HOSTED • V5.0.0 • ENCRYPTION ENABLED
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="min-h-screen bg-[#0A111F] flex md:grid md:grid-cols-12 overflow-hidden relative">
+          <AnimatedBackground />
+          
+          {/* ── Painel Esquerdo (Desktop Only - Ilustração Premium) ── */}
+          <div className="hidden md:flex md:col-span-7 lg:col-span-8 bg-[#0D1626]/30 border-r border-white/[0.03] flex-col justify-between p-12 relative overflow-hidden">
+            {/* Background glow effects - Left Panel */}
+            <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#00FFBB]/10 blur-[120px] rounded-full pointer-events-none" />
+            <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#00FFBB]/5 blur-[120px] rounded-full pointer-events-none" />
+
+            {/* Header no Painel Esquerdo */}
+            <div className="relative z-10 flex items-center gap-3">
+              <div className="w-9 h-9 bg-[#111C2B] border border-[#00FFBB]/20 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(0,255,187,0.1)]">
+                <Hexagon className="text-[#00FFBB]" size={18} strokeWidth={2} />
+              </div>
+              <h2 className="text-sm font-extrabold text-[#F8FAFC] tracking-tight">
+                Hub <span className="text-[#00FFBB]">Financeiro</span>
+              </h2>
+            </div>
+
+            {/* Ilustração e Copy de Finanças */}
+            <div className="relative z-10 flex-1 flex flex-col justify-center items-center max-w-2xl mx-auto text-center px-6">
+              <div className="relative w-full max-w-md aspect-[4/3] rounded-3xl overflow-hidden border border-white/5 shadow-2xl shadow-[#00FFBB]/5 bg-[#111C2B]/30 backdrop-blur-md p-4 group">
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#00FFBB]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <img 
+                  src="/login_illustration.png" 
+                  alt="Finance illustration" 
+                  className="w-full h-full object-cover rounded-2xl group-hover:scale-[1.02] transition-transform duration-700"
                 />
               </div>
+              <h3 className="text-lg font-bold text-[#F8FAFC] mt-8 tracking-tight">Controle total sobre suas despesas</h3>
+              <p className="text-xs text-[#64748B] mt-2 max-w-sm leading-relaxed">
+                Monitore lançamentos fixos e parcelados, planeje suas economias e visualize relatórios dinâmicos de forma privada e segura.
+              </p>
+            </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <KeyRound size={12} className="text-[#00FFBB]" /> SENHA DE ACESSO
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Sua senha secreta"
-                    required
-                    className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-[#00FFBB]/50 focus:ring-2 focus:ring-[#00FFBB]/20 focus:outline-none transition-all duration-300 pr-12"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-[#64748B] hover:text-[#F8FAFC] transition-colors"
-                  >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
+            {/* Rodapé do Painel Esquerdo */}
+            <div className="relative z-10 text-[8px] text-[#64748B] font-bold uppercase tracking-[0.2em]">
+              Sena Family Finance • Self-Hosted
+            </div>
+          </div>
+
+          {/* ── Painel Direito (Login / Recuperação de Senha) ── */}
+          <div className="w-full md:col-span-5 lg:col-span-4 flex flex-col justify-center items-center p-6 sm:p-12 relative overflow-y-auto min-h-screen">
+            {/* Glows para Mobile */}
+            <div className="md:hidden absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#00FFBB]/10 blur-[100px] rounded-full pointer-events-none" />
+            <div className="md:hidden absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 bg-[#00FFBB]/5 blur-[100px] rounded-full pointer-events-none" />
+            
+            {/* Glows para Desktop */}
+            <div className="hidden md:block absolute top-1/3 right-10 w-72 h-72 bg-[#00FFBB]/10 blur-[100px] rounded-full pointer-events-none" />
+            <div className="hidden md:block absolute bottom-1/3 right-10 w-72 h-72 bg-[#00FFBB]/5 blur-[100px] rounded-full pointer-events-none" />
+
+            <div className="w-full max-w-sm relative z-10 space-y-6">
+              {/* Header Mobile (Oculto no Desktop) */}
+              <div className="md:hidden text-center mb-6 flex flex-col items-center">
+                <div className="w-14 h-14 bg-[#111C2B] border border-[#00FFBB]/20 rounded-2xl flex items-center justify-center mb-3 shadow-[0_0_35px_rgba(0,255,187,0.15)]">
+                  <Hexagon className="text-[#00FFBB]" size={26} />
                 </div>
-                <div className="text-right">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsForgotPassword(true);
-                      setError('');
-                      setSuccess('');
-                    }}
-                    className="text-[9px] font-bold text-[#00FFBB] hover:text-[#00FFBB]/80 uppercase tracking-wider transition-colors cursor-pointer mt-1"
-                  >
-                    ESQUECI MINHA SENHA
-                  </button>
-                </div>
+                <h1 className="text-xl font-extrabold text-[#F8FAFC] tracking-tight">
+                  Hub <span className="text-[#00FFBB]">Financeiro</span>
+                </h1>
+                <p className="text-[8px] text-[#00FFBB]/60 font-bold uppercase tracking-[0.15em] mt-1.5">
+                  Organize todas suas finanças em um único lugar
+                </p>
               </div>
 
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-[#00FFBB] hover:bg-[#00FFBB]/90 text-[#0A111F] py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-[#00FFBB]/10 cursor-pointer"
-              >
-                {isLoading ? <div className="loader-spinner" /> : <ArrowRight size={15} />}
-                ACESSAR PAINEL
-              </button>
-            </form>
-          )}
+              {/* Header Desktop (Oculto no Mobile) */}
+              <div className="hidden md:block mb-4 text-center">
+                <h2 className="text-xl font-extrabold text-[#F8FAFC] tracking-tight">
+                  Portal de Acesso
+                </h2>
+                <p className="text-[10px] text-[#64748B] font-bold uppercase tracking-wider mt-1.5">
+                  Insira suas credenciais para entrar
+                </p>
+              </div>
 
-          {/* Rodapé */}
-          <p className="text-center mt-6 text-[8px] text-[#64748B] font-bold uppercase tracking-[0.25em]">
-            SELF-HOSTED • V5.0.0 • ENCRYPTION ENABLED
-          </p>
+              {/* Formulários */}
+              <form onSubmit={handleSubmit} className="bg-[#111C2B] border border-white/[0.04] backdrop-blur-2xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+                {error && (
+                  <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl px-4 py-3 flex items-start gap-2.5">
+                    <AlertTriangle size={16} className="text-rose-500 shrink-0 mt-0.5" />
+                    <p className="text-xs text-rose-400 font-medium leading-relaxed">{error}</p>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
+                    <Mail size={12} className="text-[#00FFBB]" /> ENDEREÇO DE EMAIL
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="seu@email.com"
+                    required
+                    autoFocus
+                    className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-[#00FFBB]/50 focus:ring-2 focus:ring-[#00FFBB]/20 focus:outline-none transition-all duration-300"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
+                    <KeyRound size={12} className="text-[#00FFBB]" /> SENHA DE ACESSO
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Sua senha secreta"
+                      required
+                      className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-[#00FFBB]/50 focus:ring-2 focus:ring-[#00FFBB]/20 focus:outline-none transition-all duration-300 pr-12"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-[#64748B] hover:text-[#F8FAFC] transition-colors"
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                  <div className="text-right">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsForgotPassword(true);
+                        setError('');
+                        setSuccess('');
+                      }}
+                      className="text-[9px] font-bold text-[#00FFBB] hover:text-[#00FFBB]/80 uppercase tracking-wider transition-colors cursor-pointer mt-1"
+                    >
+                      ESQUECI MINHA SENHA
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full bg-[#00FFBB] hover:bg-[#00FFBB]/90 text-[#0A111F] py-3.5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-[#00FFBB]/10 cursor-pointer"
+                >
+                  {isLoading ? <div className="loader-spinner" /> : <ArrowRight size={15} />}
+                  ACESSAR PAINEL
+                </button>
+              </form>
+
+              {/* Rodapé */}
+              <p className="text-center mt-6 text-[8px] text-[#64748B] font-bold uppercase tracking-[0.25em]">
+                SELF-HOSTED • V5.0.0 • ENCRYPTION ENABLED
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
