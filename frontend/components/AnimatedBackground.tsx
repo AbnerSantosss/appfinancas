@@ -3,54 +3,67 @@ import { motion } from 'framer-motion';
 
 export const AnimatedBackground: React.FC = () => {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      {/* Blob 1 */}
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 bg-[#0A111F]">
+      {/* Imagem de Fundo Animada */}
       <motion.div
-        className="absolute w-[350px] h-[350px] md:w-[500px] md:h-[500px] rounded-full bg-[#00FFBB]/8 blur-[100px] md:blur-[130px]"
+        className="absolute inset-0 w-[120%] h-[120%] -top-[10%] -left-[10%]"
+        style={{
+          backgroundImage: "url('/animated_bg.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.6,
+        }}
         animate={{
-          x: [0, 80, -50, 0],
-          y: [0, -100, 60, 0],
-          scale: [1, 1.1, 0.9, 1],
+          scale: [1, 1.15, 1],
+          x: [0, -30, 20, 0],
+          y: [0, 20, -30, 0],
         }}
         transition={{
-          duration: 15,
+          duration: 40,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: "linear"
         }}
-        style={{ top: '5%', left: '5%' }}
-      />
-      
-      {/* Blob 2 */}
-      <motion.div
-        className="absolute w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-cyan-500/4 blur-[110px] md:blur-[140px]"
-        animate={{
-          x: [0, -120, 70, 0],
-          y: [0, 90, -110, 0],
-          scale: [1, 0.95, 1.15, 1],
-        }}
-        transition={{
-          duration: 22,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        style={{ bottom: '10%', right: '5%' }}
       />
 
-      {/* Blob 3 */}
-      <motion.div
-        className="absolute w-[300px] h-[300px] md:w-[450px] md:h-[450px] rounded-full bg-emerald-500/4 blur-[90px] md:blur-[120px]"
-        animate={{
-          x: [0, 60, -70, 0],
-          y: [0, 110, 50, 0],
-          scale: [1, 1.15, 0.9, 1],
+      {/* Grid Tech Overlay */}
+      <div 
+        className="absolute inset-0 opacity-[0.15]"
+        style={{
+          backgroundImage: 'radial-gradient(circle at center, transparent 0%, #0A111F 80%), linear-gradient(rgba(0, 255, 187, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 187, 0.1) 1px, transparent 1px)',
+          backgroundSize: '100% 100%, 40px 40px, 40px 40px',
+          backgroundPosition: 'center, center, center',
         }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        style={{ top: '40%', left: '50%', transform: 'translate(-50%, -50%)' }}
       />
+
+      {/* Overlay Escuro / Gradiente para Leitura */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0A111F]/80 via-[#0A111F]/60 to-[#0A111F]/95" />
+
+      {/* Partículas de Luz Flutuantes (Framer Motion) */}
+      {[...Array(6)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-[#00FFBB]"
+          style={{
+            width: Math.random() * 4 + 2 + 'px',
+            height: Math.random() * 4 + 2 + 'px',
+            top: Math.random() * 100 + '%',
+            left: Math.random() * 100 + '%',
+            opacity: Math.random() * 0.5 + 0.2,
+            boxShadow: '0 0 10px 2px rgba(0, 255, 187, 0.4)'
+          }}
+          animate={{
+            y: [0, -150],
+            x: [0, (Math.random() - 0.5) * 100],
+            opacity: [0, 0.8, 0],
+          }}
+          transition={{
+            duration: Math.random() * 10 + 15,
+            repeat: Infinity,
+            ease: "linear",
+            delay: Math.random() * 10,
+          }}
+        />
+      ))}
     </div>
   );
 };
