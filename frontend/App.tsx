@@ -210,14 +210,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
 
             {/* Header overlay on top of the carousel */}
             <div className="absolute top-0 left-0 right-0 p-12 z-20">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-gray-900 border border-[#34d399]/20 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-                  <Hexagon className="text-[#34d399]" size={18} strokeWidth={2} />
-                </div>
-                <h2 className="text-sm font-extrabold text-white tracking-tight">
-                  HUB <span className="text-[#34d399]">FINANCEIRO</span>
-                </h2>
-              </div>
+              <img src="/logo_hub.png" alt="HUB FINANCEIRO" className="h-12 w-auto object-contain" />
             </div>
 
 
@@ -236,12 +229,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
             <div className="w-full max-w-sm relative z-10 space-y-6">
               {/* Header Mobile (Oculto no Desktop) */}
               <div className="md:hidden text-center mb-6 flex flex-col items-center">
-                <div className="w-16 h-16 sm:w-14 sm:h-14 bg-gray-900 border border-[#34d399]/20 rounded-2xl flex items-center justify-center mb-3 shadow-[0_0_35px_rgba(16,185,129,0.15)]">
-                  <Hexagon className="text-[#34d399]" size={30} />
-                </div>
-                <h1 className="text-2xl sm:text-xl font-extrabold text-white tracking-tight">
-                  Hub <span className="text-[#34d399]">Financeiro</span>
-                </h1>
+                <img src="/logo_hub.png" alt="HUB FINANCEIRO" className="h-16 sm:h-14 w-auto object-contain mb-3" />
                 <p className="text-[10px] sm:text-[8px] text-[#34d399]/60 font-bold uppercase tracking-[0.15em] mt-1.5">
                   Organize todas suas finanças em um único lugar
                 </p>

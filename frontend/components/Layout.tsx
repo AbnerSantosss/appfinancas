@@ -28,12 +28,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
       <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-gray-900/40 backdrop-blur-2xl border-r border-white/[0.04] p-6 shadow-2xl z-40">
         <div className="mb-10 group cursor-default">
           <div className="flex items-center gap-3 mb-1.5">
-            <div className="w-9 h-9 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.35)] group-hover:rotate-12 transition-transform duration-300 border border-emerald-400/20">
-              <ShieldCheck className="text-gray-950" size={20} strokeWidth={2.5} />
-            </div>
-            <h1 className="text-md font-bold text-white tracking-tight leading-tight">
-              HUB <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-300">FINANCEIRO</span>
-            </h1>
+            <img src="/logo_hub.png" alt="HUB FINANCEIRO" className="h-10 w-auto object-contain" />
           </div>
           <p className="text-[9px] text-emerald-400/50 font-bold uppercase tracking-[0.25em] pl-1 animate-pulse-subtle">Gestão Familiar Self-Hosted</p>
         </div>
@@ -103,13 +98,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
       {/* ── Mobile Header (Premium Style) ─────────────── */}
       <header className="md:hidden sticky top-0 z-40 bg-gray-950/80 backdrop-blur-xl border-b border-white/[0.04] px-5 py-4 flex items-center justify-between safe-top">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)] border border-emerald-400/20">
-            <ShieldCheck className="text-gray-950" size={20} strokeWidth={2.5} />
-          </div>
-          <div>
-            <h1 className="text-base font-bold text-white tracking-tight leading-none">HUB FINANCEIRO</h1>
-            <p className="text-[10px] text-emerald-400/60 font-bold uppercase tracking-[0.15em] mt-0.5">Self-Hosted</p>
-          </div>
+          <img src="/logo_hub.png" alt="HUB FINANCEIRO" className="h-10 w-auto object-contain" />
         </div>
         {user && (
           <div className="flex items-center gap-2">
