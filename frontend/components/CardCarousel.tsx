@@ -1,46 +1,135 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { TrendingUp, PiggyBank, Wallet, CreditCard, ShieldCheck } from 'lucide-react';
+import { 
+  TrendingUp, 
+  PiggyBank, 
+  Wallet, 
+  CreditCard, 
+  ShieldCheck, 
+  Calendar, 
+  FileText, 
+  Activity, 
+  Sparkles, 
+  Percent, 
+  Lock, 
+  BarChart3, 
+  DollarSign, 
+  Receipt, 
+  Sliders
+} from 'lucide-react';
 
-// ─── Card content (icons, phrases and themes) ───────────
+// ─── Animation speed constant ───────────────────────────
+const ANIMATION_SPEED = 0.0085;
+
+// ─── Card content (15 finance phrases and emerald themes) 
 const CARD_CONTENT = [
   {
-    title: 'Crescimento',
-    phrase: 'Acompanhe seu patrimônio decolar com gráficos precisos e relatórios em tempo real.',
-    icon: TrendingUp,
-    gradient: 'linear-gradient(135deg, #064e3b 0%, #022c22 100%)', // Emerald to Dark Deep Green
-    accentColor: '#34d399', // emerald-400
-  },
-  {
-    title: 'Metas & Poupança',
-    phrase: 'Planeje o amanhã. Economize com metas dinâmicas e veja seu dinheiro render mais.',
-    icon: PiggyBank,
-    gradient: 'linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 100%)', // Blue to Indigo
-    accentColor: '#60a5fa', // blue-400
-  },
-  {
-    title: 'Controle Diário',
-    phrase: 'Gerencie receitas, despesas e saldos de forma simples em um painel integrado.',
+    title: 'Organize sua vida financeira com total controle',
+    phrase: 'Acompanhe despesas, parcelamentos e economias com relatórios inteligentes e máxima segurança.',
     icon: Wallet,
-    gradient: 'linear-gradient(135deg, #0f766e 0%, #134e4a 100%)', // Teal to Dark Teal
-    accentColor: '#2dd4bf', // teal-400
+    gradient: 'linear-gradient(135deg, #064e3b 0%, #022c22 100%)', // Emerald Deep
+    accentColor: '#34d399',
   },
   {
-    title: 'Cartões & Limites',
-    phrase: 'Evite surpresas no fim do mês. Categorize e acompanhe gastos com cartões.',
+    title: 'Seu dinheiro organizado de forma simples',
+    phrase: 'Controle gastos fixos, acompanhe parcelas e visualize tudo em um só lugar.',
+    icon: PiggyBank,
+    gradient: 'linear-gradient(135deg, #0f766e 0%, #022c22 100%)', // Teal to Deep Green
+    accentColor: '#2dd4bf',
+  },
+  {
+    title: 'Mais controle financeiro para o seu dia a dia',
+    phrase: 'Gerencie despesas, planeje objetivos e acompanhe sua evolução com facilidade.',
+    icon: TrendingUp,
+    gradient: 'linear-gradient(135deg, #047857 0%, #064e3b 100%)', // Forest to Emerald
+    accentColor: '#34d399',
+  },
+  {
+    title: 'Tenha suas finanças sempre sob controle',
+    phrase: 'Monitore gastos, organize pagamentos e acompanhe relatórios personalizados.',
     icon: CreditCard,
-    gradient: 'linear-gradient(135deg, #581c87 0%, #3b0764 100%)', // Purple to Indigo
-    accentColor: '#c084fc', // purple-400
+    gradient: 'linear-gradient(135deg, #115e59 0%, #022c22 100%)', // Teal Deep
+    accentColor: '#2dd4bf',
   },
   {
-    title: 'Segurança Total',
-    phrase: 'Seus dados financeiros criptografados e protegidos sob os mais rígidos padrões.',
+    title: 'Planeje hoje, economize amanhã',
+    phrase: 'Visualize suas despesas, acompanhe parcelamentos e tome decisões melhores.',
+    icon: Calendar,
+    gradient: 'linear-gradient(135deg, #14532d 0%, #022c22 100%)', // Dark Green
+    accentColor: '#10b981',
+  },
+  {
+    title: 'Controle suas finanças com praticidade',
+    phrase: 'Tenha acesso a relatórios completos, gastos organizados e privacidade garantida.',
+    icon: FileText,
+    gradient: 'linear-gradient(135deg, #065f46 0%, #022c22 100%)', // Medium Emerald/Deep
+    accentColor: '#34d399',
+  },
+  {
+    title: 'Tudo que você precisa para organizar seu dinheiro',
+    phrase: 'Acompanhe despesas, metas financeiras e parcelamentos de forma inteligente.',
+    icon: Activity,
+    gradient: 'linear-gradient(135deg, #0f766e 0%, #115e59 100%)', // Teal Pure
+    accentColor: '#2dd4bf',
+  },
+  {
+    title: 'Organize despesas e alcance seus objetivos',
+    phrase: 'Tenha uma visão clara das suas finanças com relatórios completos e seguros.',
     icon: ShieldCheck,
-    gradient: 'linear-gradient(135deg, #27272a 0%, #09090b 100%)', // Dark Gray to Black
-    accentColor: '#a1a1aa', // zinc-400
+    gradient: 'linear-gradient(135deg, #166534 0%, #14532d 100%)', // Bright Forest Green
+    accentColor: '#10b981',
+  },
+  {
+    title: 'Sua central de organização financeira',
+    phrase: 'Controle receitas, despesas e pagamentos recorrentes com total tranquilidade.',
+    icon: Sparkles,
+    gradient: 'linear-gradient(135deg, #0d9488 0%, #0f766e 50%, #022c22 100%)', // Teal Mint
+    accentColor: '#2dd4bf',
+  },
+  {
+    title: 'Mais organização, menos preocupação',
+    phrase: 'Gerencie seus gastos e visualize suas finanças de forma rápida e segura.',
+    icon: Sliders,
+    gradient: 'linear-gradient(135deg, #059669 0%, #065f46 100%)', // Emerald Pure
+    accentColor: '#34d399',
+  },
+  {
+    title: 'Seus dados protegidos, suas finanças organizadas',
+    phrase: 'Controle tudo em um ambiente privado e pensado para simplificar seu dia.',
+    icon: Lock,
+    gradient: 'linear-gradient(135deg, #115e59 0%, #134e4a 100%)', // Teal deep block
+    accentColor: '#2dd4bf',
+  },
+  {
+    title: 'Finanças inteligentes para decisões melhores',
+    phrase: 'Monitore gastos, acompanhe metas e mantenha o controle do seu dinheiro.',
+    icon: BarChart3,
+    gradient: 'linear-gradient(135deg, #0f766e 0%, #022c22 100%)', // Teal/Emerald Black
+    accentColor: '#34d399',
+  },
+  {
+    title: 'Controle completo para sua vida financeira',
+    phrase: 'Acompanhe despesas fixas, parcelamentos e economias em tempo real.',
+    icon: DollarSign,
+    gradient: 'linear-gradient(135deg, #14532d 0%, #022c22 100%)', // Dark green deep
+    accentColor: '#10b981',
+  },
+  {
+    title: 'Transforme a forma como você cuida do dinheiro',
+    phrase: 'Visualize relatórios detalhados e mantenha suas finanças organizadas.',
+    icon: Receipt,
+    gradient: 'linear-gradient(135deg, #064e3b 0%, #0f766e 100%)', // Emerald to Teal
+    accentColor: '#34d399',
+  },
+  {
+    title: 'Privacidade, controle e organização financeira',
+    phrase: 'Gerencie tudo em um só lugar com segurança e praticidade.',
+    icon: ShieldCheck,
+    gradient: 'linear-gradient(135deg, #047857 0%, #022c22 100%)', // Forest to Deep Green
+    accentColor: '#34d399',
   },
 ];
 
-// ─── Card details for the back faces ────────────────────
+// ─── Card details for back faces ────────────────────────
 const CARD_DETAILS = [
   { number: '4232 8908 1121 4892', name: 'ZACHARY MERCER', cvv: '382' },
   { number: '4154 7831 9904 5124', name: 'SOPHIA MARTINEZ', cvv: '109' },
@@ -107,8 +196,8 @@ export const CardCarousel: React.FC = () => {
 
   // ─── Animation loop ───────────────────────────────────
   const renderLoop = () => {
-    // Increased speed (from 0.0016 to 0.006) for more dynamic, faster rotation
-    progress.current += 0.006;
+    // Increased speed for snappier transitions
+    progress.current += ANIMATION_SPEED;
 
     // Smooth mouse interpolation (inertia damping)
     mouse.current.x += (mouse.current.targetX - mouse.current.x) * 0.08;
@@ -138,6 +227,7 @@ export const CardCarousel: React.FC = () => {
       const absOffset = Math.abs(offset);
       const sign = Math.sign(offset);
 
+      // Hide cards that are far away from the viewport center
       if (absOffset > 3.0) {
         card.style.visibility = 'hidden';
         continue;
@@ -298,40 +388,35 @@ export const CardCarousel: React.FC = () => {
                         }}
                       />
 
-                      <div className="absolute inset-0 p-5 sm:p-6 text-white h-full w-full font-sans z-10 flex flex-col justify-between">
+                      <div className="absolute inset-0 p-4 sm:p-5 text-white h-full w-full font-sans z-10 flex flex-col justify-between">
                         {/* Top Row: Icon + Title */}
-                        <div className="flex justify-between items-start">
-                          <div className="flex items-center gap-2.5">
+                        <div className="flex justify-between items-start gap-2">
+                          <div className="flex items-center gap-2">
                             <div 
-                              className="p-1.5 sm:p-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/10"
+                              className="p-1 sm:p-1.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/10 flex-shrink-0"
                               style={{ color: content.accentColor }}
                             >
-                              <IconComponent className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2} />
+                              <IconComponent className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
                             </div>
-                            <div>
-                              <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-white/50 font-semibold">
-                                Recurso
-                              </p>
-                              <h4 className="text-sm sm:text-base font-bold text-white tracking-tight leading-tight">
-                                {content.title}
-                              </h4>
-                            </div>
+                            <h4 className="text-[11px] sm:text-xs font-bold text-white tracking-tight leading-tight line-clamp-2">
+                              {content.title}
+                            </h4>
                           </div>
                           
                           {/* Sena Finance branding tag */}
-                          <div className="text-right">
-                            <span className="text-[9px] sm:text-[10px] font-bold tracking-widest text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/20">
+                          <div className="flex-shrink-0">
+                            <span className="text-[8px] sm:text-[9px] font-bold tracking-widest text-emerald-400 bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-500/20">
                               SENA
                             </span>
                           </div>
                         </div>
 
                         {/* Middle Row: Chip + Phrase text */}
-                        <div className="flex items-center gap-4 my-auto">
+                        <div className="flex items-center gap-3 my-2">
                           {/* Golden/Silver Metallic Contact Chip */}
                           <div className="flex-shrink-0">
                             <svg
-                              className="w-7 h-7 sm:w-[32px] sm:h-[32px]"
+                              className="w-6 h-6 sm:w-7 sm:h-7"
                               viewBox="0 0 60 60"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
@@ -357,7 +442,7 @@ export const CardCarousel: React.FC = () => {
 
                           {/* Phrase content text */}
                           <div className="flex-1">
-                            <p className="text-[10px] sm:text-xs text-white/90 leading-relaxed font-medium">
+                            <p className="text-[10px] sm:text-[11px] text-white/90 leading-relaxed font-medium line-clamp-3">
                               "{content.phrase}"
                             </p>
                           </div>
@@ -365,14 +450,14 @@ export const CardCarousel: React.FC = () => {
 
                         {/* Bottom Row: Credit-card styled design details */}
                         <div className="flex justify-between items-end">
-                          <div className="text-[8px] sm:text-[9px] font-mono tracking-wider text-white/45 uppercase">
+                          <div className="text-[7px] sm:text-[8px] font-mono tracking-wider text-white/45 uppercase">
                             Sena Finance Platinum
                           </div>
                           
                           {/* Double intersecting circle Brand Logo - bottom right */}
                           <div className="flex -space-x-3 items-center opacity-80">
-                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/10 backdrop-blur-[1px] border border-white/10" />
-                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/25 backdrop-blur-[1px] border border-white/10" />
+                            <div className="w-4.5 h-4.5 sm:w-5 sm:h-5 rounded-full bg-white/10 backdrop-blur-[1px] border border-white/10" />
+                            <div className="w-4.5 h-4.5 sm:w-5 sm:h-5 rounded-full bg-white/25 backdrop-blur-[1px] border border-white/10" />
                           </div>
                         </div>
                       </div>
