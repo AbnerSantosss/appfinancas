@@ -127,15 +127,15 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSave, onClose, initialData 
       <div className="glass-panel w-full sm:max-w-md sm:rounded-3xl rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 overflow-hidden max-h-[95vh] sm:max-h-[90vh] flex flex-col border-white/[0.08]">
         
         {/* Header */}
-        <div className="p-4 sm:p-5 flex justify-between items-center border-b border-white/[0.04] bg-white/[0.01] shrink-0">
-          <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+        <div className="p-5 sm:p-5 flex justify-between items-center border-b border-white/[0.04] bg-white/[0.01] shrink-0">
+          <h3 className="text-base sm:text-sm font-bold text-white uppercase tracking-wider">
             {initialData ? 'Editar Lançamento' : 'Novo Lançamento'}
           </h3>
           <button 
             onClick={onClose} 
-            className="w-9 h-9 flex items-center justify-center hover:bg-white/5 rounded-xl transition-all active:scale-90 cursor-pointer"
+            className="w-10 h-10 sm:w-9 sm:h-9 flex items-center justify-center hover:bg-white/5 rounded-xl transition-all active:scale-90 cursor-pointer"
           >
-            <X size={18} className="text-gray-400" />
+            <X size={20} className="text-gray-400" />
           </button>
         </div>
 
@@ -144,14 +144,14 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSave, onClose, initialData 
           
           {/* Shortcuts */}
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Atalhos Rápidos</label>
-            <div className="flex flex-wrap gap-2">
+            <label className="text-[11px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Atalhos Rápidos</label>
+            <div className="flex flex-wrap gap-2.5 sm:gap-2">
               {COMMON_SHORTCUTS.map(s => (
                 <button
                   key={s.label}
                   type="button"
                   onClick={() => handleShortcut(s)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border transition-all duration-200 active:scale-95 cursor-pointer text-xs font-semibold ${description === s.label ? 'bg-emerald-500 border-emerald-500 text-gray-950 shadow-[0_2px_10px_rgba(16,185,129,0.2)]' : 'bg-gray-950/60 border-white/[0.04] text-gray-400 hover:border-white/[0.1] hover:bg-gray-950'}`}
+                  className={`flex items-center gap-2 px-4 py-2.5 sm:px-3 sm:py-2 rounded-xl border transition-all duration-200 active:scale-95 cursor-pointer text-sm sm:text-xs font-semibold ${description === s.label ? 'bg-emerald-500 border-emerald-500 text-gray-950 shadow-[0_2px_10px_rgba(16,185,129,0.2)]' : 'bg-gray-950/60 border-white/[0.04] text-gray-400 hover:border-white/[0.1] hover:bg-gray-950'}`}
                 >
                   {s.icon}
                   <span>{s.label}</span>
@@ -177,25 +177,25 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSave, onClose, initialData 
           </div>
 
           {/* Type selector */}
-          <div className="flex bg-gray-950/80 p-1 rounded-xl border border-white/[0.04] gap-1">
+          <div className="flex bg-gray-950/80 p-1.5 sm:p-1 rounded-xl border border-white/[0.04] gap-1">
             <button 
               type="button" 
               onClick={() => setType('FIXED')} 
-              className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer ${type === 'FIXED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_12px_rgba(16,185,129,0.1)]' : 'text-gray-500 hover:text-gray-400'}`}
+              className={`flex-1 py-3 sm:py-2 text-[11px] sm:text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer ${type === 'FIXED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_12px_rgba(16,185,129,0.1)]' : 'text-gray-500 hover:text-gray-400'}`}
             >
               Fixo
             </button>
             <button 
               type="button" 
               onClick={() => setType('INSTALLMENT')} 
-              className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer ${type === 'INSTALLMENT' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_12px_rgba(16,185,129,0.1)]' : 'text-gray-500 hover:text-gray-400'}`}
+              className={`flex-1 py-3 sm:py-2 text-[11px] sm:text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer ${type === 'INSTALLMENT' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_12px_rgba(16,185,129,0.1)]' : 'text-gray-500 hover:text-gray-400'}`}
             >
               Parcelado
             </button>
             <button 
               type="button" 
               onClick={() => setType('ONCE')} 
-              className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer ${type === 'ONCE' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_12px_rgba(16,185,129,0.1)]' : 'text-gray-500 hover:text-gray-400'}`}
+              className={`flex-1 py-3 sm:py-2 text-[11px] sm:text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all duration-200 cursor-pointer ${type === 'ONCE' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_12px_rgba(16,185,129,0.1)]' : 'text-gray-500 hover:text-gray-400'}`}
             >
               Único
             </button>
@@ -320,19 +320,19 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSave, onClose, initialData 
           </div>
 
           {/* Form Actions */}
-          <div className="pt-3 flex gap-3.5 border-t border-white/[0.04] shrink-0">
+          <div className="pt-4 sm:pt-3 flex gap-3.5 border-t border-white/[0.04] shrink-0">
             <button 
               type="button" 
               onClick={onClose} 
               disabled={isSubmitting} 
-              className="flex-1 py-3 text-xs text-gray-400 hover:text-white font-bold uppercase tracking-wider transition-colors disabled:opacity-50 active:scale-95 cursor-pointer rounded-xl"
+              className="flex-1 py-3.5 sm:py-3 text-sm sm:text-xs text-gray-400 hover:text-white font-bold uppercase tracking-wider transition-colors disabled:opacity-50 active:scale-95 cursor-pointer rounded-xl"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-[2] bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 text-xs font-bold uppercase tracking-wider py-3 rounded-xl transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+              className="flex-[2] bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 text-sm sm:text-xs font-bold uppercase tracking-wider py-3.5 sm:py-3 rounded-xl transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
             >
               {isSubmitting ? <div className="loader-spinner" /> : null}
               {initialData ? 'Salvar Alterações' : 'Criar Lançamento'}

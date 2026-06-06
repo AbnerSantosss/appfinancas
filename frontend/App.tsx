@@ -80,13 +80,13 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
           <div className="w-full max-w-sm relative z-10 space-y-6">
             {/* Header Centralizado */}
             <div className="text-center mb-6 flex flex-col items-center animate-in fade-in slide-in-from-top-4 duration-500">
-              <div className="w-14 h-14 bg-[#111C2B] border border-[#00FFBB]/20 rounded-2xl flex items-center justify-center mb-3 shadow-[0_0_35px_rgba(0,255,187,0.15)]">
-                <KeyRound className="text-[#00FFBB]" size={26} />
+              <div className="w-16 h-16 sm:w-14 sm:h-14 bg-[#111C2B] border border-[#00FFBB]/20 rounded-2xl flex items-center justify-center mb-3 shadow-[0_0_35px_rgba(0,255,187,0.15)]">
+                <KeyRound className="text-[#00FFBB]" size={30} />
               </div>
-              <h1 className="text-xl font-extrabold text-[#F8FAFC] tracking-tight">
+              <h1 className="text-2xl sm:text-xl font-extrabold text-[#F8FAFC] tracking-tight">
                 Recuperar <span className="text-[#00FFBB]">Acesso</span>
               </h1>
-              <p className="text-[8px] text-[#00FFBB]/60 font-bold uppercase tracking-[0.15em] mt-1.5">
+              <p className="text-[10px] sm:text-[8px] text-[#00FFBB]/60 font-bold uppercase tracking-[0.15em] mt-1.5">
                 Redefina suas credenciais com segurança
               </p>
             </div>
@@ -131,9 +131,9 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-[#00FFBB] hover:bg-[#00FFBB]/90 text-[#0A111F] py-3.5 rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-[#00FFBB]/10 cursor-pointer"
+                className="w-full bg-[#00FFBB] hover:bg-[#00FFBB]/90 text-[#0A111F] py-4 sm:py-3.5 rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-[#00FFBB]/10 cursor-pointer"
               >
-                {isLoading ? <div className="loader-spinner" /> : <Send size={13} />}
+                {isLoading ? <div className="loader-spinner" /> : <Send size={14} />}
                 SOLICITAR NOVA SENHA
               </button>
 
@@ -212,13 +212,13 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
             <div className="w-full max-w-sm relative z-10 space-y-6">
               {/* Header Mobile (Oculto no Desktop) */}
               <div className="md:hidden text-center mb-6 flex flex-col items-center">
-                <div className="w-14 h-14 bg-[#111C2B] border border-[#00FFBB]/20 rounded-2xl flex items-center justify-center mb-3 shadow-[0_0_35px_rgba(0,255,187,0.15)]">
-                  <Hexagon className="text-[#00FFBB]" size={26} />
+                <div className="w-16 h-16 sm:w-14 sm:h-14 bg-[#111C2B] border border-[#00FFBB]/20 rounded-2xl flex items-center justify-center mb-3 shadow-[0_0_35px_rgba(0,255,187,0.15)]">
+                  <Hexagon className="text-[#00FFBB]" size={30} />
                 </div>
-                <h1 className="text-xl font-extrabold text-[#F8FAFC] tracking-tight">
+                <h1 className="text-2xl sm:text-xl font-extrabold text-[#F8FAFC] tracking-tight">
                   Hub <span className="text-[#00FFBB]">Financeiro</span>
                 </h1>
-                <p className="text-[8px] text-[#00FFBB]/60 font-bold uppercase tracking-[0.15em] mt-1.5">
+                <p className="text-[10px] sm:text-[8px] text-[#00FFBB]/60 font-bold uppercase tracking-[0.15em] mt-1.5">
                   Organize todas suas finanças em um único lugar
                 </p>
               </div>
@@ -253,7 +253,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                     placeholder="seu@email.com"
                     required
                     autoFocus
-                    className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-[#00FFBB]/50 focus:ring-2 focus:ring-[#00FFBB]/20 focus:outline-none transition-all duration-300"
+                    className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3.5 sm:py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-[#00FFBB]/50 focus:ring-2 focus:ring-[#00FFBB]/20 focus:outline-none transition-all duration-300"
                   />
                 </div>
 
@@ -268,12 +268,12 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Sua senha secreta"
                       required
-                      className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-[#00FFBB]/50 focus:ring-2 focus:ring-[#00FFBB]/20 focus:outline-none transition-all duration-300 pr-12"
+                      className="w-full bg-[#0F172A] border border-white/5 rounded-xl px-4 py-3.5 sm:py-3 text-[#F8FAFC] placeholder:text-[#64748B]/40 focus:border-[#00FFBB]/50 focus:ring-2 focus:ring-[#00FFBB]/20 focus:outline-none transition-all duration-300 pr-12"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-[#64748B] hover:text-[#F8FAFC] transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center text-[#64748B] hover:text-[#F8FAFC] transition-colors"
                     >
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
@@ -296,9 +296,9 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-[#00FFBB] hover:bg-[#00FFBB]/90 text-[#0A111F] py-3.5 rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-[#00FFBB]/10 cursor-pointer"
+                  className="w-full bg-[#00FFBB] hover:bg-[#00FFBB]/90 text-[#0A111F] py-4 sm:py-3.5 rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-[#00FFBB]/10 cursor-pointer"
                 >
-                  {isLoading ? <div className="loader-spinner" /> : <ArrowRight size={15} />}
+                  {isLoading ? <div className="loader-spinner" /> : <ArrowRight size={16} />}
                   ACESSAR PAINEL
                 </button>
               </form>

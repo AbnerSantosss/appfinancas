@@ -69,12 +69,21 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
   border-radius: 14px !important;
   color: #ffffff !important;
-  padding: 12px 16px !important;
-  font-size: 14px !important;
+  padding: 14px 16px !important;
+  font-size: 16px !important;
   font-weight: 500 !important;
   outline: none !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  min-height: 48px !important;
+}
+
+@media (min-width: 640px) {
+  .glass-input {
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+    min-height: 44px !important;
+  }
 }
 
 .glass-input:focus {
@@ -101,6 +110,22 @@ input, select, textarea {
 @media (min-width: 640px) {
   input, select, textarea {
     font-size: 14px !important;
+  }
+}
+
+/* ─── Mobile-First Touch Targets ──────────────────── */
+@media (max-width: 639px) {
+  /* Ensure all interactive elements have comfortable touch targets */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Larger tap targets for icon-only buttons */
+  button:has(svg:only-child) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -147,4 +172,13 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+/* ─── Mobile Typography Scale ────────────────────────── */
+@media (max-width: 639px) {
+  /* Boost readability on small screens */
+  .mobile-text-boost {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
 }

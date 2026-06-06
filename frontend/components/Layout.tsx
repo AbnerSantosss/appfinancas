@@ -22,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-950 pb-24 md:pb-0 md:pl-64 selection:bg-emerald-500/20">
+    <div className="flex flex-col min-h-screen bg-gray-950 pb-28 md:pb-0 md:pl-64 selection:bg-emerald-500/20">
       
       {/* ── Sidebar Desktop (Premium Glassmorphic) ─────── */}
       <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-gray-900/40 backdrop-blur-2xl border-r border-white/[0.04] p-6 shadow-2xl z-40">
@@ -101,36 +101,36 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
       </aside>
 
       {/* ── Mobile Header (Premium Style) ─────────────── */}
-      <header className="md:hidden sticky top-0 z-40 bg-gray-950/80 backdrop-blur-xl border-b border-white/[0.04] px-4 py-3 flex items-center justify-between safe-top">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)] border border-emerald-400/20">
-            <ShieldCheck className="text-gray-950" size={18} strokeWidth={2.5} />
+      <header className="md:hidden sticky top-0 z-40 bg-gray-950/80 backdrop-blur-xl border-b border-white/[0.04] px-5 py-4 flex items-center justify-between safe-top">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)] border border-emerald-400/20">
+            <ShieldCheck className="text-gray-950" size={20} strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="text-sm font-bold text-white tracking-tight leading-none">Sena Finance</h1>
-            <p className="text-[9px] text-emerald-400/60 font-bold uppercase tracking-[0.15em] mt-0.5">Self-Hosted</p>
+            <h1 className="text-base font-bold text-white tracking-tight leading-none">Sena Finance</h1>
+            <p className="text-[10px] text-emerald-400/60 font-bold uppercase tracking-[0.15em] mt-0.5">Self-Hosted</p>
           </div>
         </div>
         {user && (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <div className="text-right">
-              <p className="text-xs font-bold text-white leading-none">{user.name || user.email.split('@')[0]}</p>
-              <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">{user.role}</p>
+              <p className="text-sm font-bold text-white leading-none">{user.name || user.email.split('@')[0]}</p>
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">{user.role}</p>
             </div>
             <button
               onClick={() => setIsProfileModalOpen(true)}
-              className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-xl transition-all duration-200 cursor-pointer"
+              className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-xl transition-all duration-200 cursor-pointer"
               title="Editar Perfil"
             >
-              <Settings size={15} />
+              <Settings size={18} />
             </button>
             {onLogout && (
               <button
                 onClick={onLogout}
-                className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all duration-200 cursor-pointer"
+                className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all duration-200 cursor-pointer"
                 title="Sair"
               >
-                <LogOut size={15} />
+                <LogOut size={18} />
               </button>
             )}
           </div>
@@ -138,40 +138,40 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
       </header>
 
       {/* ── Main Content ─────────────────────────────── */}
-      <main className="flex-1 p-4 md:p-8 max-w-6xl mx-auto w-full">
+      <main className="flex-1 p-4 pt-5 md:p-8 max-w-6xl mx-auto w-full">
         {children}
       </main>
 
       {/* ── Mobile Bottom Navigation (Floating Dock) ───── */}
-      <nav className="md:hidden fixed bottom-4 left-4 right-4 bg-gray-900/75 backdrop-blur-2xl border border-white/[0.08] px-3 py-2 rounded-2xl z-50 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]">
+      <nav className="md:hidden fixed bottom-5 left-4 right-4 bg-gray-900/80 backdrop-blur-2xl border border-white/[0.08] px-4 py-3 rounded-2xl z-50 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] safe-bottom">
         <div className="flex items-center justify-around max-w-md mx-auto relative">
           <MobileNavItem 
-            icon={<LayoutDashboard size={20} />} 
+            icon={<LayoutDashboard size={22} />} 
             label="Início"
             active={activeTab === 'dashboard'} 
             onClick={() => setActiveTab('dashboard')} 
           />
           
           {/* FAB Central flutuante */}
-          <div className="relative -mt-6">
+          <div className="relative -mt-7">
             <button 
               onClick={() => setActiveTab('expenses')}
-              className="bg-gradient-to-tr from-emerald-500 to-teal-400 text-gray-950 w-12 h-12 rounded-xl shadow-[0_4px_20px_rgba(16,185,129,0.35)] active:scale-95 transition-all flex items-center justify-center border border-emerald-400/20 cursor-pointer"
+              className="bg-gradient-to-tr from-emerald-500 to-teal-400 text-gray-950 w-14 h-14 rounded-2xl shadow-[0_4px_20px_rgba(16,185,129,0.35)] active:scale-95 transition-all flex items-center justify-center border border-emerald-400/20 cursor-pointer"
               title="Novo Lançamento"
             >
-              <PlusCircle size={24} strokeWidth={2} />
+              <PlusCircle size={26} strokeWidth={2} />
             </button>
           </div>
 
           <MobileNavItem 
-            icon={<ReceiptText size={20} />} 
+            icon={<ReceiptText size={22} />} 
             label="Lançamentos"
             active={activeTab === 'expenses'} 
             onClick={() => setActiveTab('expenses')} 
           />
           <MobileNavItem 
-            icon={<Sliders size={20} />} 
-            label="Configurações"
+            icon={<Sliders size={22} />} 
+            label="Config"
             active={activeTab === 'settings'} 
             onClick={() => setActiveTab('settings')} 
           />
@@ -212,16 +212,16 @@ const NavItem = ({ icon, label, active, onClick }: { icon: any, label: string, a
 const MobileNavItem = ({ icon, label, active, onClick }: { icon: any, label: string, active: boolean, onClick: () => void }) => (
   <button 
     onClick={onClick}
-    className={`flex flex-col items-center justify-center gap-0.5 min-w-[50px] py-1 px-2.5 rounded-xl transition-all duration-200 active:scale-90 cursor-pointer ${
+    className={`flex flex-col items-center justify-center gap-1 min-w-[56px] py-1.5 px-3 rounded-xl transition-all duration-200 active:scale-90 cursor-pointer ${
       active 
         ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]' 
         : 'text-gray-500'
     }`}
   >
-    <div className={`transition-transform duration-200 ${active ? 'scale-105' : ''}`}>
+    <div className={`transition-transform duration-200 ${active ? 'scale-110' : ''}`}>
       {icon}
     </div>
-    <span className={`text-[10px] mt-0.5 font-bold tracking-wide ${active ? 'text-emerald-400' : 'text-gray-500'}`}>
+    <span className={`text-[11px] mt-0.5 font-bold tracking-wide ${active ? 'text-emerald-400' : 'text-gray-500'}`}>
       {label}
     </span>
   </button>

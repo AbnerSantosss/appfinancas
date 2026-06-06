@@ -151,7 +151,7 @@ router.get('/users', requireAuth, requireRole('master'), async (_req: AuthReques
  */
 router.post('/reset-password/:userId', requireAuth, requireRole('master'), async (req: AuthRequest, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.params.userId as string;
     const result = await authService.resetUserPassword(userId);
     res.json(result);
   } catch (err: any) {
@@ -165,7 +165,7 @@ router.post('/reset-password/:userId', requireAuth, requireRole('master'), async
  */
 router.delete('/users/:userId', requireAuth, requireRole('master'), async (req: AuthRequest, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.params.userId as string;
     const result = await authService.deleteUser(userId, req.user!.id);
     res.json(result);
   } catch (err: any) {
