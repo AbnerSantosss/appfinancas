@@ -19,6 +19,7 @@ import {
   AuthUser,
 } from './services/api';
 import { AnimatedBackground } from './components/AnimatedBackground';
+import { CardCarousel } from './components/CardCarousel';
 
 // ─── Tela de Login ──────────────────────────────────────
 
@@ -177,15 +178,13 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
               </h2>
             </div>
 
-            {/* Ilustração e Copy de Finanças */}
-            <div className="relative z-10 flex-1 flex flex-col justify-center items-center max-w-2xl mx-auto text-center px-6">
-              <div className="relative w-full max-w-md aspect-[4/3] rounded-3xl overflow-hidden border border-white/5 shadow-2xl shadow-[#34d399]/5 bg-gray-900/30 backdrop-blur-md p-4 group">
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#34d399]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <img 
-                  src="/login_illustration.png" 
-                  alt="Finance illustration" 
-                  className="w-full h-full object-cover rounded-2xl group-hover:scale-[1.02] transition-transform duration-700"
-                />
+            {/* Ilustração 3D e Copy de Finanças */}
+            <div className="relative z-10 flex-1 flex flex-col justify-center items-center max-w-3xl mx-auto text-center px-6">
+              <div className="relative w-full max-w-lg aspect-[4/3] md:aspect-[16/10] rounded-3xl overflow-hidden border border-white/5 shadow-2xl shadow-emerald-500/5 bg-gray-900/30 backdrop-blur-md p-4 group">
+                <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden">
+                  <CardCarousel />
+                </div>
               </div>
               <h3 className="text-lg font-bold text-white mt-8 tracking-tight">Controle total sobre suas despesas</h3>
               <p className="text-xs text-gray-400 mt-2 max-w-sm leading-relaxed">
