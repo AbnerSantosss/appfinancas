@@ -162,39 +162,36 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
         <div className="min-h-screen bg-gray-950 flex md:grid md:grid-cols-12 overflow-hidden relative">
           <AnimatedBackground />
           
-          {/* ── Painel Esquerdo (Desktop Only - Ilustração Premium) ── */}
-          <div className="hidden md:flex md:col-span-7 lg:col-span-8 bg-gray-900/30 border-r border-white/[0.03] flex-col justify-between p-12 relative overflow-hidden">
+          {/* ── Painel Esquerdo (Desktop Only - 3D Card Carousel) ── */}
+          <div className="hidden md:flex md:col-span-7 lg:col-span-8 bg-gray-900/30 border-r border-white/[0.03] flex-col justify-between relative overflow-hidden">
             {/* Background glow effects - Left Panel */}
             <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#34d399]/10 blur-[120px] rounded-full pointer-events-none" />
             <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#34d399]/5 blur-[120px] rounded-full pointer-events-none" />
 
-            {/* Header no Painel Esquerdo */}
-            <div className="relative z-10 flex items-center gap-3">
-              <div className="w-9 h-9 bg-gray-900 border border-[#34d399]/20 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-                <Hexagon className="text-[#34d399]" size={18} strokeWidth={2} />
+            {/* 3D Card Carousel - fills the entire panel */}
+            <CardCarousel />
+
+            {/* Header overlay on top of the carousel */}
+            <div className="absolute top-0 left-0 right-0 p-12 z-20">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 bg-gray-900 border border-[#34d399]/20 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                  <Hexagon className="text-[#34d399]" size={18} strokeWidth={2} />
+                </div>
+                <h2 className="text-sm font-extrabold text-white tracking-tight">
+                  Sena <span className="text-[#34d399]">Finance</span>
+                </h2>
               </div>
-              <h2 className="text-sm font-extrabold text-white tracking-tight">
-                Hub <span className="text-[#34d399]">Financeiro</span>
-              </h2>
             </div>
 
-            {/* Ilustração 3D e Copy de Finanças */}
-            <div className="relative z-10 flex-1 flex flex-col justify-center items-center max-w-3xl mx-auto text-center px-6">
-              <div className="relative w-full max-w-lg aspect-[4/3] md:aspect-[16/10] rounded-3xl overflow-hidden border border-white/5 shadow-2xl shadow-emerald-500/5 bg-gray-900/30 backdrop-blur-md p-4 group">
-                <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden">
-                  <CardCarousel />
-                </div>
-              </div>
-              <h3 className="text-lg font-bold text-white mt-8 tracking-tight">Controle total sobre suas despesas</h3>
+            {/* Bottom overlay: title + footer */}
+            <div className="absolute bottom-0 left-0 right-0 p-12 z-20 bg-gradient-to-t from-gray-950/80 via-gray-950/40 to-transparent">
+              <h3 className="text-lg font-bold text-white tracking-tight">Controle total sobre suas despesas</h3>
               <p className="text-xs text-gray-400 mt-2 max-w-sm leading-relaxed">
                 Monitore lançamentos fixos e parcelados, planeje suas economias e visualize relatórios dinâmicos de forma privada e segura.
               </p>
-            </div>
-
-            {/* Rodapé do Painel Esquerdo */}
-            <div className="relative z-10 text-[8px] text-gray-400 font-bold uppercase tracking-[0.2em]">
-              Sena Finance • Self-Hosted
+              <div className="mt-6 text-[8px] text-gray-400 font-bold uppercase tracking-[0.2em]">
+                Sena Finance • Self-Hosted
+              </div>
             </div>
           </div>
 
