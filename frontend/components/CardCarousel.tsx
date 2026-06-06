@@ -63,10 +63,12 @@ export const CardCarousel: React.FC = () => {
   }, []);
 
   const renderLoop = () => {
-    progress.current += 0.0016; 
+    // Aumentado a velocidade do carrossel para ser mais perceptível
+    progress.current += 0.0080; 
 
-    mouse.current.x += (mouse.current.targetX - mouse.current.x) * 0.08;
-    mouse.current.y += (mouse.current.targetY - mouse.current.y) * 0.08;
+    // Aumentada a sensibilidade do mouse para um tilt mais forte
+    mouse.current.x += (mouse.current.targetX - mouse.current.x) * 0.15;
+    mouse.current.y += (mouse.current.targetY - mouse.current.y) * 0.15;
 
     const cards = cardsRefs.current;
     const h = window.innerHeight;
@@ -158,8 +160,8 @@ export const CardCarousel: React.FC = () => {
       const localCardRotation = -sign * rot;
       const centerFactor = Math.max(0, 1 - absOffset);
 
-      const maxTiltY = 15; 
-      const maxTiltX = 12; 
+      const maxTiltY = 35; 
+      const maxTiltX = 25; 
 
       const activeTiltX = -mouse.current.y * maxTiltX * centerFactor;
       const activeTiltY = mouse.current.x * maxTiltY * centerFactor;
