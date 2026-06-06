@@ -117,7 +117,7 @@ const Settings: React.FC<SettingsProps> = ({
         port: parseInt(smtpPort) || 587,
         user: smtpUser,
         pass: smtpPass,
-        from: smtpFrom || 'noreply@senafinance.com',
+        from: smtpFrom || 'noreply@hubfinanceiro.com',
       });
       setSmtpConfigured(true);
       setSmtpResult({ success: true, message: 'Configuração SMTP salva com sucesso!' });
@@ -137,7 +137,7 @@ const Settings: React.FC<SettingsProps> = ({
         port: parseInt(smtpPort) || 587,
         user: smtpUser,
         pass: smtpPass,
-        from: smtpFrom || 'noreply@senafinance.com',
+        from: smtpFrom || 'noreply@hubfinanceiro.com',
       });
       setSmtpResult(result);
     } catch (err: any) {
@@ -470,7 +470,7 @@ const Settings: React.FC<SettingsProps> = ({
         
         <div className="mt-8 pt-6 border-t border-white/5 text-center">
           <p className="text-[7px] md:text-[9px] text-slate-600 font-bold uppercase tracking-[0.3em]">
-            Sena Finance • v5.0.0 • Self-Hosted
+            HUB FINANCEIRO • v5.0.0 • Self-Hosted
           </p>
         </div>
       </div>

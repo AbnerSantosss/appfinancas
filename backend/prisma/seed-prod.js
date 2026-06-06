@@ -3,7 +3,7 @@
  * Executado automaticamente no deploy via docker-compose command.
  * 
  * Variáveis de ambiente necessárias:
- *   MASTER_EMAIL    (default: admin@sena.com)
+ *   MASTER_EMAIL    (default: admin@hubfinanceiro.com)
  *   MASTER_PASSWORD (default: Mudar@123)
  */
 
@@ -13,7 +13,7 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
-  const email = process.env.MASTER_EMAIL || 'admin@sena.com';
+  const email = process.env.MASTER_EMAIL || 'admin@hubfinanceiro.com';
   const rawPassword = process.env.MASTER_PASSWORD || 'Mudar@123';
 
   // Verifica se o master já existe

@@ -22,7 +22,7 @@ class EmailService {
           secure: (dbConfig.port || 587) === 465,
           auth: { user: dbConfig.user, pass: dbConfig.pass },
         });
-        return { transporter, fromAddress: dbConfig.from || 'noreply@senafinance.com' };
+        return { transporter, fromAddress: dbConfig.from || 'noreply@hubfinanceiro.com' };
       }
     } catch {
       // DB não disponível, tenta env vars
@@ -40,7 +40,7 @@ class EmailService {
         secure: parseInt(process.env.SMTP_PORT || '587') === 465,
         auth: { user, pass },
       });
-      return { transporter, fromAddress: process.env.SMTP_FROM || 'noreply@senafinance.com' };
+      return { transporter, fromAddress: process.env.SMTP_FROM || 'noreply@hubfinanceiro.com' };
     }
 
     return null;
@@ -82,19 +82,19 @@ class EmailService {
 
     try {
       await transport.transporter.sendMail({
-        from: `"Sena Finance" <${transport.fromAddress}>`,
+        from: `"HUB FINANCEIRO" <${transport.fromAddress}>`,
         to: toEmail,
-        subject: '🎉 Convite — Sena Family Finance',
+        subject: '🎉 Convite — HUB FINANCEIRO',
         html: `
           <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #0f172a; border-radius: 16px; overflow: hidden; border: 1px solid #1e293b;">
             <div style="background: linear-gradient(135deg, #10b981, #14b8a6); padding: 32px 24px; text-align: center;">
-              <h1 style="color: #0f172a; margin: 0; font-size: 24px; font-weight: 800;">Sena Family Finance</h1>
+              <h1 style="color: #0f172a; margin: 0; font-size: 24px; font-weight: 800;">HUB FINANCEIRO</h1>
               <p style="color: #064e3b; margin: 8px 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">Convite de Acesso</p>
             </div>
             <div style="padding: 32px 24px;">
               <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
                 Olá${name ? ` <strong style="color: #fff;">${name}</strong>` : ''}! 👋<br><br>
-                Você foi convidado(a) para acessar o <strong style="color: #10b981;">Sena Family Finance</strong>. 
+                Você foi convidado(a) para acessar o <strong style="color: #10b981;">HUB FINANCEIRO</strong>. 
                 Use as credenciais abaixo para fazer seu primeiro login:
               </p>
               <div style="background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155;">
@@ -113,7 +113,7 @@ class EmailService {
             </div>
             <div style="padding: 16px 24px; border-top: 1px solid #1e293b; text-align: center;">
               <p style="color: #475569; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin: 0;">
-                Sena Family Finance • Self-Hosted
+                HUB FINANCEIRO • Self-Hosted
               </p>
             </div>
           </div>
@@ -135,14 +135,14 @@ class EmailService {
 
     try {
       await transport.transporter.sendMail({
-        from: `"Sena Finance" <${transport.fromAddress}>`,
+        from: `"HUB FINANCEIRO" <${transport.fromAddress}>`,
         to: toEmail,
-        subject: '🔑 Senha Resetada — Sena Family Finance',
+        subject: '🔑 Senha Resetada — HUB FINANCEIRO',
         html: `
           <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #0f172a; border-radius: 16px; overflow: hidden; border: 1px solid #1e293b;">
             <div style="background: linear-gradient(135deg, #f59e0b, #f97316); padding: 32px 24px; text-align: center;">
               <h1 style="color: #0f172a; margin: 0; font-size: 24px; font-weight: 800;">Senha Resetada</h1>
-              <p style="color: #78350f; margin: 8px 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">Sena Family Finance</p>
+              <p style="color: #78350f; margin: 8px 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">HUB FINANCEIRO</p>
             </div>
             <div style="padding: 32px 24px;">
               <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
@@ -160,7 +160,7 @@ class EmailService {
             </div>
             <div style="padding: 16px 24px; border-top: 1px solid #1e293b; text-align: center;">
               <p style="color: #475569; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin: 0;">
-                Sena Family Finance • Self-Hosted
+                HUB FINANCEIRO • Self-Hosted
               </p>
             </div>
           </div>

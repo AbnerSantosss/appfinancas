@@ -215,7 +215,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                   <Hexagon className="text-[#34d399]" size={18} strokeWidth={2} />
                 </div>
                 <h2 className="text-sm font-extrabold text-white tracking-tight">
-                  Sena <span className="text-[#34d399]">Finance</span>
+                  HUB <span className="text-[#34d399]">FINANCEIRO</span>
                 </h2>
               </div>
             </div>

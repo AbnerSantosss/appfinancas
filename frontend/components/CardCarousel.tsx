@@ -403,10 +403,10 @@ export const CardCarousel: React.FC = () => {
                             </h4>
                           </div>
                           
-                          {/* Sena Finance branding tag */}
+                          {/* HUB FINANCEIRO branding tag */}
                           <div className="flex-shrink-0">
                             <span className="text-[8px] sm:text-[9px] font-bold tracking-widest text-emerald-400 bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-500/20">
-                              SENA
+                              HUB FINANCEIRO
                             </span>
                           </div>
                         </div>
@@ -451,7 +451,7 @@ export const CardCarousel: React.FC = () => {
                         {/* Bottom Row: Credit-card styled design details */}
                         <div className="flex justify-between items-end">
                           <div className="text-[7px] sm:text-[8px] font-mono tracking-wider text-white/45 uppercase">
-                            Sena Finance Platinum
+                            Hub Financeiro Platinum
                           </div>
                           
                           {/* Double intersecting circle Brand Logo - bottom right */}

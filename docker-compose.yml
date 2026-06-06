@@ -26,7 +26,7 @@ services:
       - PORT=3001
       - CORS_ORIGINS=${CORS_ORIGINS:-*}
       - APP_URL=${APP_URL}
-      - MASTER_EMAIL=${MASTER_EMAIL:-admin@sena.com}
+      - MASTER_EMAIL=${MASTER_EMAIL:-admin@hubfinanceiro.com}
       - MASTER_PASSWORD=${MASTER_PASSWORD:-Mudar@123}
     depends_on:
       - db

@@ -51,7 +51,7 @@ app.get('/api/health', (_req, res) => {
 app.listen(PORT, () => {
   console.log('');
   console.log('══════════════════════════════════════════');
-  console.log('  🚀 Sena Family Finance API');
+  console.log('  🚀 HUB FINANCEIRO API');
   console.log(`  📡 Rodando na porta ${PORT}`);
   console.log(`  🌍 CORS: ${corsOrigins.join(', ')}`);
   console.log(`  🕐 ${new Date().toLocaleString('pt-BR')}`);

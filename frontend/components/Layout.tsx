@@ -32,7 +32,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
               <ShieldCheck className="text-gray-950" size={20} strokeWidth={2.5} />
             </div>
             <h1 className="text-md font-bold text-white tracking-tight leading-tight">
-              Sena <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-300">Finance</span>
+              HUB <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-300">FINANCEIRO</span>
             </h1>
           </div>
           <p className="text-[9px] text-emerald-400/50 font-bold uppercase tracking-[0.25em] pl-1 animate-pulse-subtle">Gestão Familiar Self-Hosted</p>
@@ -107,7 +107,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
             <ShieldCheck className="text-gray-950" size={20} strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="text-base font-bold text-white tracking-tight leading-none">Sena Finance</h1>
+            <h1 className="text-base font-bold text-white tracking-tight leading-none">HUB FINANCEIRO</h1>
             <p className="text-[10px] text-emerald-400/60 font-bold uppercase tracking-[0.15em] mt-0.5">Self-Hosted</p>
           </div>
         </div>

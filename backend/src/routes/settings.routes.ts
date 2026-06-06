@@ -85,7 +85,7 @@ router.put('/smtp', requireRole('master'), async (req: AuthRequest, res) => {
       port: parseInt(port) || 587,
       user,
       pass,
-      from: from || 'noreply@senafinance.com',
+      from: from || 'noreply@hubfinanceiro.com',
     });
 
     res.json({ success: true });
@@ -112,7 +112,7 @@ router.post('/smtp/test', requireRole('master'), async (req: AuthRequest, res) =
       port: parseInt(port) || 587,
       user,
       pass,
-      from: from || 'noreply@senafinance.com',
+      from: from || 'noreply@hubfinanceiro.com',
     });
 
     res.json(result);
