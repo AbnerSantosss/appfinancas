@@ -31,6 +31,32 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('sena_saved_email');
+    const savedPassword = localStorage.getItem('sena_saved_password');
+    const savedPasswordDate = localStorage.getItem('sena_saved_password_date');
+
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setRememberMe(true);
+    }
+
+    if (savedPassword && savedPasswordDate) {
+      const savedDate = new Date(savedPasswordDate);
+      const now = new Date();
+      const diffTime = Math.abs(now.getTime() - savedDate.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+      
+      if (diffDays <= 7) {
+        setPassword(savedPassword);
+      } else {
+        localStorage.removeItem('sena_saved_password');
+        localStorage.removeItem('sena_saved_password_date');
+      }
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,6 +68,17 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
 
     try {
       const result = await authApi.login(email, password);
+      
+      if (rememberMe) {
+        localStorage.setItem('sena_saved_email', email);
+        localStorage.setItem('sena_saved_password', password);
+        localStorage.setItem('sena_saved_password_date', new Date().toISOString());
+      } else {
+        localStorage.removeItem('sena_saved_email');
+        localStorage.removeItem('sena_saved_password');
+        localStorage.removeItem('sena_saved_password_date');
+      }
+
       onLogin(result.user);
     } catch (err: any) {
       setError(err.message || 'Falha na autenticação.');
@@ -274,7 +311,19 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
-                  <div className="text-right">
+                  <div className="flex items-center justify-between mt-2">
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                      <div className="relative flex items-center justify-center w-4 h-4">
+                        <input
+                          type="checkbox"
+                          checked={rememberMe}
+                          onChange={(e) => setRememberMe(e.target.checked)}
+                          className="peer appearance-none w-4 h-4 border border-white/10 bg-gray-950 rounded cursor-pointer checked:bg-[#34d399] checked:border-[#34d399] transition-all"
+                        />
+                        <CheckCircle2 size={12} className="absolute text-gray-950 opacity-0 peer-checked:opacity-100 pointer-events-none" strokeWidth={3} />
+                      </div>
+                      <span className="text-[10px] font-bold text-gray-400 group-hover:text-gray-300 uppercase tracking-wider transition-colors">Lembrar-me</span>
+                    </label>
                     <button
                       type="button"
                       onClick={() => {
@@ -282,7 +331,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                         setError('');
                         setSuccess('');
                       }}
-                      className="text-[10px] font-bold text-[#34d399] hover:text-[#34d399]/80 uppercase tracking-wider transition-colors cursor-pointer mt-2 inline-block py-1 px-2 -mr-2"
+                      className="text-[10px] font-bold text-[#34d399] hover:text-[#34d399]/80 uppercase tracking-wider transition-colors cursor-pointer py-1 px-2 -mr-2"
                     >
                       ESQUECI MINHA SENHA
                     </button>
