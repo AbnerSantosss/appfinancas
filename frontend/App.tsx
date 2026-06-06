@@ -220,16 +220,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
               </div>
             </div>
 
-            {/* Bottom overlay: title + footer */}
-            <div className="absolute bottom-0 left-0 right-0 p-12 z-20 bg-gradient-to-t from-gray-950/80 via-gray-950/40 to-transparent">
-              <h3 className="text-lg font-bold text-white tracking-tight">Controle total sobre suas despesas</h3>
-              <p className="text-xs text-gray-400 mt-2 max-w-sm leading-relaxed">
-                Monitore lançamentos fixos e parcelados, planeje suas economias e visualize relatórios dinâmicos de forma privada e segura.
-              </p>
-              <div className="mt-6 text-[8px] text-gray-400 font-bold uppercase tracking-[0.2em]">
-                Sena Finance • Self-Hosted
-              </div>
-            </div>
+
           </div>
 
           {/* ── Painel Direito (Login / Recuperação de Senha) ── */}
