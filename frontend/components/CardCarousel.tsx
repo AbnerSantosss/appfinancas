@@ -1,15 +1,46 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { TrendingUp, PiggyBank, Wallet, CreditCard, ShieldCheck } from 'lucide-react';
 
-// ─── Exact card videos from designer.md ─────────────────
-const CARD_VIDEOS = [
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260506_030111_a9e15665-d379-4a7f-8116-695bbe452ad1.mp4',
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260429_171347_f640c30d-ec21-426a-98bc-77e07c2c60cb.mp4',
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260503_104800_bc43ae09-f494-43e3-97d7-2f8c1692cfd7.mp4',
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260423_161253_c72b1869-400f-45ed-ac0c-52f68c2ed5bd.mp4',
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260418_115655_b4d9cd77-feed-43cd-a198-af78ebdf1f7a.mp4',
+// ─── Card content (icons, phrases and themes) ───────────
+const CARD_CONTENT = [
+  {
+    title: 'Crescimento',
+    phrase: 'Acompanhe seu patrimônio decolar com gráficos precisos e relatórios em tempo real.',
+    icon: TrendingUp,
+    gradient: 'linear-gradient(135deg, #064e3b 0%, #022c22 100%)', // Emerald to Dark Deep Green
+    accentColor: '#34d399', // emerald-400
+  },
+  {
+    title: 'Metas & Poupança',
+    phrase: 'Planeje o amanhã. Economize com metas dinâmicas e veja seu dinheiro render mais.',
+    icon: PiggyBank,
+    gradient: 'linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 100%)', // Blue to Indigo
+    accentColor: '#60a5fa', // blue-400
+  },
+  {
+    title: 'Controle Diário',
+    phrase: 'Gerencie receitas, despesas e saldos de forma simples em um painel integrado.',
+    icon: Wallet,
+    gradient: 'linear-gradient(135deg, #0f766e 0%, #134e4a 100%)', // Teal to Dark Teal
+    accentColor: '#2dd4bf', // teal-400
+  },
+  {
+    title: 'Cartões & Limites',
+    phrase: 'Evite surpresas no fim do mês. Categorize e acompanhe gastos com cartões.',
+    icon: CreditCard,
+    gradient: 'linear-gradient(135deg, #581c87 0%, #3b0764 100%)', // Purple to Indigo
+    accentColor: '#c084fc', // purple-400
+  },
+  {
+    title: 'Segurança Total',
+    phrase: 'Seus dados financeiros criptografados e protegidos sob os mais rígidos padrões.',
+    icon: ShieldCheck,
+    gradient: 'linear-gradient(135deg, #27272a 0%, #09090b 100%)', // Dark Gray to Black
+    accentColor: '#a1a1aa', // zinc-400
+  },
 ];
 
-// ─── Card details from designer.md ──────────────────────
+// ─── Card details for the back faces ────────────────────
 const CARD_DETAILS = [
   { number: '4232 8908 1121 4892', name: 'ZACHARY MERCER', cvv: '382' },
   { number: '4154 7831 9904 5124', name: 'SOPHIA MARTINEZ', cvv: '109' },
@@ -22,7 +53,7 @@ const CARD_DETAILS = [
 const thicknessLayers = [-1.47, -0.73, 0, 0.73, 1.47];
 
 export const CardCarousel: React.FC = () => {
-  const cardCount = 5;
+  const cardCount = CARD_CONTENT.length;
   const cardsRefs = useRef<(HTMLDivElement | null)[]>([]);
   const frameId = useRef<number>(0);
   const progress = useRef<number>(0);
@@ -33,7 +64,7 @@ export const CardCarousel: React.FC = () => {
     cardH: 211,
   });
 
-  // ─── Mouse tracking (exact from designer.md) ──────────
+  // ─── Mouse tracking ───────────────────────────────────
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       const rx = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
@@ -55,7 +86,7 @@ export const CardCarousel: React.FC = () => {
     };
   }, []);
 
-  // ─── Responsive card sizing (adapted for left panel) ──
+  // ─── Responsive card sizing ───────────────────────────
   useEffect(() => {
     const handleResize = () => {
       const w = window.innerWidth;
@@ -74,10 +105,10 @@ export const CardCarousel: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // ─── Exact animation loop from designer.md ────────────
+  // ─── Animation loop ───────────────────────────────────
   const renderLoop = () => {
-    // Exact speed from designer.md (0.0016) — slow, premium, calm
-    progress.current += 0.0016;
+    // Increased speed (from 0.0016 to 0.006) for more dynamic, faster rotation
+    progress.current += 0.006;
 
     // Smooth mouse interpolation (inertia damping)
     mouse.current.x += (mouse.current.targetX - mouse.current.x) * 0.08;
@@ -91,7 +122,7 @@ export const CardCarousel: React.FC = () => {
     const roundedIndex = Math.round(continuousProgress);
     const diffFromRound = continuousProgress - roundedIndex;
 
-    // Custom non-linear magnetic step logic from designer.md
+    // Custom non-linear magnetic step logic
     const easedDiff = Math.sign(diffFromRound) * Math.pow(Math.abs(diffFromRound) * 2, 4.2) / 2;
     const virtualActiveIndex = roundedIndex + easedDiff;
 
@@ -202,152 +233,207 @@ export const CardCarousel: React.FC = () => {
           transformStyle: 'preserve-3d',
         }}
       >
-        {Array.from({ length: cardCount }).map((_, i) => (
-          <div
-            key={i}
-            ref={(el) => { cardsRefs.current[i] = el; }}
-            className="absolute inset-0"
-            style={{
-              width: `${metrics.cardW}px`,
-              height: `${metrics.cardH}px`,
-              transformStyle: 'preserve-3d',
-              backfaceVisibility: 'visible',
-            }}
-          >
-            {/* Build physical 3D volumetric thickness by dense parallel layering */}
-            {thicknessLayers.map((zOffset, layerIdx) => {
-              const isFrontFace = layerIdx === thicknessLayers.length - 1;
-              const isBackFace = layerIdx === 0;
-              const videoSrc = CARD_VIDEOS[i % CARD_VIDEOS.length];
-              const baseBgColor = '#0f0f0f';
+        {CARD_CONTENT.map((content, i) => {
+          const IconComponent = content.icon;
+          return (
+            <div
+              key={i}
+              ref={(el) => { cardsRefs.current[i] = el; }}
+              className="absolute inset-0"
+              style={{
+                width: `${metrics.cardW}px`,
+                height: `${metrics.cardH}px`,
+                transformStyle: 'preserve-3d',
+                backfaceVisibility: 'visible',
+              }}
+            >
+              {/* Build physical 3D volumetric thickness by dense parallel layering */}
+              {thicknessLayers.map((zOffset, layerIdx) => {
+                const isFrontFace = layerIdx === thicknessLayers.length - 1;
+                const isBackFace = layerIdx === 0;
 
-              // Middle structural slice
-              if (!isFrontFace && !isBackFace) {
-                return (
-                  <div
-                    key={layerIdx}
-                    className="absolute inset-0 rounded-[16px] border border-[#808080] pointer-events-none overflow-hidden"
-                    style={{
-                      backgroundColor: '#808080',
-                      transform: `translateZ(${zOffset}px)`,
-                    }}
-                  />
-                );
-              }
-
-              // ─── Front face (exact from designer.md) ──────
-              if (isFrontFace) {
-                return (
-                  <div
-                    key={layerIdx}
-                    className="absolute inset-0 rounded-[16px] border border-white/15 pointer-events-none overflow-hidden"
-                    style={{
-                      backgroundColor: baseBgColor,
-                      transform: `translateZ(${zOffset}px)`,
-                      backfaceVisibility: 'hidden',
-                      boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15)',
-                    }}
-                  >
-                    <video
-                      src={videoSrc}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="absolute inset-0 w-full h-full object-cover rounded-[16px]"
-                    />
-
-                    <div className="absolute inset-0 p-5 sm:p-6 text-white h-full w-full font-sans z-10 bg-black/15">
-                      {/* Golden/Silver Metallic Contact Chip */}
-                      <div className="absolute left-5 sm:left-6 top-1/2 -translate-y-1/2">
-                        <svg
-                          className="w-6 h-6 sm:w-[29px] sm:h-[29px]"
-                          viewBox="0 0 60 60"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M20 8H40V14C40.0016 14.5299 40.2128 15.0377 40.5875 15.4125C40.9623 15.7872 41.4701 15.9984 42 16H59V24H42C41.4701 24.0016 40.9623 24.2128 40.5875 24.5875C40.2128 24.9623 40.0016 25.4701 40 26V52H20V8ZM18 8H8.00039C4.47435 8 1.56576 10.6083 1.08 14H18V8ZM1 16V24V26V34V36V44H18V36H1V34H18V26H1V24H18V16H1ZM1.08 46C1.56576 49.3917 4.47435 52 8.00039 52H18V46H1.08ZM42 14V8H52.0004C55.5264 8 58.4342 10.6084 58.92 14H42ZM59 26H42V34H59V26ZM59 36H42V44H59V36ZM52.0004 52H42V46H58.92C58.4342 49.3916 55.5264 52 52.0004 52Z"
-                            fill={`url(#paint0_linear_${i})`}
-                          />
-                          <defs>
-                            <linearGradient
-                              id={`paint0_linear_${i}`}
-                              x1="30" y1="8" x2="30" y2="52"
-                              gradientUnits="userSpaceOnUse"
-                            >
-                              <stop stopColor="white" />
-                              <stop offset="1" stopColor="#999999" />
-                            </linearGradient>
-                          </defs>
-                        </svg>
-                      </div>
-
-                      {/* Double intersecting circle Brand Logo - bottom right */}
-                      <div className="absolute right-5 sm:right-6 bottom-5 sm:bottom-6 flex -space-x-3 items-center opacity-90">
-                        <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/20 backdrop-blur-[1px] border border-white/10" />
-                        <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/35 backdrop-blur-[1px] border border-white/10" />
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-
-              // ─── Back face (exact from designer.md) ───────
-              if (isBackFace) {
-                const details = CARD_DETAILS[i % CARD_DETAILS.length];
-                return (
-                  <div
-                    key={layerIdx}
-                    className="absolute inset-0 rounded-[16px] border border-white/15 pointer-events-none overflow-hidden"
-                    style={{
-                      backgroundColor: baseBgColor,
-                      transform: `translateZ(${zOffset}px) rotateX(180deg)`,
-                      backfaceVisibility: 'hidden',
-                      boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)',
-                    }}
-                  >
-                    {/* Magnetic strip */}
+                // Middle structural slices (sides/edges)
+                if (!isFrontFace && !isBackFace) {
+                  return (
                     <div
-                      className="w-full mt-5 sm:mt-6"
-                      style={{ height: '22%', backgroundColor: '#1a1a1a' }}
+                      key={layerIdx}
+                      className="absolute inset-0 rounded-[16px] border border-[#27272a]/30 pointer-events-none overflow-hidden"
+                      style={{
+                        backgroundColor: '#18181b',
+                        transform: `translateZ(${zOffset}px)`,
+                      }}
                     />
+                  );
+                }
 
-                    {/* Signature + CVV stripe */}
-                    <div className="px-4 sm:px-5 mt-3 sm:mt-4">
-                      <div className="flex items-stretch gap-0 h-7 sm:h-8 w-full rounded-[4px] overflow-hidden">
-                        <div className="flex-1 bg-[#e8e0d4] flex items-center px-2 sm:px-3">
-                          <span
-                            className="text-[#333] text-[9px] sm:text-[10px] italic opacity-70 truncate"
-                            style={{ fontFamily: 'cursive' }}
-                          >
-                            {details.name}
-                          </span>
+                // ─── Front face ───
+                if (isFrontFace) {
+                  return (
+                    <div
+                      key={layerIdx}
+                      className="absolute inset-0 rounded-[16px] border border-white/15 pointer-events-none overflow-hidden"
+                      style={{
+                        background: content.gradient,
+                        transform: `translateZ(${zOffset}px)`,
+                        backfaceVisibility: 'hidden',
+                        boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), 0 10px 30px rgba(0,0,0,0.5)',
+                      }}
+                    >
+                      {/* Glowing ambient light effect inside the card */}
+                      <div 
+                        className="absolute -right-20 -top-20 w-40 h-40 rounded-full blur-[60px]" 
+                        style={{ backgroundColor: content.accentColor, opacity: 0.25 }}
+                      />
+                      <div 
+                        className="absolute -left-20 -bottom-20 w-40 h-40 rounded-full blur-[60px]" 
+                        style={{ backgroundColor: content.accentColor, opacity: 0.1 }}
+                      />
+                      
+                      {/* Subtle grid pattern overlay for premium look */}
+                      <div 
+                        className="absolute inset-0 opacity-[0.03]"
+                        style={{
+                          backgroundImage: `radial-gradient(circle, white 1px, transparent 1px)`,
+                          backgroundSize: '16px 16px',
+                        }}
+                      />
+
+                      <div className="absolute inset-0 p-5 sm:p-6 text-white h-full w-full font-sans z-10 flex flex-col justify-between">
+                        {/* Top Row: Icon + Title */}
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-2.5">
+                            <div 
+                              className="p-1.5 sm:p-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/10"
+                              style={{ color: content.accentColor }}
+                            >
+                              <IconComponent className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2} />
+                            </div>
+                            <div>
+                              <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-white/50 font-semibold">
+                                Recurso
+                              </p>
+                              <h4 className="text-sm sm:text-base font-bold text-white tracking-tight leading-tight">
+                                {content.title}
+                              </h4>
+                            </div>
+                          </div>
+                          
+                          {/* Sena Finance branding tag */}
+                          <div className="text-right">
+                            <span className="text-[9px] sm:text-[10px] font-bold tracking-widest text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/20">
+                              SENA
+                            </span>
+                          </div>
                         </div>
-                        <div className="w-12 sm:w-14 bg-white flex items-center justify-center">
-                          <span className="text-black text-[10px] sm:text-xs font-mono font-bold tracking-wider">
-                            {details.cvv}
-                          </span>
+
+                        {/* Middle Row: Chip + Phrase text */}
+                        <div className="flex items-center gap-4 my-auto">
+                          {/* Golden/Silver Metallic Contact Chip */}
+                          <div className="flex-shrink-0">
+                            <svg
+                              className="w-7 h-7 sm:w-[32px] sm:h-[32px]"
+                              viewBox="0 0 60 60"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M20 8H40V14C40.0016 14.5299 40.2128 15.0377 40.5875 15.4125C40.9623 15.7872 41.4701 15.9984 42 16H59V24H42C41.4701 24.0016 40.9623 24.2128 40.5875 24.5875C40.2128 24.9623 40.0016 25.4701 40 26V52H20V8ZM18 8H8.00039C4.47435 8 1.56576 10.6083 1.08 14H18V8ZM1 16V24V26V34V36V44H18V36H1V34H18V26H1V24H18V16H1ZM1.08 46C1.56576 49.3917 4.47435 52 8.00039 52H18V46H1.08ZM42 14V8H52.0004C55.5264 8 58.4342 10.6084 58.92 14H42ZM59 26H42V34H59V26ZM59 36H42V44H59V36ZM52.0004 52H42V46H58.92C58.4342 49.3916 55.5264 52 52.0004 52Z"
+                                fill={`url(#paint0_linear_${i})`}
+                              />
+                              <defs>
+                                <linearGradient
+                                  id={`paint0_linear_${i}`}
+                                  x1="30" y1="8" x2="30" y2="52"
+                                  gradientUnits="userSpaceOnUse"
+                                >
+                                  <stop stopColor="white" />
+                                  <stop offset="1" stopColor="#a3a3a3" />
+                                </linearGradient>
+                              </defs>
+                            </svg>
+                          </div>
+
+                          {/* Phrase content text */}
+                          <div className="flex-1">
+                            <p className="text-[10px] sm:text-xs text-white/90 leading-relaxed font-medium">
+                              "{content.phrase}"
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Bottom Row: Credit-card styled design details */}
+                        <div className="flex justify-between items-end">
+                          <div className="text-[8px] sm:text-[9px] font-mono tracking-wider text-white/45 uppercase">
+                            Sena Finance Platinum
+                          </div>
+                          
+                          {/* Double intersecting circle Brand Logo - bottom right */}
+                          <div className="flex -space-x-3 items-center opacity-80">
+                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/10 backdrop-blur-[1px] border border-white/10" />
+                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/25 backdrop-blur-[1px] border border-white/10" />
+                          </div>
                         </div>
                       </div>
                     </div>
+                  );
+                }
 
-                    {/* Card number */}
-                    <div className="px-4 sm:px-5 mt-3 sm:mt-4 flex items-center justify-between">
-                      <span className="text-white/30 text-[8px] sm:text-[9px] font-mono tracking-[0.15em]">
-                        {details.number}
-                      </span>
+                // ─── Back face ───
+                if (isBackFace) {
+                  const details = CARD_DETAILS[i % CARD_DETAILS.length];
+                  return (
+                    <div
+                      key={layerIdx}
+                      className="absolute inset-0 rounded-[16px] border border-white/15 pointer-events-none overflow-hidden"
+                      style={{
+                        background: content.gradient,
+                        transform: `translateZ(${zOffset}px) rotateX(180deg)`,
+                        backfaceVisibility: 'hidden',
+                        boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)',
+                      }}
+                    >
+                      {/* Magnetic strip */}
+                      <div
+                        className="w-full mt-5 sm:mt-6"
+                        style={{ height: '22%', backgroundColor: '#111827' }}
+                      />
+
+                      {/* Signature + CVV stripe */}
+                      <div className="px-4 sm:px-5 mt-3 sm:mt-4">
+                        <div className="flex items-stretch gap-0 h-7 sm:h-8 w-full rounded-[4px] overflow-hidden">
+                          <div className="flex-1 bg-[#e8e0d4] flex items-center px-2 sm:px-3">
+                            <span
+                              className="text-[#333] text-[9px] sm:text-[10px] italic opacity-70 truncate"
+                              style={{ fontFamily: 'cursive' }}
+                            >
+                              {details.name}
+                            </span>
+                          </div>
+                          <div className="w-12 sm:w-14 bg-white flex items-center justify-center">
+                            <span className="text-black text-[10px] sm:text-xs font-mono font-bold tracking-wider">
+                              {details.cvv}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Card number */}
+                      <div className="px-4 sm:px-5 mt-3 sm:mt-4 flex items-center justify-between">
+                        <span className="text-white/30 text-[8px] sm:text-[9px] font-mono tracking-[0.15em]">
+                          {details.number}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                );
-              }
+                  );
+                }
 
-              return null;
-            })}
-          </div>
-        ))}
+                return null;
+              })}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
