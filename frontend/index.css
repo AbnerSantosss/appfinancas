@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* ─── Animated RGB Border for Carousel Cards ────────── */
+
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes borderSpin {
+  0%   { --border-angle: 0deg; }
+  100% { --border-angle: 360deg; }
+}
+
 /* ─── Global Styles & Typography ─────────────────────── */
 
 body {

@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 
 // ─── Animation speed constant ───────────────────────────
-const ANIMATION_SPEED = 0.0085;
+const ANIMATION_SPEED = 0.004;
 
 // ─── Card content (15 finance phrases and emerald themes) 
 const CARD_CONTENT = [
@@ -361,14 +361,22 @@ export const CardCarousel: React.FC = () => {
                   return (
                     <div
                       key={layerIdx}
-                      className="absolute inset-0 rounded-[16px] border border-white/15 pointer-events-none overflow-hidden"
+                      className="absolute inset-0 rounded-[16px] pointer-events-none overflow-hidden"
                       style={{
-                        background: content.gradient,
                         transform: `translateZ(${zOffset}px)`,
                         backfaceVisibility: 'hidden',
-                        boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), 0 10px 30px rgba(0,0,0,0.5)',
+                        padding: '1.5px',
+                        background: `conic-gradient(from var(--border-angle, 0deg), #064e3b, #34d399, #14b8a6, #0d9488, #064e3b)`,
+                        animation: 'borderSpin 3s linear infinite',
                       }}
                     >
+                      <div
+                        className="w-full h-full rounded-[15px] overflow-hidden relative"
+                        style={{
+                          background: content.gradient,
+                          boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.15), 0 10px 30px rgba(0,0,0,0.5)',
+                        }}
+                      >
                       {/* Glowing ambient light effect inside the card */}
                       <div 
                         className="absolute -right-20 -top-20 w-40 h-40 rounded-full blur-[60px]" 
@@ -461,6 +469,7 @@ export const CardCarousel: React.FC = () => {
                           </div>
                         </div>
                       </div>
+                    </div>
                     </div>
                   );
                 }
