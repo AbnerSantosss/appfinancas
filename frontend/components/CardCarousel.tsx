@@ -20,111 +20,111 @@ import {
 // ─── Animation speed constant ───────────────────────────
 const ANIMATION_SPEED = 0.004;
 
-// ─── Card content (15 finance phrases and emerald themes) 
+// ─── Card content (15 finance phrases — emerald + gray palette) 
 const CARD_CONTENT = [
   {
     title: 'Organize sua vida financeira com total controle',
     phrase: 'Acompanhe despesas, parcelamentos e economias com relatórios inteligentes e máxima segurança.',
     icon: Wallet,
-    gradient: 'linear-gradient(135deg, #064e3b 0%, #022c22 100%)', // Emerald Deep
+    gradient: 'linear-gradient(135deg, #064e3b 0%, #022c22 100%)',
     accentColor: '#34d399',
   },
   {
     title: 'Seu dinheiro organizado de forma simples',
     phrase: 'Controle gastos fixos, acompanhe parcelas e visualize tudo em um só lugar.',
     icon: PiggyBank,
-    gradient: 'linear-gradient(135deg, #0f766e 0%, #022c22 100%)', // Teal to Deep Green
-    accentColor: '#2dd4bf',
+    gradient: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+    accentColor: '#94a3b8',
   },
   {
     title: 'Mais controle financeiro para o seu dia a dia',
     phrase: 'Gerencie despesas, planeje objetivos e acompanhe sua evolução com facilidade.',
     icon: TrendingUp,
-    gradient: 'linear-gradient(135deg, #047857 0%, #064e3b 100%)', // Forest to Emerald
+    gradient: 'linear-gradient(135deg, #047857 0%, #064e3b 100%)',
     accentColor: '#34d399',
   },
   {
     title: 'Tenha suas finanças sempre sob controle',
     phrase: 'Monitore gastos, organize pagamentos e acompanhe relatórios personalizados.',
     icon: CreditCard,
-    gradient: 'linear-gradient(135deg, #115e59 0%, #022c22 100%)', // Teal Deep
-    accentColor: '#2dd4bf',
+    gradient: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
+    accentColor: '#9ca3af',
   },
   {
     title: 'Planeje hoje, economize amanhã',
     phrase: 'Visualize suas despesas, acompanhe parcelamentos e tome decisões melhores.',
     icon: Calendar,
-    gradient: 'linear-gradient(135deg, #14532d 0%, #022c22 100%)', // Dark Green
+    gradient: 'linear-gradient(135deg, #14532d 0%, #022c22 100%)',
     accentColor: '#10b981',
   },
   {
     title: 'Controle suas finanças com praticidade',
     phrase: 'Tenha acesso a relatórios completos, gastos organizados e privacidade garantida.',
     icon: FileText,
-    gradient: 'linear-gradient(135deg, #065f46 0%, #022c22 100%)', // Medium Emerald/Deep
-    accentColor: '#34d399',
+    gradient: 'linear-gradient(135deg, #334155 0%, #1e293b 100%)',
+    accentColor: '#cbd5e1',
   },
   {
     title: 'Tudo que você precisa para organizar seu dinheiro',
     phrase: 'Acompanhe despesas, metas financeiras e parcelamentos de forma inteligente.',
     icon: Activity,
-    gradient: 'linear-gradient(135deg, #0f766e 0%, #115e59 100%)', // Teal Pure
+    gradient: 'linear-gradient(135deg, #0f766e 0%, #115e59 100%)',
     accentColor: '#2dd4bf',
   },
   {
     title: 'Organize despesas e alcance seus objetivos',
     phrase: 'Tenha uma visão clara das suas finanças com relatórios completos e seguros.',
     icon: ShieldCheck,
-    gradient: 'linear-gradient(135deg, #166534 0%, #14532d 100%)', // Bright Forest Green
-    accentColor: '#10b981',
+    gradient: 'linear-gradient(135deg, #1e293b 0%, #0c1524 100%)',
+    accentColor: '#64748b',
   },
   {
     title: 'Sua central de organização financeira',
     phrase: 'Controle receitas, despesas e pagamentos recorrentes com total tranquilidade.',
     icon: Sparkles,
-    gradient: 'linear-gradient(135deg, #0d9488 0%, #0f766e 50%, #022c22 100%)', // Teal Mint
+    gradient: 'linear-gradient(135deg, #0d9488 0%, #0f766e 50%, #022c22 100%)',
     accentColor: '#2dd4bf',
   },
   {
     title: 'Mais organização, menos preocupação',
     phrase: 'Gerencie seus gastos e visualize suas finanças de forma rápida e segura.',
     icon: Sliders,
-    gradient: 'linear-gradient(135deg, #059669 0%, #065f46 100%)', // Emerald Pure
-    accentColor: '#34d399',
+    gradient: 'linear-gradient(135deg, #27303f 0%, #111827 100%)',
+    accentColor: '#94a3b8',
   },
   {
     title: 'Seus dados protegidos, suas finanças organizadas',
     phrase: 'Controle tudo em um ambiente privado e pensado para simplificar seu dia.',
     icon: Lock,
-    gradient: 'linear-gradient(135deg, #115e59 0%, #134e4a 100%)', // Teal deep block
-    accentColor: '#2dd4bf',
+    gradient: 'linear-gradient(135deg, #065f46 0%, #022c22 100%)',
+    accentColor: '#34d399',
   },
   {
     title: 'Finanças inteligentes para decisões melhores',
     phrase: 'Monitore gastos, acompanhe metas e mantenha o controle do seu dinheiro.',
     icon: BarChart3,
-    gradient: 'linear-gradient(135deg, #0f766e 0%, #022c22 100%)', // Teal/Emerald Black
-    accentColor: '#34d399',
+    gradient: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
+    accentColor: '#d1d5db',
   },
   {
     title: 'Controle completo para sua vida financeira',
     phrase: 'Acompanhe despesas fixas, parcelamentos e economias em tempo real.',
     icon: DollarSign,
-    gradient: 'linear-gradient(135deg, #14532d 0%, #022c22 100%)', // Dark green deep
+    gradient: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
     accentColor: '#10b981',
   },
   {
     title: 'Transforme a forma como você cuida do dinheiro',
     phrase: 'Visualize relatórios detalhados e mantenha suas finanças organizadas.',
     icon: Receipt,
-    gradient: 'linear-gradient(135deg, #064e3b 0%, #0f766e 100%)', // Emerald to Teal
-    accentColor: '#34d399',
+    gradient: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+    accentColor: '#94a3b8',
   },
   {
     title: 'Privacidade, controle e organização financeira',
     phrase: 'Gerencie tudo em um só lugar com segurança e praticidade.',
     icon: ShieldCheck,
-    gradient: 'linear-gradient(135deg, #047857 0%, #022c22 100%)', // Forest to Deep Green
+    gradient: 'linear-gradient(135deg, #047857 0%, #022c22 100%)',
     accentColor: '#34d399',
   },
 ];
