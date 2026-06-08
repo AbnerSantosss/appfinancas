@@ -28,6 +28,10 @@ services:
       - APP_URL=${APP_URL}
       - MASTER_EMAIL=${MASTER_EMAIL:-admin@hubfinanceiro.com}
       - MASTER_PASSWORD=${MASTER_PASSWORD:-Mudar@123}
+      - MASTER_NAME=${MASTER_NAME:-Administrador}
+      - USER_EMAIL=${USER_EMAIL:-}
+      - USER_PASSWORD=${USER_PASSWORD:-Mudar@123}
+      - USER_NAME=${USER_NAME:-Usuário}
     depends_on:
       - db
     volumes:
