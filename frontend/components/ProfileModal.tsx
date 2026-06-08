@@ -66,16 +66,16 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ user, isOpen, onClos
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="glass-panel w-full max-w-md rounded-3xl shadow-2xl animate-in zoom-in-95 duration-300 border border-white/10 overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-gray-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="glass-panel w-full sm:max-w-md sm:rounded-3xl rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 border border-white/10 overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/5 bg-slate-900/20">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center border border-emerald-500/20">
-              <User size={20} />
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-white/5 bg-slate-900/20">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center border border-emerald-500/20">
+              <User size={18} />
             </div>
             <div>
-              <h3 className="text-md font-bold text-white tracking-tight">Editar Perfil</h3>
+              <h3 className="text-[15px] sm:text-md font-bold text-white tracking-tight">Editar Perfil</h3>
               <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">{user.email}</p>
             </div>
           </div>
@@ -88,7 +88,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ user, isOpen, onClos
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1 custom-scrollbar">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-5 sm:space-y-6 flex-1 custom-scrollbar">
           {/* Nome Section */}
           <form onSubmit={handleSaveName} className="space-y-3">
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">

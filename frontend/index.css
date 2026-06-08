@@ -13,11 +13,11 @@
   100% { --border-angle: 360deg; }
 }
 
-/* ─── Global Styles & Typography ─────────────────────── */
+/* ─── Global Styles & Mobile-First Typography ────────── */
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: #030712; /* gray-950 para um dark mode mais profundo e moderno */
+  background-color: #030712; /* gray-950 */
   color: #f3f4f6; /* gray-100 */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -26,6 +26,35 @@ body {
     radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.03) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.02) 0%, transparent 40%);
   background-attachment: fixed;
+  /* Fluid base font: 15px on 360px screens → 14px on 640px+ */
+  font-size: clamp(0.875rem, 0.83rem + 0.2vw, 0.9375rem);
+}
+
+/* ─── Mobile Typography Utilities ────────────────────── */
+
+.mobile-title {
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.mobile-subtitle {
+  font-size: clamp(0.6875rem, 0.65rem + 0.15vw, 0.75rem);
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.mobile-body {
+  font-size: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
+  line-height: 1.5;
+}
+
+.mobile-caption {
+  font-size: clamp(0.625rem, 0.6rem + 0.1vw, 0.6875rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 /* ─── Custom Scrollbar (Estilo Premium) ──────────────── */
@@ -61,6 +90,13 @@ body {
     inset 0 1px 1px rgba(255, 255, 255, 0.03);
 }
 
+/* Reduce border-radius on small screens for more usable space */
+@media (max-width: 639px) {
+  .glass-panel {
+    border-radius: 14px;
+  }
+}
+
 .glass-card-hover {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -83,12 +119,12 @@ body {
   border-radius: 14px !important;
   color: #ffffff !important;
   padding: 14px 16px !important;
-  font-size: 16px !important;
+  font-size: 16px !important; /* Prevents iOS zoom */
   font-weight: 500 !important;
   outline: none !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
-  min-height: 48px !important;
+  min-height: 48px !important; /* Apple HIG touch target */
 }
 
 @media (min-width: 640px) {
@@ -96,6 +132,7 @@ body {
     padding: 12px 16px !important;
     font-size: 14px !important;
     min-height: 44px !important;
+    border-radius: 14px !important;
   }
 }
 
@@ -118,7 +155,7 @@ body {
 }
 
 input, select, textarea {
-  font-size: 16px !important; /* Evita zoom forçado no iOS */
+  font-size: 16px !important; /* Prevents iOS zoom on focus */
 }
 @media (min-width: 640px) {
   input, select, textarea {
@@ -131,7 +168,6 @@ input, select, textarea {
   /* Ensure all interactive elements have comfortable touch targets */
   button, a, [role="button"] {
     min-height: 44px;
-    min-width: 44px;
   }
 
   /* Larger tap targets for icon-only buttons */
@@ -142,8 +178,60 @@ input, select, textarea {
   }
 }
 
-.safe-top { padding-top: env(safe-area-inset-top); }
-.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+/* ─── Safe Areas (Notch, Dynamic Island, Gesture Bar) ── */
+
+.safe-top { 
+  padding-top: env(safe-area-inset-top, 0px); 
+}
+
+.safe-bottom { 
+  padding-bottom: env(safe-area-inset-bottom, 0px); 
+}
+
+.safe-left {
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+.safe-right {
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* ─── Horizontal Snap Scroll (Dashboard Cards) ─────── */
+
+.snap-scroll-x {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 12px;
+  padding-bottom: 4px;
+}
+
+.snap-scroll-x::-webkit-scrollbar {
+  display: none;
+}
+
+.snap-scroll-x {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.snap-card {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: 85%;
+  min-width: 260px;
+  max-width: 340px;
+}
+
+@media (min-width: 640px) {
+  .snap-card {
+    width: auto;
+    min-width: auto;
+    max-width: none;
+    flex-shrink: 1;
+  }
+}
 
 /* ─── Hide Scrollbars ───────────────────────────────── */
 
@@ -187,11 +275,31 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-/* ─── Mobile Typography Scale ────────────────────────── */
+/* ─── Mobile Layout Helpers ──────────────────────────── */
+
+/* Ensure content doesn't hide behind the floating bottom nav */
+@media (max-width: 767px) {
+  .mobile-content-pad {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Full-width buttons on mobile only */
 @media (max-width: 639px) {
-  /* Boost readability on small screens */
-  .mobile-text-boost {
-    font-size: 1rem;
-    line-height: 1.5;
+  .mobile-full-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Stacked flex on mobile, row on desktop */
+.mobile-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+@media (min-width: 640px) {
+  .mobile-stack {
+    flex-direction: row;
   }
 }

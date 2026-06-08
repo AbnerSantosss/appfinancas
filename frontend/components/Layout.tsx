@@ -22,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-950 pb-28 md:pb-0 md:pl-64 selection:bg-emerald-500/20">
+    <div className="flex flex-col min-h-screen bg-gray-950 pb-32 md:pb-0 md:pl-64 selection:bg-emerald-500/20">
       
       {/* ── Sidebar Desktop (Premium Glassmorphic) ─────── */}
       <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-gray-900/40 backdrop-blur-2xl border-r border-white/[0.04] p-6 shadow-2xl z-40">
@@ -95,31 +95,31 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
         </div>
       </aside>
 
-      {/* ── Mobile Header (Premium Style) ─────────────── */}
-      <header className="md:hidden sticky top-0 z-40 bg-gray-950/80 backdrop-blur-xl border-b border-white/[0.04] px-5 py-4 flex items-center justify-between safe-top">
-        <div className="flex items-center gap-3">
-          <img src="/logo_hub.png" alt="HUB FINANCEIRO" className="h-10 w-auto object-contain" />
+      {/* ── Mobile Header (Premium Compact) ──────────────── */}
+      <header className="md:hidden sticky top-0 z-40 bg-gray-950/85 backdrop-blur-2xl border-b border-white/[0.06] px-4 py-2.5 flex items-center justify-between safe-top">
+        <div className="flex items-center gap-2.5">
+          <img src="/logo_hub.png" alt="HUB FINANCEIRO" className="h-8 w-auto object-contain" />
         </div>
         {user && (
-          <div className="flex items-center gap-2">
-            <div className="text-right">
-              <p className="text-sm font-bold text-white leading-none">{user.name || user.email.split('@')[0]}</p>
-              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">{user.role}</p>
+          <div className="flex items-center gap-1.5">
+            <div className="text-right mr-1">
+              <p className="text-[13px] font-bold text-white leading-none truncate max-w-[120px]">{user.name || user.email.split('@')[0]}</p>
+              <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">{user.role}</p>
             </div>
             <button
               onClick={() => setIsProfileModalOpen(true)}
-              className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-xl transition-all duration-200 cursor-pointer"
+              className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-xl transition-all duration-200 cursor-pointer"
               title="Editar Perfil"
             >
-              <Settings size={18} />
+              <Settings size={16} />
             </button>
             {onLogout && (
               <button
                 onClick={onLogout}
-                className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all duration-200 cursor-pointer"
+                className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all duration-200 cursor-pointer"
                 title="Sair"
               >
-                <LogOut size={18} />
+                <LogOut size={16} />
               </button>
             )}
           </div>
@@ -127,15 +127,15 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
       </header>
 
       {/* ── Main Content ─────────────────────────────── */}
-      <main className="flex-1 p-4 pt-5 md:p-8 max-w-6xl mx-auto w-full">
+      <main className="flex-1 px-3.5 pt-3 pb-4 sm:px-4 sm:pt-5 md:p-8 max-w-6xl mx-auto w-full">
         {children}
       </main>
 
       {/* ── Mobile Bottom Navigation (Floating Dock) ───── */}
-      <nav className="md:hidden fixed bottom-5 left-4 right-4 bg-gray-900/80 backdrop-blur-2xl border border-white/[0.08] px-4 py-3 rounded-2xl z-50 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] safe-bottom">
+      <nav className="md:hidden fixed bottom-4 left-3 right-3 bg-gray-900/85 backdrop-blur-3xl border border-white/[0.1] px-3 py-2.5 rounded-2xl z-50 shadow-[0_8px_40px_0_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.03)] safe-bottom">
         <div className="flex items-center justify-around max-w-md mx-auto relative">
           <MobileNavItem 
-            icon={<LayoutDashboard size={22} />} 
+            icon={<LayoutDashboard size={20} />} 
             label="Início"
             active={activeTab === 'dashboard'} 
             onClick={() => setActiveTab('dashboard')} 
@@ -145,21 +145,21 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
           <div className="relative -mt-7">
             <button 
               onClick={() => setActiveTab('expenses')}
-              className="bg-gradient-to-tr from-emerald-500 to-teal-400 text-gray-950 w-14 h-14 rounded-2xl shadow-[0_4px_20px_rgba(16,185,129,0.35)] active:scale-95 transition-all flex items-center justify-center border border-emerald-400/20 cursor-pointer"
+              className="bg-gradient-to-tr from-emerald-500 to-teal-400 text-gray-950 w-[52px] h-[52px] rounded-[18px] shadow-[0_4px_24px_rgba(16,185,129,0.4)] active:scale-90 transition-all flex items-center justify-center border border-emerald-400/30 cursor-pointer"
               title="Novo Lançamento"
             >
-              <PlusCircle size={26} strokeWidth={2} />
+              <PlusCircle size={24} strokeWidth={2.5} />
             </button>
           </div>
 
           <MobileNavItem 
-            icon={<ReceiptText size={22} />} 
+            icon={<ReceiptText size={20} />} 
             label="Lançamentos"
             active={activeTab === 'expenses'} 
             onClick={() => setActiveTab('expenses')} 
           />
           <MobileNavItem 
-            icon={<Sliders size={22} />} 
+            icon={<Sliders size={20} />} 
             label="Config"
             active={activeTab === 'settings'} 
             onClick={() => setActiveTab('settings')} 
@@ -201,7 +201,7 @@ const NavItem = ({ icon, label, active, onClick }: { icon: any, label: string, a
 const MobileNavItem = ({ icon, label, active, onClick }: { icon: any, label: string, active: boolean, onClick: () => void }) => (
   <button 
     onClick={onClick}
-    className={`flex flex-col items-center justify-center gap-1 min-w-[56px] py-1.5 px-3 rounded-xl transition-all duration-200 active:scale-90 cursor-pointer ${
+    className={`flex flex-col items-center justify-center gap-0.5 min-w-[52px] py-1.5 px-2.5 rounded-xl transition-all duration-200 active:scale-90 cursor-pointer ${
       active 
         ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]' 
         : 'text-gray-500'
@@ -210,7 +210,7 @@ const MobileNavItem = ({ icon, label, active, onClick }: { icon: any, label: str
     <div className={`transition-transform duration-200 ${active ? 'scale-110' : ''}`}>
       {icon}
     </div>
-    <span className={`text-[11px] mt-0.5 font-bold tracking-wide ${active ? 'text-emerald-400' : 'text-gray-500'}`}>
+    <span className={`text-[10px] mt-0.5 font-semibold tracking-wide ${active ? 'text-emerald-400' : 'text-gray-500'}`}>
       {label}
     </span>
   </button>

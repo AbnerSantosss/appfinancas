@@ -262,13 +262,13 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUserId }) => {
             {users.map(user => (
               <div
                 key={user.id}
-                className={`bg-slate-950/60 border rounded-xl px-4 py-3 flex items-center justify-between gap-3 transition-all ${
+                className={`bg-slate-950/60 border rounded-xl px-3.5 py-3 sm:px-4 sm:py-3 flex items-center justify-between gap-2 sm:gap-3 transition-all ${
                   user.id === currentUserId 
                     ? 'border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.05)]' 
                     : 'border-white/5 hover:border-white/10'
                 }`}
               >
-                <div className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                     user.role === 'master' 
                       ? 'bg-amber-500/15 text-amber-400' 
@@ -278,21 +278,18 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUserId }) => {
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="text-xs font-bold text-white truncate">{user.email}</p>
+                      <p className="text-[11px] sm:text-xs font-bold text-white truncate">{user.email}</p>
                       {user.id === currentUserId && (
                         <span className="text-[7px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-1.5 py-0.5 rounded-md shrink-0">Você</span>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 mt-0.5">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-0.5">
                       <span className="text-[8px] text-slate-600 font-bold uppercase tracking-widest">
                         {user.role === 'master' ? '👑 Admin' : '👤 Usuário'}
                       </span>
                       {user.name && (
-                        <span className="text-[8px] text-slate-500 font-semibold truncate">{user.name}</span>
+                        <span className="text-[8px] text-slate-500 font-semibold truncate max-w-[100px]">{user.name}</span>
                       )}
-                      <span className="text-[8px] text-slate-600 flex items-center gap-0.5">
-                        <Clock size={8} /> {formatDate(user.createdAt)}
-                      </span>
                       <span className="text-[8px] text-slate-600 flex items-center gap-0.5">
                         <Database size={8} /> {user.expenseCount} desp.
                       </span>
@@ -301,18 +298,18 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUserId }) => {
                 </div>
 
                 {user.id !== currentUserId && user.role !== 'master' && (
-                  <div className="flex items-center gap-1 shrink-0">
+                  <div className="flex items-center gap-0.5 shrink-0">
                     <button
                       onClick={() => setResetTarget(user)}
                       title="Resetar Senha"
-                      className="p-2 rounded-lg text-amber-500/60 hover:text-amber-400 hover:bg-amber-500/10 transition-all cursor-pointer"
+                      className="p-2.5 rounded-lg text-amber-500/60 hover:text-amber-400 hover:bg-amber-500/10 transition-all cursor-pointer"
                     >
                       <Key size={13} />
                     </button>
                     <button
                       onClick={() => setDeleteTarget(user)}
                       title="Remover Usuário"
-                      className="p-2 rounded-lg text-rose-500/60 hover:text-rose-400 hover:bg-rose-500/10 transition-all cursor-pointer"
+                      className="p-2.5 rounded-lg text-rose-500/60 hover:text-rose-400 hover:bg-rose-500/10 transition-all cursor-pointer"
                     >
                       <Trash2 size={13} />
                     </button>

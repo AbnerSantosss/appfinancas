@@ -228,8 +228,8 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
 
             <div className="w-full max-w-sm relative z-10 space-y-6">
               {/* Header Mobile (Oculto no Desktop) */}
-              <div className="md:hidden text-center mb-6 flex flex-col items-center">
-                <img src="/logo_hub.png" alt="HUB FINANCEIRO" className="h-16 sm:h-14 w-auto object-contain mb-3" />
+              <div className="md:hidden text-center mb-4 sm:mb-6 flex flex-col items-center">
+                <img src="/logo_hub.png" alt="HUB FINANCEIRO" className="h-12 sm:h-14 w-auto object-contain mb-2" />
                 <p className="text-[10px] sm:text-[8px] text-[#34d399]/60 font-bold uppercase tracking-[0.15em] mt-1.5">
                   Organize todas suas finanças em um único lugar
                 </p>
@@ -246,7 +246,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
               </div>
 
               {/* Formulários */}
-              <form onSubmit={handleSubmit} className="bg-gray-900 border border-white/[0.04] backdrop-blur-2xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+              <form onSubmit={handleSubmit} className="bg-gray-900 border border-white/[0.04] backdrop-blur-2xl rounded-2xl sm:rounded-3xl p-5 sm:p-8 space-y-5 sm:space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
                 {error && (
                   <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl px-4 py-3 flex items-start gap-2.5">
                     <AlertTriangle size={16} className="text-rose-500 shrink-0 mt-0.5" />

@@ -148,14 +148,14 @@ const Settings: React.FC<SettingsProps> = ({
   };
 
   return (
-    <div className="p-4 md:p-8 space-y-6 animate-in fade-in zoom-in duration-500">
-      <div className="bg-slate-900/60 backdrop-blur-3xl p-5 sm:p-6 md:p-10 rounded-[2rem] border border-white/5 max-w-2xl mx-auto shadow-2xl">
-        <div className="flex items-center gap-4 mb-8">
-          <div className="w-14 h-14 sm:w-12 sm:h-12 bg-emerald-500/20 text-emerald-500 rounded-xl flex items-center justify-center">
-            <Wallet size={26} />
+    <div className="p-2 sm:p-4 md:p-8 space-y-6 animate-in fade-in zoom-in duration-500">
+      <div className="bg-slate-900/60 backdrop-blur-3xl p-4 sm:p-6 md:p-10 rounded-2xl sm:rounded-[2rem] border border-white/5 max-w-2xl mx-auto shadow-2xl">
+        <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="w-11 h-11 sm:w-12 sm:h-12 bg-emerald-500/20 text-emerald-500 rounded-xl flex items-center justify-center">
+            <Wallet size={22} />
           </div>
           <div>
-            <h2 className="text-xl md:text-xl font-black text-white tracking-tighter">Opções de Conta</h2>
+            <h2 className="text-lg sm:text-xl md:text-xl font-black text-white tracking-tighter">Opções de Conta</h2>
             <p className="text-slate-500 text-[10px] sm:text-[9px] font-bold uppercase tracking-widest">Configurações e Financeiro</p>
           </div>
         </div>
@@ -460,7 +460,7 @@ const Settings: React.FC<SettingsProps> = ({
               </label>
               <button 
                 onClick={onResetDB}
-                className="w-full bg-rose-500/10 text-rose-500 border border-rose-500/20 py-4.5 sm:py-4 rounded-xl hover:bg-rose-500 hover:text-white transition-all font-black uppercase tracking-widest text-[11px] sm:text-[10px] flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full bg-rose-500/10 text-rose-500 border border-rose-500/20 py-3.5 sm:py-4 rounded-xl hover:bg-rose-500 hover:text-white transition-all font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Trash2 size={14} /> Resetar Banco de Dados
               </button>

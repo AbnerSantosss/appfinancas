@@ -91,112 +91,113 @@ const Dashboard: React.FC<DashboardProps> = ({ expenses, salary, onTogglePaid, o
     <div className="relative space-y-6 animate-in fade-in duration-500">
       
       {/* HEADER SECTION */}
-      <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
         <div>
-          <h2 className="text-2xl md:text-2xl font-bold text-white tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
             Painel <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-300">Financeiro</span>
           </h2>
-          <p className="text-gray-500 text-sm sm:text-xs mt-1 sm:mt-0.5 font-medium">Controle de faturas e planejamento de gastos familiares.</p>
+          <p className="text-gray-500 text-xs mt-0.5 font-medium">Controle de faturas e planejamento de gastos familiares.</p>
         </div>
 
         <div className="flex items-center gap-3 self-start sm:self-center">
           <button 
             onClick={() => setIsInsightsOpen(true)}
-            className="flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 px-5 py-3 sm:px-4 sm:py-2.5 rounded-xl transition-all duration-200 group active:scale-95 shrink-0 cursor-pointer"
+            className="flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 px-4 py-2.5 sm:px-4 sm:py-2.5 rounded-xl transition-all duration-200 group active:scale-95 shrink-0 cursor-pointer"
           >
-            <Sparkles size={18} className="group-hover:rotate-12 transition-transform duration-300 sm:w-4 sm:h-4" />
-            <span className="text-sm sm:text-xs font-semibold">Previsões e Insights</span>
+            <Sparkles size={16} className="group-hover:rotate-12 transition-transform duration-300 sm:w-4 sm:h-4" />
+            <span className="text-xs font-semibold">Previsões e Insights</span>
           </button>
         </div>
       </header>
 
       {/* MONTH SELECTOR BAR */}
-      <div className="glass-panel p-2.5 sm:p-2 rounded-2xl flex items-center justify-between shadow-lg max-w-md">
+      <div className="glass-panel p-2 rounded-2xl flex items-center justify-between shadow-lg max-w-md">
         <button 
           onClick={() => setSelectedMonth(prevMonthDate)} 
-          className="w-12 h-12 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-white/5 text-gray-400 hover:text-emerald-400 rounded-xl transition-all duration-200 active:scale-90 cursor-pointer"
+          className="w-10 h-10 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-white/5 text-gray-400 hover:text-emerald-400 rounded-xl transition-all duration-200 active:scale-90 cursor-pointer"
           title="Mês anterior"
         >
-          <ChevronLeft size={22} />
+          <ChevronLeft size={20} />
         </button>
         <div className="text-center">
-          <p className="text-base sm:text-sm font-bold text-white capitalize tracking-tight flex items-center gap-2 justify-center">
-             <Calendar className="text-emerald-400 w-5 h-5 sm:w-4 sm:h-4" /> {formatFullMonth(selectedMonth)}
+          <p className="text-sm sm:text-sm font-bold text-white capitalize tracking-tight flex items-center gap-1.5 justify-center">
+             <Calendar className="text-emerald-400 w-4 h-4" /> {formatFullMonth(selectedMonth)}
           </p>
         </div>
         <button 
           onClick={() => setSelectedMonth(nextMonthDate)} 
-          className="w-12 h-12 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-white/5 text-gray-400 hover:text-emerald-400 rounded-xl transition-all duration-200 active:scale-90 cursor-pointer"
+          className="w-10 h-10 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-white/5 text-gray-400 hover:text-emerald-400 rounded-xl transition-all duration-200 active:scale-90 cursor-pointer"
           title="Próximo mês"
         >
-          <ChevronRight size={22} />
+          <ChevronRight size={20} />
         </button>
       </div>
 
       {/* SUMMARY CARDS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* SUMMARY CARDS — horizontal scroll on mobile, grid on desktop */}
+      <div className="snap-scroll-x sm:grid sm:grid-cols-3 sm:gap-4">
         {/* Unpaid Card */}
-        <div className="glass-panel border-rose-500/15 p-5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg relative overflow-hidden group">
+        <div className="snap-card glass-panel border-rose-500/15 p-4 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg relative overflow-hidden group">
           <div className="absolute right-0 top-0 w-24 h-24 bg-rose-500/[0.02] blur-xl rounded-full -z-10" />
-          <div className="flex justify-between items-start mb-4">
-            <div className="bg-rose-500/10 text-rose-400 p-3 sm:p-2.5 rounded-xl border border-rose-500/10">
-              <Clock size={18} />
+          <div className="flex justify-between items-start mb-3 sm:mb-4">
+            <div className="bg-rose-500/10 text-rose-400 p-2.5 rounded-xl border border-rose-500/10">
+              <Clock size={16} />
             </div>
-            <span className="text-[11px] sm:text-[10px] font-bold text-rose-400/80 uppercase tracking-wider bg-rose-500/10 px-2.5 py-1 sm:px-2 sm:py-0.5 rounded-md">Pendente</span>
+            <span className="text-[10px] font-bold text-rose-400/80 uppercase tracking-wider bg-rose-500/10 px-2 py-0.5 rounded-md">Pendente</span>
           </div>
           <div>
-            <p className="text-gray-400 text-sm sm:text-xs font-semibold mb-1">A pagar em {formatMonth(selectedMonth)}</p>
-            <h3 className="text-3xl sm:text-2xl font-bold text-rose-400 tracking-tight">{formatCurrency(selectedUnpaidTotal)}</h3>
+            <p className="text-gray-400 text-xs font-semibold mb-1">A pagar em {formatMonth(selectedMonth)}</p>
+            <h3 className="text-2xl sm:text-2xl font-bold text-rose-400 tracking-tight">{formatCurrency(selectedUnpaidTotal)}</h3>
           </div>
         </div>
 
         {/* Total Month Card */}
-        <div className="glass-panel border-emerald-500/10 p-5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg relative overflow-hidden">
+        <div className="snap-card glass-panel border-emerald-500/10 p-4 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg relative overflow-hidden">
           <div className="absolute right-0 top-0 w-24 h-24 bg-emerald-500/[0.02] blur-xl rounded-full -z-10" />
-          <div className="flex justify-between items-start mb-4">
-            <div className="bg-emerald-500/10 text-emerald-400 p-3 sm:p-2.5 rounded-xl border border-emerald-500/10">
-              <Wallet size={18} />
+          <div className="flex justify-between items-start mb-3 sm:mb-4">
+            <div className="bg-emerald-500/10 text-emerald-400 p-2.5 rounded-xl border border-emerald-500/10">
+              <Wallet size={16} />
             </div>
-            <span className="text-[11px] sm:text-[10px] font-bold text-emerald-400/80 uppercase tracking-wider bg-emerald-500/10 px-2.5 py-1 sm:px-2 sm:py-0.5 rounded-md">Previsão Total</span>
+            <span className="text-[10px] font-bold text-emerald-400/80 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded-md">Previsão Total</span>
           </div>
           <div>
-            <p className="text-gray-400 text-sm sm:text-xs font-semibold mb-1">Soma de lançamentos</p>
-            <h3 className="text-3xl sm:text-2xl font-bold text-white tracking-tight">{formatCurrency(selectedMonthTotal)}</h3>
+            <p className="text-gray-400 text-xs font-semibold mb-1">Soma de lançamentos</p>
+            <h3 className="text-2xl sm:text-2xl font-bold text-white tracking-tight">{formatCurrency(selectedMonthTotal)}</h3>
           </div>
         </div>
 
         {/* Next Month Forecast Card */}
-        <div className="glass-panel border-cyan-500/10 p-5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg relative overflow-hidden">
+        <div className="snap-card glass-panel border-cyan-500/10 p-4 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg relative overflow-hidden">
           <div className="absolute right-0 top-0 w-24 h-24 bg-cyan-500/[0.02] blur-xl rounded-full -z-10" />
-          <div className="flex justify-between items-start mb-4">
-            <div className="bg-cyan-500/10 text-cyan-400 p-3 sm:p-2.5 rounded-xl border border-cyan-500/10">
-              <TrendingUp size={18} />
+          <div className="flex justify-between items-start mb-3 sm:mb-4">
+            <div className="bg-cyan-500/10 text-cyan-400 p-2.5 rounded-xl border border-cyan-500/10">
+              <TrendingUp size={16} />
             </div>
-            <span className="text-[11px] sm:text-[10px] font-bold text-cyan-400/80 uppercase tracking-wider bg-cyan-500/10 px-2.5 py-1 sm:px-2 sm:py-0.5 rounded-md">Próximo Mês</span>
+            <span className="text-[10px] font-bold text-cyan-400/80 uppercase tracking-wider bg-cyan-500/10 px-2 py-0.5 rounded-md">Próximo Mês</span>
           </div>
           <div>
-            <p className="text-gray-400 text-sm sm:text-xs font-semibold mb-1">Previsão para {formatMonth(addMonths(today, 1))}</p>
-            <h3 className="text-3xl sm:text-2xl font-bold text-white tracking-tight">{formatCurrency(nextMonthForecast)}</h3>
+            <p className="text-gray-400 text-xs font-semibold mb-1">Previsão para {formatMonth(addMonths(today, 1))}</p>
+            <h3 className="text-2xl sm:text-2xl font-bold text-white tracking-tight">{formatCurrency(nextMonthForecast)}</h3>
           </div>
         </div>
       </div>
 
       {/* MAIN LIST & CHART GRID */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
         
         {/* Expenses List column */}
-        <div className="lg:col-span-8 space-y-4">
-          <div className="flex items-center justify-between gap-4">
-            <h3 className="text-base sm:text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <CreditCard size={18} className="text-emerald-400 sm:w-4 sm:h-4" />
-              Lançamentos de {formatFullMonth(selectedMonth)}
+        <div className="lg:col-span-8 space-y-3 sm:space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-[13px] sm:text-sm font-bold text-white uppercase tracking-wider flex items-center gap-1.5 sm:gap-2">
+              <CreditCard size={16} className="text-emerald-400 shrink-0" />
+              <span className="truncate">Lançamentos de {formatFullMonth(selectedMonth)}</span>
             </h3>
             {selectedUnpaidTotal > 0 && (
               <button 
                 onClick={() => onMarkAllAsPaid(selectedMonth)}
-                className="flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 px-4 py-2.5 sm:px-3.5 sm:py-1.5 rounded-xl transition-all duration-200 text-sm sm:text-xs font-bold shrink-0 active:scale-95 cursor-pointer"
+                className="flex items-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 px-3 py-2 sm:px-3.5 sm:py-1.5 rounded-xl transition-all duration-200 text-xs font-bold shrink-0 active:scale-95 cursor-pointer"
               >
-                <CheckSquare size={16} /> Liquidar Mês
+                <CheckSquare size={14} /> <span className="hidden sm:inline">Liquidar</span> Mês
               </button>
             )}
           </div>
@@ -212,40 +213,40 @@ const Dashboard: React.FC<DashboardProps> = ({ expenses, salary, onTogglePaid, o
                 const info = getInstallmentInfo(expense, selectedMonth);
                 
                 return (
-                  <div key={expense.id} className={`glass-panel p-4 sm:p-3.5 rounded-2xl transition-all duration-300 flex items-center justify-between gap-3 ${paid ? 'border-emerald-500/10 opacity-75 bg-emerald-500/[0.01]' : 'hover:border-white/[0.1] bg-gray-900/30'}`}>
-                    <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                  <div key={expense.id} className={`glass-panel p-3.5 sm:p-3.5 rounded-2xl transition-all duration-300 flex items-center justify-between gap-2.5 ${paid ? 'border-emerald-500/10 opacity-75 bg-emerald-500/[0.01]' : 'hover:border-white/[0.1] bg-gray-900/30'}`}>
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
                       <button 
                         onClick={() => onTogglePaid(expense.id, selectedMonth)} 
-                        className={`w-11 h-11 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl transition-all duration-300 border-2 shrink-0 cursor-pointer ${paid ? 'bg-emerald-500 border-emerald-500 text-gray-950 shadow-[0_0_12px_rgba(16,185,129,0.35)]' : 'bg-gray-950/40 border-white/10 text-gray-600 hover:border-emerald-500/40'}`}
+                        className={`w-10 h-10 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl transition-all duration-300 border-2 shrink-0 cursor-pointer ${paid ? 'bg-emerald-500 border-emerald-500 text-gray-950 shadow-[0_0_12px_rgba(16,185,129,0.35)]' : 'bg-gray-950/40 border-white/10 text-gray-600 hover:border-emerald-500/40'}`}
                       >
-                        {paid ? <CheckCircle2 size={18} strokeWidth={2.5} /> : <Circle size={18} />}
+                        {paid ? <CheckCircle2 size={16} strokeWidth={2.5} /> : <Circle size={16} />}
                       </button>
                       
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5">
                           <span className={`shrink-0 ${paid ? 'text-emerald-500/40' : 'text-emerald-400'}`}>
                             {getCategoryIcon(expense.category)}
                           </span>
-                          <p className={`font-semibold text-base sm:text-sm leading-tight tracking-tight truncate ${paid ? 'text-gray-500 line-through' : 'text-gray-100'}`}>
+                          <p className={`font-semibold text-[15px] sm:text-sm leading-tight tracking-tight truncate ${paid ? 'text-gray-500 line-through' : 'text-gray-100'}`}>
                             {expense.description}
                           </p>
                         </div>
                         
-                        <div className="flex flex-wrap items-center gap-2 mt-2 sm:mt-1.5 pl-5">
+                        <div className="flex flex-wrap items-center gap-1.5 mt-1.5 pl-5">
                           {expense.type === 'INSTALLMENT' && info && (
-                            <span className="text-[10px] sm:text-[9px] font-bold px-2.5 py-1 sm:px-2 sm:py-0.5 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/25 uppercase tracking-wider">
-                              Parcela {info.current} de {info.total}
+                            <span className="text-[9px] font-bold px-2 py-0.5 rounded-md bg-cyan-500/10 text-cyan-400 border border-cyan-500/25 uppercase tracking-wider">
+                              Parcela {info.current}/{info.total}
                             </span>
                           )}
-                          <span className={`text-[10px] sm:text-[9px] font-bold px-2.5 py-1 sm:px-2 sm:py-0.5 rounded-md uppercase tracking-wider ${expense.type === 'FIXED' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/25' : expense.type === 'ONCE' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/25' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/25'}`}>
-                            {expense.type === 'FIXED' ? 'Mensal Fixo' : expense.type === 'ONCE' ? 'Único' : 'Parcelado'}
+                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${expense.type === 'FIXED' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/25' : expense.type === 'ONCE' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/25' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/25'}`}>
+                            {expense.type === 'FIXED' ? 'Fixo' : expense.type === 'ONCE' ? 'Único' : 'Parcelado'}
                           </span>
                         </div>
                       </div>
                     </div>
                     
                     <div className="text-right shrink-0">
-                      <p className={`text-lg sm:text-md font-bold tracking-tight ${paid ? 'text-emerald-400/50' : 'text-white'}`}>
+                      <p className={`text-base sm:text-md font-bold tracking-tight ${paid ? 'text-emerald-400/50' : 'text-white'}`}>
                         {formatCurrency(expense.value)}
                       </p>
                     </div>
@@ -257,14 +258,14 @@ const Dashboard: React.FC<DashboardProps> = ({ expenses, salary, onTogglePaid, o
         </div>
 
         {/* Sidebar Statistics & Charts Column */}
-        <div className="lg:col-span-4 space-y-5">
+        <div className="lg:col-span-4 space-y-4 sm:space-y-5">
           
           {/* 6 MONTH FLOW CHART */}
-          <div className="glass-panel p-5 rounded-2xl flex flex-col shadow-xl">
-            <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-              <TrendingUp size={14} /> Fluxo de Despesas (6 meses)
+          <div className="glass-panel p-4 sm:p-5 rounded-2xl flex flex-col shadow-xl">
+            <h4 className="text-[11px] sm:text-xs font-bold text-emerald-400 uppercase tracking-wider mb-3 sm:mb-4 flex items-center gap-1.5">
+              <TrendingUp size={13} /> Fluxo de Despesas (6 meses)
             </h4>
-            <div className="h-[150px] w-full min-h-[150px]">
+            <div className="h-[130px] sm:h-[150px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartDataShort} margin={{ top: 5, right: 5, left: -30, bottom: 0 }}>
                   <defs>

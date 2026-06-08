@@ -1,27 +1,21 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-// ─── Modelos ────────────────────────────────────────────
-
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String   // Hash Bcrypt
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
   name      String?
-  role      String   @default("user") // master, admin, user
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  expenses Expense[]
+  role      String    @default("user")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  expenses  Expense[]
 
   @@map("users")
 }
@@ -29,19 +23,18 @@ model User {
 model Expense {
   id           String   @id @default(uuid())
   description  String
-  value        Float    // Valor da parcela ou valor fixo mensal
-  totalValue   Float?   @map("total_value") // Valor total (parcelados)
-  type         String   // FIXED, INSTALLMENT, ONCE
-  installments Int?     // Número total de parcelas
-  startMonth   String   @map("start_month") // ISO string do primeiro mês
+  value        Float
+  totalValue   Float?   @map("total_value")
+  type         String
+  installments Int?
+  startMonth   String   @map("start_month")
   category     String   @default("Geral")
-  paidMonths   String[] @map("paid_months") // Array ISO de meses pagos
+  paidMonths   String[] @map("paid_months")
   notes        String?
-
-  userId    String   @map("user_id")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  userId       String   @map("user_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("expenses")
 }
