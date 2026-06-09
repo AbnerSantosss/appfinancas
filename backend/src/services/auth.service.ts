@@ -242,6 +242,9 @@ export class AuthService {
         email: true,
         name: true,
         role: true,
+        familyId: true,
+        isActive: true,
+        lastActiveAt: true,
         createdAt: true,
         _count: { select: { expenses: true } },
       },
@@ -253,9 +256,32 @@ export class AuthService {
       email: u.email,
       name: u.name,
       role: u.role,
+      familyId: u.familyId,
+      isActive: u.isActive,
+      lastActiveAt: u.lastActiveAt,
       createdAt: u.createdAt,
       expenseCount: u._count.expenses,
     }));
+  }
+
+  /**
+   * Bloqueia ou desbloqueia o acesso de um usuário.
+   */
+  async toggleUserStatus(userId: string) {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new Error('Usuário não encontrado.');
+    }
+    if (user.role === 'master') {
+      throw new Error('Não é possível alterar o status de um administrador master.');
+    }
+
+    const updated = await prisma.user.update({
+      where: { id: userId },
+      data: { isActive: !user.isActive },
+    });
+
+    return { success: true, isActive: updated.isActive };
   }
 
   /**

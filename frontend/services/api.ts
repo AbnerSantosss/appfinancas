@@ -80,8 +80,8 @@ async function request<T>(
     const body = await response.json().catch(() => ({}));
     const message = body.error || `Erro ${response.status}`;
 
-    // Se token expirado, limpa autenticação
-    if (response.status === 401) {
+    // Se token expirado ou acesso bloqueado, limpa autenticação
+    if (response.status === 401 || (response.status === 403 && message === 'Acesso bloqueado pelo administrador.')) {
       clearAuth();
       window.location.reload();
     }
@@ -238,6 +238,9 @@ export interface AdminUser {
   email: string;
   name: string | null;
   role: string;
+  familyId?: string | null;
+  isActive: boolean;
+  lastActiveAt?: string | null;
   createdAt: string;
   expenseCount: number;
 }
@@ -264,4 +267,7 @@ export const adminApi = {
 
   deleteUser: (userId: string) =>
     api.delete<{ success: boolean; deletedEmail: string }>(`/auth/users/${userId}`),
+
+  toggleStatus: (userId: string) =>
+    api.patch<{ success: boolean }>(`/auth/users/${userId}/toggle-status`),
 };

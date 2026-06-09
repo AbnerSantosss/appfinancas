@@ -241,4 +241,18 @@ router.delete('/users/:userId', requireAuth, requireRole('master'), async (req: 
   }
 });
 
+/**
+ * PATCH /api/auth/users/:userId/toggle-status
+ * Bloqueia ou desbloqueia um usuário (master only).
+ */
+router.patch('/users/:userId/toggle-status', requireAuth, requireRole('master'), async (req: AuthRequest, res) => {
+  try {
+    const userId = req.params.userId as string;
+    const result = await authService.toggleUserStatus(userId);
+    res.json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 export default router;

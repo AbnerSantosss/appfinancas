@@ -3,7 +3,7 @@ import { adminApi, AdminUser } from '../services/api';
 import { 
   UserPlus, Users, RefreshCw, Mail, KeyRound, Eye, EyeOff, 
   Trash2, Key, AlertTriangle, CheckCircle, X, Copy, Shield, 
-  Clock, Database, Send, User, ChevronDown, ChevronUp
+  Clock, Database, Send, User, ChevronDown, ChevronUp, Ban, CheckCircle2
 } from 'lucide-react';
 
 interface UserManagementProps {
@@ -101,6 +101,25 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUserId }) => {
       setIsDeleting(false);
     }
   };
+
+  const handleToggleStatus = async (user: AdminUser) => {
+    try {
+      await adminApi.toggleStatus(user.id);
+      await fetchUsers();
+    } catch (err: any) {
+      alert('Erro: ' + (err.message || 'Falha ao alterar status.'));
+    }
+  };
+
+  const isOnline = (lastActiveAt?: string | null) => {
+    if (!lastActiveAt) return false;
+    const diff = new Date().getTime() - new Date(lastActiveAt).getTime();
+    return diff < 5 * 60 * 1000; // 5 minutos
+  };
+
+  // Agrupar usuários: Heads (sem familyId) e Membros
+  const headUsers = users.filter(u => !u.familyId || u.id === u.familyId);
+  const familyMembers = users.filter(u => u.familyId && u.id !== u.familyId);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -258,65 +277,145 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUserId }) => {
         ) : users.length === 0 ? (
           <p className="text-xs text-slate-600 text-center py-6">Nenhum usuário encontrado.</p>
         ) : (
-          <div className="space-y-2">
-            {users.map(user => (
-              <div
-                key={user.id}
-                className={`bg-slate-950/60 border rounded-xl px-3.5 py-3 sm:px-4 sm:py-3 flex items-center justify-between gap-2 sm:gap-3 transition-all ${
-                  user.id === currentUserId 
-                    ? 'border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.05)]' 
-                    : 'border-white/5 hover:border-white/10'
-                }`}
-              >
-                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                    user.role === 'master' 
-                      ? 'bg-amber-500/15 text-amber-400' 
-                      : 'bg-slate-800 text-slate-400'
+          <div className="space-y-4">
+            {headUsers.map(head => {
+              const members = familyMembers.filter(m => m.familyId === head.id);
+              return (
+                <div key={head.id} className="space-y-2">
+                  {/* Titular da Conta */}
+                  <div className={`bg-slate-950/60 border rounded-xl px-3.5 py-3 sm:px-4 sm:py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-all ${
+                    head.id === currentUserId 
+                      ? 'border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.05)]' 
+                      : !head.isActive ? 'border-rose-500/20 opacity-75' : 'border-white/5 hover:border-white/10'
                   }`}>
-                    {user.role === 'master' ? <Shield size={14} /> : <User size={14} />}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="text-[11px] sm:text-xs font-bold text-white truncate">{user.email}</p>
-                      {user.id === currentUserId && (
-                        <span className="text-[7px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-1.5 py-0.5 rounded-md shrink-0">Você</span>
-                      )}
+                    <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                        head.role === 'master' 
+                          ? 'bg-amber-500/15 text-amber-400' 
+                          : 'bg-slate-800 text-slate-400'
+                      }`}>
+                        {head.role === 'master' ? <Shield size={14} /> : <User size={14} />}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className={`text-[11px] sm:text-xs font-bold truncate ${!head.isActive ? 'text-slate-400 line-through' : 'text-white'}`}>
+                            {head.email}
+                          </p>
+                          {head.id === currentUserId && (
+                            <span className="text-[7px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-1.5 py-0.5 rounded-md shrink-0">Você</span>
+                          )}
+                          <div className={`w-2 h-2 rounded-full ${isOnline(head.lastActiveAt) ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-slate-600'}`} title={isOnline(head.lastActiveAt) ? 'Online' : 'Offline'} />
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-0.5">
+                          <span className="text-[8px] text-slate-600 font-bold uppercase tracking-widest">
+                            {head.role === 'master' ? '👑 Admin' : '👤 Titular'}
+                          </span>
+                          {head.name && (
+                            <span className="text-[8px] text-slate-500 font-semibold truncate max-w-[100px]">{head.name}</span>
+                          )}
+                          <span className="text-[8px] text-slate-600 flex items-center gap-0.5">
+                            <Database size={8} /> {head.expenseCount} desp.
+                          </span>
+                          {!head.isActive && (
+                            <span className="text-[8px] text-rose-400 font-bold uppercase tracking-widest flex items-center gap-1 bg-rose-500/10 px-1.5 py-0.5 rounded">
+                              <Ban size={8} /> Bloqueado
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-0.5">
-                      <span className="text-[8px] text-slate-600 font-bold uppercase tracking-widest">
-                        {user.role === 'master' ? '👑 Admin' : '👤 Usuário'}
-                      </span>
-                      {user.name && (
-                        <span className="text-[8px] text-slate-500 font-semibold truncate max-w-[100px]">{user.name}</span>
-                      )}
-                      <span className="text-[8px] text-slate-600 flex items-center gap-0.5">
-                        <Database size={8} /> {user.expenseCount} desp.
-                      </span>
-                    </div>
-                  </div>
-                </div>
 
-                {user.id !== currentUserId && user.role !== 'master' && (
-                  <div className="flex items-center gap-0.5 shrink-0">
-                    <button
-                      onClick={() => setResetTarget(user)}
-                      title="Resetar Senha"
-                      className="p-2.5 rounded-lg text-amber-500/60 hover:text-amber-400 hover:bg-amber-500/10 transition-all cursor-pointer"
-                    >
-                      <Key size={13} />
-                    </button>
-                    <button
-                      onClick={() => setDeleteTarget(user)}
-                      title="Remover Usuário"
-                      className="p-2.5 rounded-lg text-rose-500/60 hover:text-rose-400 hover:bg-rose-500/10 transition-all cursor-pointer"
-                    >
-                      <Trash2 size={13} />
-                    </button>
+                    {head.id !== currentUserId && head.role !== 'master' && (
+                      <div className="flex flex-wrap items-center gap-0.5 shrink-0 self-end sm:self-auto">
+                        <button
+                          onClick={() => handleToggleStatus(head)}
+                          title={head.isActive ? "Bloquear Acesso" : "Desbloquear Acesso"}
+                          className={`p-2.5 rounded-lg transition-all cursor-pointer ${
+                            head.isActive ? 'text-amber-500/60 hover:text-amber-400 hover:bg-amber-500/10' : 'text-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10'
+                          }`}
+                        >
+                          {head.isActive ? <Ban size={13} /> : <CheckCircle2 size={13} />}
+                        </button>
+                        <button
+                          onClick={() => setResetTarget(head)}
+                          title="Resetar Senha"
+                          className="p-2.5 rounded-lg text-amber-500/60 hover:text-amber-400 hover:bg-amber-500/10 transition-all cursor-pointer"
+                        >
+                          <Key size={13} />
+                        </button>
+                        <button
+                          onClick={() => setDeleteTarget(head)}
+                          title="Remover Usuário"
+                          className="p-2.5 rounded-lg text-rose-500/60 hover:text-rose-400 hover:bg-rose-500/10 transition-all cursor-pointer"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            ))}
+
+                  {/* Membros da Família */}
+                  {members.length > 0 && (
+                    <div className="pl-6 space-y-2 border-l border-white/5 ml-3">
+                      {members.map(member => (
+                        <div key={member.id} className={`bg-slate-950/40 border rounded-xl px-3 sm:px-4 py-2.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-all ${
+                          !member.isActive ? 'border-rose-500/10 opacity-75' : 'border-white/5'
+                        }`}>
+                          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                            <div className="w-6 h-6 rounded-md flex items-center justify-center shrink-0 bg-slate-900 text-slate-500">
+                              <Users size={12} />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className={`text-[10px] sm:text-[11px] font-bold truncate ${!member.isActive ? 'text-slate-500 line-through' : 'text-slate-300'}`}>
+                                  {member.email}
+                                </p>
+                                <div className={`w-1.5 h-1.5 rounded-full ${isOnline(member.lastActiveAt) ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]' : 'bg-slate-700'}`} title={isOnline(member.lastActiveAt) ? 'Online' : 'Offline'} />
+                              </div>
+                              <div className="flex flex-wrap items-center gap-2 mt-0.5">
+                                <span className="text-[7px] text-slate-600 font-bold uppercase tracking-widest">Membro</span>
+                                {member.name && (
+                                  <span className="text-[7px] text-slate-500 font-semibold truncate max-w-[80px]">{member.name}</span>
+                                )}
+                                {!member.isActive && (
+                                  <span className="text-[7px] text-rose-500 font-bold uppercase tracking-widest">Bloqueado</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-0.5 shrink-0 self-end sm:self-auto">
+                            <button
+                              onClick={() => handleToggleStatus(member)}
+                              title={member.isActive ? "Bloquear Acesso" : "Desbloquear Acesso"}
+                              className={`p-2 rounded-lg transition-all cursor-pointer ${
+                                member.isActive ? 'text-amber-500/60 hover:text-amber-400 hover:bg-amber-500/10' : 'text-emerald-500/60 hover:text-emerald-400 hover:bg-emerald-500/10'
+                              }`}
+                            >
+                              {member.isActive ? <Ban size={11} /> : <CheckCircle2 size={11} />}
+                            </button>
+                            <button
+                              onClick={() => setResetTarget(member)}
+                              title="Resetar Senha"
+                              className="p-2 rounded-lg text-amber-500/60 hover:text-amber-400 hover:bg-amber-500/10 transition-all cursor-pointer"
+                            >
+                              <Key size={11} />
+                            </button>
+                            <button
+                              onClick={() => setDeleteTarget(member)}
+                              title="Remover Usuário"
+                              className="p-2 rounded-lg text-rose-500/60 hover:text-rose-400 hover:bg-rose-500/10 transition-all cursor-pointer"
+                            >
+                              <Trash2 size={11} />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
