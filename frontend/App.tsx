@@ -7,7 +7,7 @@ import ExpenseForm from './components/ExpenseForm';
 import Settings from './components/Settings';
 import { Expense } from './types';
 import { startOfMonth } from 'date-fns';
-import { AlertTriangle, Trash2, ShieldAlert, X, RefreshCw, LogIn, Mail, KeyRound, Eye, EyeOff, ShieldCheck, ArrowLeft, CheckCircle2, ArrowRight, Hexagon, Send } from 'lucide-react';
+import { AlertTriangle, Trash2, ShieldAlert, X, RefreshCw, LogIn, Mail, KeyRound, Eye, EyeOff, ShieldCheck, ArrowLeft, CheckCircle2, ArrowRight, Hexagon, Send, ExternalLink, HelpCircle } from 'lucide-react';
 import { isExpenseActiveInMonth, isMonthPaid } from './utils';
 import {
   authApi,
@@ -600,7 +600,7 @@ const App: React.FC = () => {
 
       {showSmtpOnboarding && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl relative">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 max-w-4xl w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 bg-rose-500/10 rounded-full flex items-center justify-center shrink-0">
                 <AlertTriangle className="w-6 h-6 text-rose-500" />
@@ -611,47 +611,124 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            <form onSubmit={handleSmtpSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2 md:col-span-1">
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Host SMTP</label>
-                  <input type="text" required value={smtpForm.host} onChange={(e) => setSmtpForm({ ...smtpForm, host: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="smtp.gmail.com" />
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
+              {/* Lado esquerdo: Guia de Implementação */}
+              <div className="md:col-span-5 space-y-4 md:border-r border-slate-800/80 md:pr-6 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <HelpCircle className="w-5 h-5 text-emerald-400" />
+                    <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-wider">Como configurar?</h3>
+                  </div>
+
+                  <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                    Para que novos usuários recebam o e-mail com suas credenciais de acesso, você precisa configurar um servidor SMTP. Veja como fazer isso usando o <span className="text-slate-200 font-medium">Gmail</span>:
+                  </p>
+
+                  <div className="space-y-3">
+                    <div className="bg-slate-950/40 border border-slate-800/60 rounded-xl p-3 hover:border-slate-800 transition-colors">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="w-4 h-4 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center text-[10px] font-bold">1</span>
+                        <h4 className="text-xs font-semibold text-slate-200">Verificação em 2 Etapas</h4>
+                      </div>
+                      <p className="text-[11px] text-slate-400 leading-relaxed">
+                        Ative a Verificação em 2 Etapas nas configurações de segurança da sua conta Google.
+                      </p>
+                      <a 
+                        href="https://myaccount.google.com/security" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="inline-flex items-center gap-1 text-[11px] text-emerald-400 hover:text-emerald-300 font-medium mt-1.5 transition-colors"
+                      >
+                        Ativar 2 Etapas <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+
+                    <div className="bg-slate-950/40 border border-slate-800/60 rounded-xl p-3 hover:border-slate-800 transition-colors">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="w-4 h-4 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center text-[10px] font-bold">2</span>
+                        <h4 className="text-xs font-semibold text-slate-200">Criar Senha de App</h4>
+                      </div>
+                      <p className="text-[11px] text-slate-400 leading-relaxed">
+                        Gere uma chave de segurança de 16 dígitos. Selecione o app como "Outro (nome personalizado)" e dê o nome de "Financas App".
+                      </p>
+                      <a 
+                        href="https://myaccount.google.com/apppasswords" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="inline-flex items-center gap-1 text-[11px] text-emerald-400 hover:text-emerald-300 font-medium mt-1.5 transition-colors"
+                      >
+                        Gerar Senha de App <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+
+                    <div className="bg-slate-950/40 border border-slate-800/60 rounded-xl p-3 hover:border-slate-800 transition-colors">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="w-4 h-4 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center text-[10px] font-bold">3</span>
+                        <h4 className="text-xs font-semibold text-slate-200">Preencher os Campos</h4>
+                      </div>
+                      <ul className="text-[11px] text-slate-400 space-y-1 list-disc list-inside">
+                        <li><span className="text-slate-300 font-medium">Host:</span> <code className="text-emerald-400">smtp.gmail.com</code></li>
+                        <li><span className="text-slate-300 font-medium">Porta:</span> <code className="text-emerald-400">587</code></li>
+                        <li><span className="text-slate-300 font-medium">Usuário:</span> Seu e-mail do Gmail</li>
+                        <li><span className="text-slate-300 font-medium">Senha:</span> A Senha de App (16 caracteres sem espaços)</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-                <div className="col-span-2 md:col-span-1">
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Porta</label>
-                  <input type="number" required value={smtpForm.port} onChange={(e) => setSmtpForm({ ...smtpForm, port: parseInt(e.target.value) })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" />
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Usuário</label>
-                  <input type="email" required value={smtpForm.user} onChange={(e) => setSmtpForm({ ...smtpForm, user: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="seu@email.com" />
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Senha (App Password)</label>
-                  <input type="password" required value={smtpForm.pass} onChange={(e) => setSmtpForm({ ...smtpForm, pass: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="••••••••" />
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Email de Envio (From)</label>
-                  <input type="email" required value={smtpForm.from} onChange={(e) => setSmtpForm({ ...smtpForm, from: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="noreply@hubfinanceiro.com" />
+
+                <div className="pt-4 border-t border-slate-800/50 hidden md:block">
+                  <div className="flex items-center gap-2 text-[10px] text-slate-500">
+                    <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>Seus dados de SMTP são criptografados no banco de dados.</span>
+                  </div>
                 </div>
               </div>
 
-              {smtpTestResult && (
-                <div className={`p-3 rounded-lg text-sm flex items-start gap-2 ${smtpTestResult.success ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
-                  {smtpTestResult.success ? <CheckCircle2 className="w-5 h-5 shrink-0" /> : <AlertTriangle className="w-5 h-5 shrink-0" />}
-                  {smtpTestResult.message}
-                </div>
-              )}
+              {/* Lado direito: Formulário */}
+              <div className="md:col-span-7">
+                <form onSubmit={handleSmtpSubmit} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="block text-xs font-medium text-slate-400 mb-1">Host SMTP</label>
+                      <input type="text" required value={smtpForm.host} onChange={(e) => setSmtpForm({ ...smtpForm, host: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="smtp.gmail.com" />
+                    </div>
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="block text-xs font-medium text-slate-400 mb-1">Porta</label>
+                      <input type="number" required value={smtpForm.port} onChange={(e) => setSmtpForm({ ...smtpForm, port: parseInt(e.target.value) })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="block text-xs font-medium text-slate-400 mb-1">Usuário</label>
+                      <input type="email" required value={smtpForm.user} onChange={(e) => setSmtpForm({ ...smtpForm, user: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="seu@email.com" />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="block text-xs font-medium text-slate-400 mb-1">Senha (App Password)</label>
+                      <input type="password" required value={smtpForm.pass} onChange={(e) => setSmtpForm({ ...smtpForm, pass: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="••••••••" />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="block text-xs font-medium text-slate-400 mb-1">Email de Envio (From)</label>
+                      <input type="email" required value={smtpForm.from} onChange={(e) => setSmtpForm({ ...smtpForm, from: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="noreply@hubfinanceiro.com" />
+                    </div>
+                  </div>
 
-              <div className="flex justify-end gap-3 pt-4 mt-6 border-t border-slate-800/50">
-                <button type="button" onClick={handleTestSmtp} disabled={isTestingSmtp} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium text-sm transition-colors flex items-center gap-2">
-                  {isTestingSmtp ? <RefreshCw className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
-                  Testar Conexão
-                </button>
-                <button type="submit" disabled={!smtpTestResult?.success} className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-medium text-sm transition-colors shadow-lg shadow-emerald-500/20">
-                  Salvar e Continuar
-                </button>
+                  {smtpTestResult && (
+                    <div className={`p-3 rounded-lg text-sm flex items-start gap-2 ${smtpTestResult.success ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
+                      {smtpTestResult.success ? <CheckCircle2 className="w-5 h-5 shrink-0" /> : <AlertTriangle className="w-5 h-5 shrink-0" />}
+                      {smtpTestResult.message}
+                    </div>
+                  )}
+
+                  <div className="flex justify-end gap-3 pt-4 mt-6 border-t border-slate-800/50">
+                    <button type="button" onClick={handleTestSmtp} disabled={isTestingSmtp} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium text-sm transition-colors flex items-center gap-2">
+                      {isTestingSmtp ? <RefreshCw className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
+                      Testar Conexão
+                    </button>
+                    <button type="submit" disabled={!smtpTestResult?.success} className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-medium text-sm transition-colors shadow-lg shadow-emerald-500/20">
+                      Salvar e Continuar
+                    </button>
+                  </div>
+                </form>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
