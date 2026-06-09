@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import { prisma } from '../lib/prisma';
 import { emailService } from './email.service';
 
@@ -16,6 +17,10 @@ export class AuthService {
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       throw new Error('Credenciais inválidas.');
+    }
+
+    if (!user.isEmailVerified) {
+      throw new Error('Por favor, confirme seu e-mail para acessar a conta.');
     }
 
     const token = jwt.sign(
@@ -86,17 +91,21 @@ export class AuthService {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    const token = crypto.randomBytes(32).toString('hex');
+
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
         name: name || null,
         role: 'user',
+        isEmailVerified: false,
+        emailVerificationToken: token,
         // Um usuário recém cadastrado não tem familyId (é o head da própria família)
       },
     });
 
-    await emailService.sendWelcomeEmail(email, password, name);
+    await emailService.sendVerificationEmail(email, token, name);
 
     return {
       user: {
@@ -244,6 +253,7 @@ export class AuthService {
         role: true,
         familyId: true,
         isActive: true,
+        isEmailVerified: true,
         lastActiveAt: true,
         createdAt: true,
         _count: { select: { expenses: true } },
@@ -258,6 +268,7 @@ export class AuthService {
       role: u.role,
       familyId: u.familyId,
       isActive: u.isActive,
+      isEmailVerified: u.isEmailVerified,
       lastActiveAt: u.lastActiveAt,
       createdAt: u.createdAt,
       expenseCount: u._count.expenses,
@@ -437,6 +448,59 @@ export class AuthService {
     }
 
     return { success: true, message: 'Uma nova senha temporária foi enviada para o seu e-mail.' };
+  }
+
+  /**
+   * Verifica o e-mail do usuário a partir do token.
+   */
+  async verifyEmail(token: string) {
+    const user = await prisma.user.findFirst({
+      where: { emailVerificationToken: token },
+    });
+
+    if (!user) {
+      throw new Error('Token de verificação inválido ou expirado.');
+    }
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        isEmailVerified: true,
+        emailVerificationToken: null,
+      },
+    });
+
+    return { success: true, message: 'E-mail confirmado com sucesso!' };
+  }
+
+  /**
+   * Reenvia o e-mail de verificação (função usada pelo master).
+   */
+  async resendVerificationEmail(userId: string) {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    
+    if (!user) {
+      throw new Error('Usuário não encontrado.');
+    }
+
+    if (user.isEmailVerified) {
+      throw new Error('O e-mail deste usuário já está confirmado.');
+    }
+
+    const token = crypto.randomBytes(32).toString('hex');
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { emailVerificationToken: token },
+    });
+
+    const emailSent = await emailService.sendVerificationEmail(user.email, token, user.name || '');
+    
+    if (!emailSent) {
+      throw new Error('Falha ao enviar e-mail de verificação.');
+    }
+
+    return { success: true, message: 'E-mail de verificação reenviado com sucesso.' };
   }
 }
 

@@ -177,6 +177,59 @@ class EmailService {
   }
 
   /**
+   * Envia email de verificação para o usuário confirmar o cadastro.
+   */
+  async sendVerificationEmail(toEmail: string, token: string, name?: string): Promise<boolean> {
+    const transport = await this.getTransporter();
+    if (!transport) return false;
+
+    const verificationLink = `https://financas.proxserverabner.site/verify-email?token=${token}`;
+
+    try {
+      await transport.transporter.sendMail({
+        from: `"HUB FINANCEIRO" <${transport.fromAddress}>`,
+        to: toEmail,
+        subject: '✉️ Confirme seu e-mail — HUB FINANCEIRO',
+        html: `
+          <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #0f172a; border-radius: 16px; overflow: hidden; border: 1px solid #1e293b;">
+            <div style="background: linear-gradient(135deg, #3b82f6, #2563eb); padding: 32px 24px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 800;">HUB FINANCEIRO</h1>
+              <p style="color: #bfdbfe; margin: 8px 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">Confirmação de Cadastro</p>
+            </div>
+            <div style="padding: 32px 24px;">
+              <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
+                Olá${name ? ` <strong style="color: #fff;">${name}</strong>` : ''}! 👋<br><br>
+                Falta pouco para você acessar o <strong style="color: #3b82f6;">HUB FINANCEIRO</strong>. 
+                Por favor, confirme seu endereço de e-mail clicando no botão abaixo:
+              </p>
+              
+              <div style="text-align: center; margin: 32px 0;">
+                <a href="${verificationLink}" style="background-color: #3b82f6; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; display: inline-block;">
+                  Confirmar E-mail
+                </a>
+              </div>
+
+              <p style="color: #64748b; font-size: 12px; margin: 24px 0 0; line-height: 1.5; text-align: center;">
+                Se o botão não funcionar, cole o link abaixo no seu navegador:<br>
+                <a href="${verificationLink}" style="color: #3b82f6; word-break: break-all;">${verificationLink}</a>
+              </p>
+            </div>
+            <div style="padding: 16px 24px; border-top: 1px solid #1e293b; text-align: center;">
+              <p style="color: #475569; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin: 0;">
+                HUB FINANCEIRO • Self-Hosted
+              </p>
+            </div>
+          </div>
+        `,
+      });
+      return true;
+    } catch (error) {
+      console.error('❌ Erro ao enviar email de verificação:', error);
+      return false;
+    }
+  }
+
+  /**
    * Envia email notificando que a senha foi resetada.
    */
   async sendPasswordResetEmail(toEmail: string, newPassword: string): Promise<boolean> {

@@ -21,6 +21,7 @@ import {
 import { AnimatedBackground } from './components/AnimatedBackground';
 import { CardCarousel } from './components/CardCarousel';
 import { SignUpScreen } from './components/SignUpScreen';
+import { VerifyEmailScreen } from './components/VerifyEmailScreen';
 
 // ─── Tela de Login ──────────────────────────────────────
 
@@ -363,6 +364,12 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
 // ─── App Principal ──────────────────────────────────────
 
 const App: React.FC = () => {
+  const isVerifyEmailRoute = window.location.pathname === '/verify-email';
+
+  if (isVerifyEmailRoute) {
+    return <VerifyEmailScreen />;
+  }
+
   const [user, setUser] = useState<AuthUser | null>(getStoredUser());
   const [activeTab, setActiveTab] = useState('dashboard');
   const [expenses, setExpenses] = useState<Expense[]>([]);

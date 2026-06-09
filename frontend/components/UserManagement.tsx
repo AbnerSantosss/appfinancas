@@ -3,7 +3,8 @@ import { adminApi, AdminUser } from '../services/api';
 import { 
   UserPlus, Users, RefreshCw, Mail, KeyRound, Eye, EyeOff, 
   Trash2, Key, AlertTriangle, CheckCircle, X, Copy, Shield, 
-  Clock, Database, Send, User, ChevronDown, ChevronUp, Ban, CheckCircle2
+  Clock, Database, Send, User, ChevronDown, ChevronUp, Ban, CheckCircle2,
+  MailWarning
 } from 'lucide-react';
 
 interface UserManagementProps {
@@ -108,6 +109,15 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUserId }) => {
       await fetchUsers();
     } catch (err: any) {
       alert('Erro: ' + (err.message || 'Falha ao alterar status.'));
+    }
+  };
+
+  const handleResendVerification = async (userId: string) => {
+    try {
+      const res = await adminApi.resendVerification(userId);
+      alert(res.message || 'E-mail de verificação reenviado.');
+    } catch (err: any) {
+      alert('Erro: ' + (err.message || 'Falha ao reenviar e-mail de verificação.'));
     }
   };
 
@@ -321,12 +331,26 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUserId }) => {
                               <Ban size={8} /> Bloqueado
                             </span>
                           )}
+                          {!head.isEmailVerified && (
+                            <span className="text-[8px] text-amber-400 font-bold uppercase tracking-widest flex items-center gap-1 bg-amber-500/10 px-1.5 py-0.5 rounded" title="E-mail não confirmado">
+                              <AlertTriangle size={8} /> Pendente
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
 
                     {head.id !== currentUserId && head.role !== 'master' && (
                       <div className="flex flex-wrap items-center gap-0.5 shrink-0 self-end sm:self-auto">
+                        {!head.isEmailVerified && (
+                          <button
+                            onClick={() => handleResendVerification(head.id)}
+                            title="Reenviar E-mail de Verificação"
+                            className="p-2.5 rounded-lg text-amber-500/60 hover:text-amber-400 hover:bg-amber-500/10 transition-all cursor-pointer"
+                          >
+                            <MailWarning size={13} />
+                          </button>
+                        )}
                         <button
                           onClick={() => handleToggleStatus(head)}
                           title={head.isActive ? "Bloquear Acesso" : "Desbloquear Acesso"}
@@ -380,11 +404,23 @@ const UserManagement: React.FC<UserManagementProps> = ({ currentUserId }) => {
                                 {!member.isActive && (
                                   <span className="text-[7px] text-rose-500 font-bold uppercase tracking-widest">Bloqueado</span>
                                 )}
+                                {!member.isEmailVerified && (
+                                  <span className="text-[7px] text-amber-500 font-bold uppercase tracking-widest bg-amber-500/10 px-1 py-0.5 rounded">Pendente</span>
+                                )}
                               </div>
                             </div>
                           </div>
 
                           <div className="flex items-center gap-0.5 shrink-0 self-end sm:self-auto">
+                            {!member.isEmailVerified && (
+                              <button
+                                onClick={() => handleResendVerification(member.id)}
+                                title="Reenviar E-mail de Verificação"
+                                className="p-2 rounded-lg text-amber-500/60 hover:text-amber-400 hover:bg-amber-500/10 transition-all cursor-pointer"
+                              >
+                                <MailWarning size={11} />
+                              </button>
+                            )}
                             <button
                               onClick={() => handleToggleStatus(member)}
                               title={member.isActive ? "Bloquear Acesso" : "Desbloquear Acesso"}

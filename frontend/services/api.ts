@@ -156,6 +156,9 @@ export const authApi = {
     clearAuth();
     window.location.reload();
   },
+
+  verifyEmail: (token: string) =>
+    api.post<{ success: boolean; message: string }>('/auth/verify-email', { token }),
 };
 
 // ─── Expenses API ───────────────────────────────────────
@@ -240,6 +243,7 @@ export interface AdminUser {
   role: string;
   familyId?: string | null;
   isActive: boolean;
+  isEmailVerified: boolean;
   lastActiveAt?: string | null;
   createdAt: string;
   expenseCount: number;
@@ -270,4 +274,7 @@ export const adminApi = {
 
   toggleStatus: (userId: string) =>
     api.patch<{ success: boolean }>(`/auth/users/${userId}/toggle-status`),
+
+  resendVerification: (userId: string) =>
+    api.post<{ success: boolean; message: string }>(`/auth/users/${userId}/resend-verification`),
 };

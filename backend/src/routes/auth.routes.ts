@@ -64,6 +64,25 @@ router.post('/forgot-password', async (req, res) => {
 });
 
 /**
+ * POST /api/auth/verify-email
+ * Valida o token e confirma o e-mail do usuário.
+ */
+router.post('/verify-email', async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      res.status(400).json({ error: 'Token é obrigatório.' });
+      return;
+    }
+
+    const result = await authService.verifyEmail(token);
+    res.json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+/**
  * POST /api/auth/register
  * Registra um novo usuário (apenas master).
  */
@@ -249,6 +268,19 @@ router.patch('/users/:userId/toggle-status', requireAuth, requireRole('master'),
   try {
     const userId = req.params.userId as string;
     const result = await authService.toggleUserStatus(userId);
+    res.json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+/**
+ * POST /api/auth/users/:userId/resend-verification
+ * Reenvia o e-mail de confirmação (master only).
+ */
+router.post('/users/:userId/resend-verification', requireAuth, requireRole('master'), async (req: AuthRequest, res) => {
+  try {
+    const userId = req.params.userId as string;
+    const result = await authService.resendVerificationEmail(userId);
     res.json(result);
   } catch (err: any) {
     res.status(400).json({ error: err.message });
