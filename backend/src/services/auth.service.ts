@@ -135,17 +135,21 @@ export class AuthService {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    const token = crypto.randomBytes(32).toString('hex');
+
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
         name: name || null,
         role: 'user',
+        isEmailVerified: false,
+        emailVerificationToken: token,
       },
     });
 
     // Tenta enviar email com as credenciais
-    const emailSent = await emailService.sendInviteEmail(email, password, name);
+    const emailSent = await emailService.sendInviteEmail(email, password, name, token);
 
     return {
       user: {
@@ -181,6 +185,8 @@ export class AuthService {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    const token = crypto.randomBytes(32).toString('hex');
+
     const user = await prisma.user.create({
       data: {
         email,
@@ -188,10 +194,12 @@ export class AuthService {
         name: name || null,
         role: 'user',
         familyId,
+        isEmailVerified: false,
+        emailVerificationToken: token,
       },
     });
 
-    const emailSent = await emailService.sendInviteEmail(email, password, name);
+    const emailSent = await emailService.sendInviteEmail(email, password, name, token);
 
     return {
       user: {
@@ -312,6 +320,7 @@ export class AuthService {
         name: true,
         role: true,
         familyId: true,
+        isEmailVerified: true,
         createdAt: true,
       },
       orderBy: { createdAt: 'asc' },
@@ -474,13 +483,17 @@ export class AuthService {
   }
 
   /**
-   * Reenvia o e-mail de verificação (função usada pelo master).
+   * Reenvia o e-mail de verificação (função usada pelo master ou pelo titular da família).
    */
-  async resendVerificationEmail(userId: string) {
+  async resendVerificationEmail(userId: string, requester: { id: string, role: string }) {
     const user = await prisma.user.findUnique({ where: { id: userId } });
     
     if (!user) {
       throw new Error('Usuário não encontrado.');
+    }
+
+    if (requester.role !== 'master' && user.familyId !== requester.id) {
+      throw new Error('Você não tem permissão para reenviar o e-mail deste usuário.');
     }
 
     if (user.isEmailVerified) {

@@ -225,6 +225,7 @@ export interface FamilyMember {
   name: string | null;
   role: string;
   familyId: string | null;
+  isEmailVerified: boolean;
   createdAt: string;
 }
 
@@ -232,6 +233,8 @@ export const familyApi = {
   listMembers: () => api.get<FamilyMember[]>('/auth/family/members'),
   inviteMember: (email: string, password: string, name: string) =>
     api.post<{ user: FamilyMember; emailSent: boolean }>('/auth/family/invite', { email, password, name }),
+  resendVerification: (userId: string) =>
+    api.post<{ success: boolean; message: string }>(`/auth/users/${userId}/resend-verification`),
 };
 
 // ─── Admin API (User Management) ────────────────────────

@@ -275,12 +275,12 @@ router.patch('/users/:userId/toggle-status', requireAuth, requireRole('master'),
 });
 /**
  * POST /api/auth/users/:userId/resend-verification
- * Reenvia o e-mail de confirmação (master only).
+ * Reenvia o e-mail de confirmação.
  */
-router.post('/users/:userId/resend-verification', requireAuth, requireRole('master'), async (req: AuthRequest, res) => {
+router.post('/users/:userId/resend-verification', requireAuth, async (req: AuthRequest, res) => {
   try {
     const userId = req.params.userId as string;
-    const result = await authService.resendVerificationEmail(userId);
+    const result = await authService.resendVerificationEmail(userId, { id: req.user!.id, role: req.user!.role });
     res.json(result);
   } catch (err: any) {
     res.status(400).json({ error: err.message });

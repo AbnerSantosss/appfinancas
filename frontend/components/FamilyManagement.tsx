@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { familyApi, FamilyMember } from '../services/api';
-import { Users, UserPlus, Trash2, Mail, KeyRound, AlertTriangle, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { Users, UserPlus, Trash2, Mail, KeyRound, AlertTriangle, RefreshCw, CheckCircle2, MailWarning } from 'lucide-react';
 
 interface FamilyManagementProps {
   currentUserId: string;
@@ -68,6 +68,16 @@ const FamilyManagement: React.FC<FamilyManagementProps> = ({ currentUserId }) =>
     }
   };
 
+  const handleResendVerification = async (userId: string) => {
+    try {
+      const res = await familyApi.resendVerification(userId);
+      setInviteResult({ success: true, message: res.message || 'E-mail de verificação reenviado.' });
+      setTimeout(() => setInviteResult(null), 5000);
+    } catch (err: any) {
+      setInviteResult({ success: false, message: err.message || 'Erro ao reenviar verificação.' });
+    }
+  };
+
   return (
     <div className="pt-6 border-t border-white/5 space-y-4">
       <div className="flex items-center justify-between">
@@ -132,8 +142,24 @@ const FamilyManagement: React.FC<FamilyManagementProps> = ({ currentUserId }) =>
                 <p className="text-sm font-semibold text-white flex items-center gap-2">
                   {member.name || member.email}
                   {member.id === currentUserId && <span className="text-[8px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded uppercase font-bold">Você</span>}
+                  {!member.isEmailVerified && (
+                    <span className="text-[8px] text-amber-400 font-bold uppercase tracking-widest bg-amber-500/10 px-1.5 py-0.5 rounded flex items-center gap-1" title="E-mail não confirmado">
+                      <AlertTriangle size={8} /> Pendente
+                    </span>
+                  )}
                 </p>
                 <p className="text-[10px] text-slate-500 font-mono">{member.email}</p>
+              </div>
+              <div className="flex items-center gap-1">
+                {member.id !== currentUserId && !member.isEmailVerified && (
+                  <button
+                    onClick={() => handleResendVerification(member.id)}
+                    title="Reenviar E-mail de Verificação"
+                    className="p-2 rounded-lg text-amber-500/60 hover:text-amber-400 hover:bg-amber-500/10 transition-all cursor-pointer"
+                  >
+                    <MailWarning size={14} />
+                  </button>
+                )}
               </div>
             </div>
           ))}

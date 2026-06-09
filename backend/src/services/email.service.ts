@@ -74,17 +74,19 @@ class EmailService {
   }
 
   /**
-   * Envia email de convite com credenciais de acesso.
+   * Envia email de convite com credenciais de acesso e link de confirmação.
    */
-  async sendInviteEmail(toEmail: string, password: string, name?: string): Promise<boolean> {
+  async sendInviteEmail(toEmail: string, password: string, name?: string, token?: string): Promise<boolean> {
     const transport = await this.getTransporter();
     if (!transport) return false;
+
+    const verificationLink = token ? `https://financas.proxserverabner.site/verify-email?token=${token}` : null;
 
     try {
       await transport.transporter.sendMail({
         from: `"HUB FINANCEIRO" <${transport.fromAddress}>`,
         to: toEmail,
-        subject: '🎉 Convite — HUB FINANCEIRO',
+        subject: '🎉 Convite e Acesso — HUB FINANCEIRO',
         html: `
           <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #0f172a; border-radius: 16px; overflow: hidden; border: 1px solid #1e293b;">
             <div style="background: linear-gradient(135deg, #10b981, #14b8a6); padding: 32px 24px; text-align: center;">
@@ -95,20 +97,33 @@ class EmailService {
               <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
                 Olá${name ? ` <strong style="color: #fff;">${name}</strong>` : ''}! 👋<br><br>
                 Você foi convidado(a) para acessar o <strong style="color: #10b981;">HUB FINANCEIRO</strong>. 
-                Use as credenciais abaixo para fazer seu primeiro login:
+                Use as credenciais abaixo para acessar sua conta:
               </p>
-              <div style="background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155;">
+              <div style="background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; margin-bottom: 24px;">
                 <div style="margin-bottom: 12px;">
                   <span style="color: #64748b; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">Email</span>
                   <p style="color: #fff; font-size: 16px; font-weight: 700; margin: 4px 0 0;">${toEmail}</p>
                 </div>
                 <div>
-                  <span style="color: #64748b; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">Senha</span>
+                  <span style="color: #64748b; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">Senha Provisória</span>
                   <p style="color: #10b981; font-size: 18px; font-weight: 800; margin: 4px 0 0; font-family: monospace; letter-spacing: 1px;">${password}</p>
                 </div>
               </div>
-              <p style="color: #64748b; font-size: 12px; margin: 24px 0 0; line-height: 1.5;">
+              
+              ${verificationLink ? `
+              <div style="text-align: center; margin: 32px 0;">
+                <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">
+                  Para liberar seu acesso, é necessário confirmar seu e-mail:
+                </p>
+                <a href="${verificationLink}" style="background-color: #10b981; color: #0f172a; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; display: inline-block;">
+                  Confirmar E-mail e Acessar
+                </a>
+              </div>
+              ` : ''}
+
+              <p style="color: #64748b; font-size: 12px; margin: 24px 0 0; line-height: 1.5; text-align: center;">
                 ⚠️ Recomendamos que você altere sua senha após o primeiro acesso.
+                ${verificationLink ? `<br><br>Se o botão não funcionar, cole o link abaixo no seu navegador:<br><a href="${verificationLink}" style="color: #10b981; word-break: break-all;">${verificationLink}</a>` : ''}
               </p>
             </div>
             <div style="padding: 16px 24px; border-top: 1px solid #1e293b; text-align: center;">
