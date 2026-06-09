@@ -9,13 +9,13 @@ export interface SmtpConfig {
 }
 
 export class SettingsService {
-  async getSalary() {
-    const setting = await settingsRepository.get('base_salary');
+  async getSalary(familyId: string) {
+    const setting = await settingsRepository.get(`base_salary_${familyId}`);
     return setting ? parseFloat(setting.value) : 0;
   }
 
-  async updateSalary(value: number) {
-    return settingsRepository.upsert('base_salary', value.toString());
+  async updateSalary(familyId: string, value: number) {
+    return settingsRepository.upsert(`base_salary_${familyId}`, value.toString());
   }
 
   /**

@@ -5,6 +5,26 @@ import { requireAuth, requireRole, AuthRequest } from '../middlewares/auth.middl
 const router = Router();
 
 /**
+ * POST /api/auth/signup
+ * Cadastra um novo usuário (público) - Head of family.
+ */
+router.post('/signup', async (req, res) => {
+  try {
+    const { email, password, name } = req.body;
+
+    if (!email || !password) {
+      res.status(400).json({ error: 'Email e senha são obrigatórios.' });
+      return;
+    }
+
+    const result = await authService.signup(email, password, name);
+    res.status(201).json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+/**
  * POST /api/auth/login
  * Autentica o usuário e retorna JWT + dados públicos.
  */
@@ -105,6 +125,54 @@ router.put('/change-password', requireAuth, async (req: AuthRequest, res) => {
 
     const result = await authService.changePassword(req.user!.id, currentPassword, newPassword);
     res.json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// ─── Rotas de Família (requireAuth) ──────────────────────
+
+/**
+ * GET /api/auth/family/members
+ * Lista os membros da família do usuário logado.
+ */
+router.get('/family/members', requireAuth, async (req: AuthRequest, res) => {
+  try {
+    const user = await authService.getProfile(req.user!.id);
+    // Para typescript, precisamos buscar o user completo ou usar getProfile que tem familyId
+    // getProfile nao retorna familyId. Vamos buscar o user completo do banco
+    const dbUser = await authService.getProfile(req.user!.id); // Wait, preciso alterar getProfile pra retornar familyId
+    // Vou usar o authService.listFamilyMembers
+    // Qual é o effectiveFamilyId do user logado?
+    // Se ele não tem familyId, o effective é o próprio id dele.
+    const fullUser = await import('../lib/prisma').then(m => m.prisma.user.findUnique({ where: { id: req.user!.id } }));
+    const effectiveFamilyId = fullUser?.familyId || fullUser?.id || req.user!.id;
+    
+    const members = await authService.listFamilyMembers(effectiveFamilyId);
+    res.json(members);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * POST /api/auth/family/invite
+ * Convida um membro para a família (cria conta e envia email).
+ */
+router.post('/family/invite', requireAuth, async (req: AuthRequest, res) => {
+  try {
+    const { email, password, name } = req.body;
+
+    if (!email || !password) {
+      res.status(400).json({ error: 'Email e senha são obrigatórios.' });
+      return;
+    }
+
+    const fullUser = await import('../lib/prisma').then(m => m.prisma.user.findUnique({ where: { id: req.user!.id } }));
+    const effectiveFamilyId = fullUser?.familyId || fullUser?.id || req.user!.id;
+
+    const result = await authService.inviteFamilyMember(email, password, name, effectiveFamilyId);
+    res.status(201).json(result);
   } catch (err: any) {
     res.status(400).json({ error: err.message });
   }

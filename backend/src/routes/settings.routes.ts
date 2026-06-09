@@ -12,9 +12,12 @@ router.use(requireAuth);
  * GET /api/settings/salary
  * Retorna o salário base configurado.
  */
-router.get('/salary', async (_req: AuthRequest, res) => {
+router.get('/salary', async (req: AuthRequest, res) => {
   try {
-    const salary = await settingsService.getSalary();
+    const fullUser = await import('../lib/prisma').then(m => m.prisma.user.findUnique({ where: { id: req.user!.id } }));
+    const effectiveFamilyId = fullUser?.familyId || fullUser?.id || req.user!.id;
+
+    const salary = await settingsService.getSalary(effectiveFamilyId);
     res.json({ salary });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -34,7 +37,10 @@ router.put('/salary', async (req: AuthRequest, res) => {
       return;
     }
 
-    await settingsService.updateSalary(parseFloat(salary));
+    const fullUser = await import('../lib/prisma').then(m => m.prisma.user.findUnique({ where: { id: req.user!.id } }));
+    const effectiveFamilyId = fullUser?.familyId || fullUser?.id || req.user!.id;
+
+    await settingsService.updateSalary(effectiveFamilyId, parseFloat(salary));
     res.json({ success: true, salary: parseFloat(salary) });
   } catch (err: any) {
     res.status(500).json({ error: err.message });

@@ -135,6 +135,9 @@ export const authApi = {
     return result;
   },
 
+  signup: (email: string, password: string, name?: string) =>
+    api.post<{ user: AuthUser }>('/auth/signup', { email, password, name }),
+
   me: () => api.get<AuthUser>('/auth/me'),
 
   updateProfile: async (name: string) => {
@@ -209,6 +212,23 @@ export const settingsApi = {
     api.put<{ success: boolean }>('/settings/smtp', config),
   testSmtp: (config: { host: string; port: number; user: string; pass: string; from: string }) =>
     api.post<{ success: boolean; message: string }>('/settings/smtp/test', config),
+};
+
+// ─── Family API ─────────────────────────────────────────
+
+export interface FamilyMember {
+  id: string;
+  email: string;
+  name: string | null;
+  role: string;
+  familyId: string | null;
+  createdAt: string;
+}
+
+export const familyApi = {
+  listMembers: () => api.get<FamilyMember[]>('/auth/family/members'),
+  inviteMember: (email: string, password: string, name: string) =>
+    api.post<{ user: FamilyMember; emailSent: boolean }>('/auth/family/invite', { email, password, name }),
 };
 
 // ─── Admin API (User Management) ────────────────────────

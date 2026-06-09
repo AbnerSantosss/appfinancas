@@ -65,6 +65,51 @@ export class AuthService {
   }
 
   /**
+   * Cadastro de novos usuários (público).
+   * Requer que o SMTP esteja configurado pelo master.
+   */
+  async signup(email: string, password: string, name?: string) {
+    const isSmtpConfigured = await emailService.checkConfigured();
+    if (!isSmtpConfigured) {
+      throw new Error('O sistema ainda está em construção. O provedor de e-mail não foi configurado pelo administrador.');
+    }
+
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) {
+      throw new Error('Email já cadastrado.');
+    }
+
+    if (!password || password.length < 6) {
+      throw new Error('A senha deve ter pelo menos 6 caracteres.');
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        name: name || null,
+        role: 'user',
+        // Um usuário recém cadastrado não tem familyId (é o head da própria família)
+      },
+    });
+
+    await emailService.sendWelcomeEmail(email, password, name);
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        createdAt: user.createdAt,
+      },
+    };
+  }
+
+  /**
    * Convida um novo usuário: cria a conta e envia email com credenciais.
    * O admin define a senha. Se SMTP estiver configurado, envia por email.
    */
@@ -99,6 +144,53 @@ export class AuthService {
         email: user.email,
         name: user.name,
         role: user.role,
+        createdAt: user.createdAt,
+      },
+      emailSent,
+    };
+  }
+
+  /**
+   * Convida um membro da família.
+   * Cria a conta vinculada ao familyId do usuário que convidou e envia email.
+   */
+  async inviteFamilyMember(email: string, password: string, name: string, familyId: string) {
+    const isSmtpConfigured = await emailService.checkConfigured();
+    if (!isSmtpConfigured) {
+      throw new Error('O sistema não possui provedor de e-mail configurado para convidar novos membros.');
+    }
+
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) {
+      throw new Error('Este email já está cadastrado no sistema.');
+    }
+
+    if (!password || password.length < 6) {
+      throw new Error('A senha deve ter pelo menos 6 caracteres.');
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        name: name || null,
+        role: 'user',
+        familyId,
+      },
+    });
+
+    const emailSent = await emailService.sendInviteEmail(email, password, name);
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        familyId: user.familyId,
         createdAt: user.createdAt,
       },
       emailSent,
@@ -164,6 +256,30 @@ export class AuthService {
       createdAt: u.createdAt,
       expenseCount: u._count.expenses,
     }));
+  }
+
+  /**
+   * Lista os membros da família (incluindo o head).
+   */
+  async listFamilyMembers(effectiveFamilyId: string) {
+    const users = await prisma.user.findMany({
+      where: {
+        OR: [
+          { id: effectiveFamilyId },
+          { familyId: effectiveFamilyId }
+        ]
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        familyId: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: 'asc' },
+    });
+    return users;
   }
 
   /**

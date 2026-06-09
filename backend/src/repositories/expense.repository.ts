@@ -1,9 +1,9 @@
 import { prisma } from '../lib/prisma';
 
 export class ExpenseRepository {
-  async findAll(userId: string) {
+  async findAll(userIds: string[]) {
     return prisma.expense.findMany({
-      where: { userId },
+      where: { userId: { in: userIds } },
       orderBy: { createdAt: 'desc' },
     });
   }
@@ -45,8 +45,8 @@ export class ExpenseRepository {
     return prisma.expense.delete({ where: { id } });
   }
 
-  async deleteAllByUser(userId: string) {
-    return prisma.expense.deleteMany({ where: { userId } });
+  async deleteAllByUser(userIds: string[]) {
+    return prisma.expense.deleteMany({ where: { userId: { in: userIds } } });
   }
 
   async updatePaidMonths(id: string, paidMonths: string[]) {

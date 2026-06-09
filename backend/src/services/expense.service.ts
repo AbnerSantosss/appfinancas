@@ -1,8 +1,23 @@
 import { expenseRepository } from '../repositories/expense.repository';
+import { prisma } from '../lib/prisma';
 
 export class ExpenseService {
+  private async getFamilyUserIds(userId: string) {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) return [userId];
+    const effectiveFamilyId = user.familyId || user.id;
+    const users = await prisma.user.findMany({
+      where: {
+        OR: [{ id: effectiveFamilyId }, { familyId: effectiveFamilyId }]
+      },
+      select: { id: true }
+    });
+    return users.map(u => u.id);
+  }
+
   async list(userId: string) {
-    return expenseRepository.findAll(userId);
+    const userIds = await this.getFamilyUserIds(userId);
+    return expenseRepository.findAll(userIds);
   }
 
   async create(data: {
@@ -31,28 +46,30 @@ export class ExpenseService {
     paidMonths?: string[];
     notes?: string;
   }) {
-    // Verifica se a expense pertence ao usuário
+    const userIds = await this.getFamilyUserIds(userId);
     const expense = await expenseRepository.findById(id);
-    if (!expense || expense.userId !== userId) {
-      throw new Error('Despesa não encontrada.');
+    if (!expense || !userIds.includes(expense.userId)) {
+      throw new Error('Despesa não encontrada ou sem permissão.');
     }
 
     return expenseRepository.update(id, data);
   }
 
   async delete(id: string, userId: string) {
+    const userIds = await this.getFamilyUserIds(userId);
     const expense = await expenseRepository.findById(id);
-    if (!expense || expense.userId !== userId) {
-      throw new Error('Despesa não encontrada.');
+    if (!expense || !userIds.includes(expense.userId)) {
+      throw new Error('Despesa não encontrada ou sem permissão.');
     }
 
     return expenseRepository.delete(id);
   }
 
   async togglePaid(id: string, userId: string, monthISO: string) {
+    const userIds = await this.getFamilyUserIds(userId);
     const expense = await expenseRepository.findById(id);
-    if (!expense || expense.userId !== userId) {
-      throw new Error('Despesa não encontrada.');
+    if (!expense || !userIds.includes(expense.userId)) {
+      throw new Error('Despesa não encontrada ou sem permissão.');
     }
 
     const currentPaid = expense.paidMonths || [];
@@ -65,7 +82,8 @@ export class ExpenseService {
   }
 
   async markAllPaid(userId: string, monthISO: string) {
-    const expenses = await expenseRepository.findAll(userId);
+    const userIds = await this.getFamilyUserIds(userId);
+    const expenses = await expenseRepository.findAll(userIds);
 
     const updates = expenses
       .filter((e) => {
@@ -84,7 +102,8 @@ export class ExpenseService {
   }
 
   async resetAll(userId: string) {
-    return expenseRepository.deleteAllByUser(userId);
+    const userIds = await this.getFamilyUserIds(userId);
+    return expenseRepository.deleteAllByUser(userIds);
   }
 }
 

@@ -127,6 +127,56 @@ class EmailService {
   }
 
   /**
+   * Envia email de boas vindas para o usuário que se cadastrou.
+   */
+  async sendWelcomeEmail(toEmail: string, password: string, name?: string): Promise<boolean> {
+    const transport = await this.getTransporter();
+    if (!transport) return false;
+
+    try {
+      await transport.transporter.sendMail({
+        from: `"HUB FINANCEIRO" <${transport.fromAddress}>`,
+        to: toEmail,
+        subject: '🎉 Bem-vindo ao HUB FINANCEIRO',
+        html: `
+          <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 480px; margin: 0 auto; background: #0f172a; border-radius: 16px; overflow: hidden; border: 1px solid #1e293b;">
+            <div style="background: linear-gradient(135deg, #10b981, #14b8a6); padding: 32px 24px; text-align: center;">
+              <h1 style="color: #0f172a; margin: 0; font-size: 24px; font-weight: 800;">HUB FINANCEIRO</h1>
+              <p style="color: #064e3b; margin: 8px 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">Conta Criada com Sucesso</p>
+            </div>
+            <div style="padding: 32px 24px;">
+              <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
+                Olá${name ? ` <strong style="color: #fff;">${name}</strong>` : ''}! 👋<br><br>
+                Sua conta no <strong style="color: #10b981;">HUB FINANCEIRO</strong> foi criada com sucesso. 
+                Aqui estão as credenciais que você acabou de configurar:
+              </p>
+              <div style="background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155;">
+                <div style="margin-bottom: 12px;">
+                  <span style="color: #64748b; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">Email</span>
+                  <p style="color: #fff; font-size: 16px; font-weight: 700; margin: 4px 0 0;">${toEmail}</p>
+                </div>
+                <div>
+                  <span style="color: #64748b; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">Senha</span>
+                  <p style="color: #10b981; font-size: 18px; font-weight: 800; margin: 4px 0 0; font-family: monospace; letter-spacing: 1px;">${password}</p>
+                </div>
+              </div>
+            </div>
+            <div style="padding: 16px 24px; border-top: 1px solid #1e293b; text-align: center;">
+              <p style="color: #475569; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin: 0;">
+                HUB FINANCEIRO • Self-Hosted
+              </p>
+            </div>
+          </div>
+        `,
+      });
+      return true;
+    } catch (error) {
+      console.error('❌ Erro ao enviar email de boas-vindas:', error);
+      return false;
+    }
+  }
+
+  /**
    * Envia email notificando que a senha foi resetada.
    */
   async sendPasswordResetEmail(toEmail: string, newPassword: string): Promise<boolean> {

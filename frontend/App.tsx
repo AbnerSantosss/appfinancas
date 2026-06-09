@@ -20,6 +20,7 @@ import {
 } from './services/api';
 import { AnimatedBackground } from './components/AnimatedBackground';
 import { CardCarousel } from './components/CardCarousel';
+import { SignUpScreen } from './components/SignUpScreen';
 
 // ─── Tela de Login ──────────────────────────────────────
 
@@ -31,6 +32,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
@@ -104,6 +106,10 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
       setIsLoading(false);
     }
   };
+
+  if (isSignUp) {
+    return <SignUpScreen onBackToLogin={() => setIsSignUp(false)} />;
+  }
 
   return (
     <>
@@ -325,6 +331,21 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
                   {isLoading ? <div className="loader-spinner" /> : <ArrowRight size={16} />}
                   ACESSAR PAINEL
                 </button>
+
+                <div className="pt-2 text-center">
+                  <span className="text-[11px] text-gray-500 font-medium uppercase tracking-wider">Ainda não tem conta? </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsSignUp(true);
+                      setError('');
+                      setSuccess('');
+                    }}
+                    className="text-[11px] font-bold text-[#34d399] hover:text-[#34d399]/80 uppercase tracking-wider transition-colors cursor-pointer ml-1"
+                  >
+                    CADASTRE-SE
+                  </button>
+                </div>
               </form>
 
               {/* Rodapé */}
@@ -352,6 +373,12 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSavingSalary, setIsSavingSalary] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [showSmtpOnboarding, setShowSmtpOnboarding] = useState(false);
+  
+  // States for SMTP onboarding form
+  const [smtpForm, setSmtpForm] = useState({ host: '', port: 587, user: '', pass: '', from: '' });
+  const [isTestingSmtp, setIsTestingSmtp] = useState(false);
+  const [smtpTestResult, setSmtpTestResult] = useState<{ success: boolean; message: string } | null>(null);
   const fetchData = async () => {
     if (!user) return;
     setIsLoading(true);
@@ -381,6 +408,18 @@ const App: React.FC = () => {
         const saved = localStorage.getItem('sena_family_salary');
         if (saved) setSalary(parseFloat(saved));
       }
+
+      // Check SMTP for Master Onboarding
+      if (user.role === 'master') {
+        try {
+          const smtpConfig = await settingsApi.getSmtp();
+          if (!smtpConfig.configured) {
+            setShowSmtpOnboarding(true);
+          }
+        } catch (e) {
+          console.error("Erro ao checar SMTP", e);
+        }
+      }
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
     } finally {
@@ -393,6 +432,32 @@ const App: React.FC = () => {
       fetchData();
     }
   }, [user]);
+
+  const handleTestSmtp = async () => {
+    setIsTestingSmtp(true);
+    try {
+      const result = await settingsApi.testSmtp(smtpForm);
+      setSmtpTestResult(result);
+    } catch (err: any) {
+      setSmtpTestResult({ success: false, message: err.message || 'Falha ao testar SMTP.' });
+    } finally {
+      setIsTestingSmtp(false);
+    }
+  };
+
+  const handleSmtpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!smtpTestResult?.success) {
+      alert('Por favor, teste a conexão SMTP com sucesso antes de salvar.');
+      return;
+    }
+    try {
+      await settingsApi.updateSmtp(smtpForm);
+      setShowSmtpOnboarding(false);
+    } catch (err: any) {
+      alert(err.message || 'Erro ao salvar configuração SMTP.');
+    }
+  };
 
   const handleUpdateSalaryDB = async () => {
     setIsSavingSalary(true);
@@ -531,6 +596,64 @@ const App: React.FC = () => {
           onSave={editingExpense ? handleUpdateExpense : handleAddExpense}
           initialData={editingExpense}
         />
+      )}
+
+      {showSmtpOnboarding && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl relative">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 bg-rose-500/10 rounded-full flex items-center justify-center shrink-0">
+                <AlertTriangle className="w-6 h-6 text-rose-500" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-white">Configuração Obrigatória</h2>
+                <p className="text-sm text-slate-400">Configure o SMTP para habilitar o cadastro de novos usuários</p>
+              </div>
+            </div>
+
+            <form onSubmit={handleSmtpSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2 md:col-span-1">
+                  <label className="block text-xs font-medium text-slate-400 mb-1">Host SMTP</label>
+                  <input type="text" required value={smtpForm.host} onChange={(e) => setSmtpForm({ ...smtpForm, host: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="smtp.gmail.com" />
+                </div>
+                <div className="col-span-2 md:col-span-1">
+                  <label className="block text-xs font-medium text-slate-400 mb-1">Porta</label>
+                  <input type="number" required value={smtpForm.port} onChange={(e) => setSmtpForm({ ...smtpForm, port: parseInt(e.target.value) })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" />
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-xs font-medium text-slate-400 mb-1">Usuário</label>
+                  <input type="email" required value={smtpForm.user} onChange={(e) => setSmtpForm({ ...smtpForm, user: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="seu@email.com" />
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-xs font-medium text-slate-400 mb-1">Senha (App Password)</label>
+                  <input type="password" required value={smtpForm.pass} onChange={(e) => setSmtpForm({ ...smtpForm, pass: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="••••••••" />
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-xs font-medium text-slate-400 mb-1">Email de Envio (From)</label>
+                  <input type="email" required value={smtpForm.from} onChange={(e) => setSmtpForm({ ...smtpForm, from: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" placeholder="noreply@hubfinanceiro.com" />
+                </div>
+              </div>
+
+              {smtpTestResult && (
+                <div className={`p-3 rounded-lg text-sm flex items-start gap-2 ${smtpTestResult.success ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
+                  {smtpTestResult.success ? <CheckCircle2 className="w-5 h-5 shrink-0" /> : <AlertTriangle className="w-5 h-5 shrink-0" />}
+                  {smtpTestResult.message}
+                </div>
+              )}
+
+              <div className="flex justify-end gap-3 pt-4 mt-6 border-t border-slate-800/50">
+                <button type="button" onClick={handleTestSmtp} disabled={isTestingSmtp} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium text-sm transition-colors flex items-center gap-2">
+                  {isTestingSmtp ? <RefreshCw className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
+                  Testar Conexão
+                </button>
+                <button type="submit" disabled={!smtpTestResult?.success} className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-medium text-sm transition-colors shadow-lg shadow-emerald-500/20">
+                  Salvar e Continuar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
 
       {expenseToDelete && (

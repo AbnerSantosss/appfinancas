@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { authApi, settingsApi, expensesApi, AuthUser } from '../services/api';
 import UserManagement from './UserManagement';
+import FamilyManagement from './FamilyManagement';
 
 interface SettingsProps {
   user: AuthUser;
@@ -321,6 +322,9 @@ const Settings: React.FC<SettingsProps> = ({
               )}
             </div>
           </div>
+
+          {/* ─── Family Management ─── */}
+          <FamilyManagement currentUserId={user.id} />
 
           {/* ─── User Management (admin only) ─── */}
           {user.role === 'master' && (
