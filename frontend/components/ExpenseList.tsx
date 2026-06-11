@@ -34,26 +34,26 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDeleteRequest, on
   });
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-7 sm:space-y-8 animate-in fade-in duration-500">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 fade-up">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          <h2 className="text-xl sm:text-2xl lg:text-[1.75rem] font-manrope font-bold text-white tracking-tight">
             Banco de <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-300">Lançamentos</span>
           </h2>
-          <p className="text-gray-500 text-xs mt-0.5 font-medium">Histórico geral de custos fixos, únicos e parcelas ativas.</p>
+          <p className="text-gray-500 text-xs mt-1 font-medium">Histórico geral de custos fixos, únicos e parcelas ativas.</p>
         </div>
         
         <button 
           onClick={onAddNew} 
-          className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 px-5 py-3 sm:px-5 sm:py-3 rounded-xl flex items-center justify-center gap-2 font-bold uppercase tracking-wider text-xs transition-all active:scale-[0.98] shadow-lg shadow-emerald-500/10 cursor-pointer w-full sm:w-auto">
+          className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-gray-950 px-5 py-3.5 sm:px-6 sm:py-3 rounded-xl flex items-center justify-center gap-2 font-bold uppercase tracking-wider text-xs transition-all active:scale-[0.98] shadow-lg shadow-emerald-500/10 cursor-pointer w-full sm:w-auto">
           <Plus size={16} strokeWidth={2.5} /> Novo Lançamento
         </button>
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 fade-up fade-up-delay-1">
         <div className="sm:col-span-2 relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
           <input 
@@ -83,26 +83,26 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDeleteRequest, on
       </div>
 
       {/* Expense Cards List */}
-      <div className="space-y-3">
+      <div className="space-y-3 sm:space-y-3.5 fade-up fade-up-delay-2">
         {filteredExpenses.length === 0 ? (
-          <div className="text-center py-16 bg-gray-900/10 rounded-2xl border border-dashed border-white/[0.04]">
+          <div className="text-center py-20 bg-gray-900/10 rounded-2xl sm:rounded-3xl border border-dashed border-white/[0.04]">
             <p className="text-gray-500 text-xs font-medium">Nenhum lançamento corresponde à busca.</p>
           </div>
         ) : (
           filteredExpenses.map(expense => {
             const progress = getExpenseProgress(expense);
             return (
-              <div key={expense.id} className={`glass-panel p-4 sm:p-4 rounded-2xl glass-card-hover relative overflow-hidden border ${progress?.isFinished ? 'border-emerald-500/20 bg-emerald-500/[0.01]' : 'border-white/[0.04]'}`}>
+              <div key={expense.id} className={`glass-panel p-4 sm:p-5 rounded-2xl glass-card-hover relative overflow-hidden border ${progress?.isFinished ? 'border-emerald-500/20 bg-emerald-500/[0.01]' : 'border-white/[0.04]'}`}>
                 {/* Upper line: icon + details */}
                 <div className="flex items-start gap-3 sm:gap-4">
-                  <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 ${expense.type === 'FIXED' ? 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)]' : expense.type === 'ONCE' ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : progress?.isFinished ? 'bg-emerald-500/25 border-emerald-500/40 text-emerald-400' : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400'}`}>
+                  <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 ${expense.type === 'FIXED' ? 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)]' : expense.type === 'ONCE' ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : progress?.isFinished ? 'bg-emerald-500/25 border-emerald-500/40 text-emerald-400' : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400'}`}>
                     {getCategoryIcon(expense.category)}
                   </div>
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
-                        <h4 className={`font-bold text-[15px] sm:text-sm leading-tight tracking-tight ${progress?.isFinished ? 'text-emerald-400' : 'text-white'}`}>
+                        <h4 className={`font-manrope font-bold text-[15px] sm:text-sm leading-tight tracking-tight ${progress?.isFinished ? 'text-emerald-400' : 'text-white'}`}>
                           {expense.description}
                         </h4>
                         {expense.notes && (
@@ -152,17 +152,17 @@ const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, onDeleteRequest, on
                 </div>
 
                 {/* Bottom line: action triggers */}
-                <div className="flex items-center justify-end gap-1.5 mt-3.5 pt-3 sm:pt-3.5 border-t border-white/[0.04] shrink-0">
+                <div className="flex items-center justify-end gap-2 mt-4 pt-3.5 sm:pt-4 border-t border-white/[0.04] shrink-0">
                   <button 
                     onClick={() => onEdit(expense)} 
-                    className="flex items-center gap-1.5 px-3 py-2 sm:px-3 sm:py-1.5 text-gray-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-xl transition-all duration-200 cursor-pointer text-xs font-semibold" 
+                    className="flex items-center gap-1.5 px-3.5 py-2.5 sm:px-3.5 sm:py-2 text-gray-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-xl transition-all duration-200 cursor-pointer text-xs font-semibold" 
                     title="Editar Lançamento"
                   >
                     <Edit3 size={14} /> Editar
                   </button>
                   <button 
                     onClick={() => onDeleteRequest(expense)} 
-                    className="flex items-center gap-1.5 px-3 py-2 sm:px-3 sm:py-1.5 text-gray-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all duration-200 cursor-pointer text-xs font-semibold" 
+                    className="flex items-center gap-1.5 px-3.5 py-2.5 sm:px-3.5 sm:py-2 text-gray-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all duration-200 cursor-pointer text-xs font-semibold" 
                     title="Excluir Lançamento"
                   >
                     <Trash2 size={14} /> Excluir

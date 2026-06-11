@@ -156,7 +156,7 @@ const Settings: React.FC<SettingsProps> = ({
             <Wallet size={22} />
           </div>
           <div>
-            <h2 className="text-lg sm:text-xl md:text-xl font-black text-white tracking-tighter">Opções de Conta</h2>
+            <h2 className="text-lg sm:text-xl md:text-xl font-manrope font-black text-white tracking-tighter">Opções de Conta</h2>
             <p className="text-slate-500 text-[10px] sm:text-[9px] font-bold uppercase tracking-widest">Configurações e Financeiro</p>
           </div>
         </div>

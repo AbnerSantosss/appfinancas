@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-manrope: "Manrope", sans-serif;
+  --font-signature: "Mr Dafoe", cursive;
+}
+
+/* Custom horizontal scanlines or grids for high-tech background */
+.bg-grid-subtle {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
 /* ─── Animated RGB Border for Carousel Cards ────────── */
 
 @property --border-angle {
@@ -81,34 +96,69 @@ body {
 /* ─── Premium Glassmorphism & Effects ───────────────── */
 
 .glass-panel {
-  background: rgba(17, 24, 39, 0.65); /* gray-900/65 */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow: 
-    0 4px 30px rgba(0, 0, 0, 0.4),
-    inset 0 1px 1px rgba(255, 255, 255, 0.03);
+    0 4px 32px rgba(0, 0, 0, 0.35),
+    0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 /* Reduce border-radius on small screens for more usable space */
 @media (max-width: 639px) {
   .glass-panel {
-    border-radius: 14px;
+    border-radius: 16px;
+  }
+}
+
+@media (min-width: 640px) {
+  .glass-panel {
+    border-radius: 20px;
   }
 }
 
 .glass-card-hover {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card-hover:hover {
-  transform: translateY(-2px);
-  background: rgba(17, 24, 39, 0.8);
-  border-color: rgba(16, 185, 129, 0.2);
+  transform: translateY(-3px);
+  background: rgba(17, 24, 39, 0.85);
+  border-color: rgba(16, 185, 129, 0.18);
   box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.5),
-    0 0 25px rgba(16, 185, 129, 0.05),
-    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    0 16px 48px rgba(0, 0, 0, 0.45),
+    0 0 30px rgba(16, 185, 129, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ─── Summary Card Premium Style ───────────────────── */
+
+.summary-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.summary-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 /* ─── Premium Form Inputs ───────────────────────────── */
@@ -139,8 +189,8 @@ body {
 .glass-input:focus {
   border-color: rgba(16, 185, 129, 0.45) !important;
   box-shadow: 
-    0 0 0 2px rgba(16, 185, 129, 0.15),
-    0 0 20px rgba(16, 185, 129, 0.1),
+    0 0 0 3px rgba(16, 185, 129, 0.12),
+    0 0 24px rgba(16, 185, 129, 0.08),
     inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
 
@@ -203,8 +253,10 @@ input, select, textarea {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  gap: 12px;
-  padding-bottom: 4px;
+  gap: 14px;
+  padding-bottom: 6px;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 
 .snap-scroll-x::-webkit-scrollbar {
@@ -217,11 +269,11 @@ input, select, textarea {
 }
 
 .snap-card {
-  scroll-snap-align: start;
+  scroll-snap-align: center;
   flex-shrink: 0;
-  width: 85%;
-  min-width: 260px;
-  max-width: 340px;
+  width: 88%;
+  min-width: 280px;
+  max-width: 360px;
 }
 
 @media (min-width: 640px) {
@@ -230,6 +282,35 @@ input, select, textarea {
     min-width: auto;
     max-width: none;
     flex-shrink: 1;
+  }
+}
+
+/* ─── Scroll Dots Indicator ──────────────────────────── */
+
+.scroll-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding-top: 10px;
+}
+
+.scroll-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  transition: all 0.3s ease;
+}
+
+.scroll-dot.active {
+  width: 20px;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+@media (min-width: 640px) {
+  .scroll-dots {
+    display: none;
   }
 }
 
@@ -248,6 +329,28 @@ input, select, textarea {
 .animate-pulse-subtle {
   animation: pulse-subtle 4s infinite ease-in-out;
 }
+
+/* ─── Fade Up Entry Animation ────────────────────────── */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.fade-up-delay-1 { animation-delay: 0.06s; }
+.fade-up-delay-2 { animation-delay: 0.12s; }
+.fade-up-delay-3 { animation-delay: 0.18s; }
+.fade-up-delay-4 { animation-delay: 0.24s; }
 
 /* Spinner de carregamento modernizado */
 .loader-spinner {
@@ -302,4 +405,19 @@ input[type="number"] {
   .mobile-stack {
     flex-direction: row;
   }
+}
+
+/* ─── Section Divider ────────────────────────────────── */
+
+.section-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.06) 20%,
+    rgba(16, 185, 129, 0.12) 50%,
+    rgba(255, 255, 255, 0.06) 80%,
+    transparent
+  );
+  margin: 8px 0;
 }

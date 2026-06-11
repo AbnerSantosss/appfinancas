@@ -115,7 +115,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
   return (
     <>
       {isForgotPassword ? (
-        <div className="min-h-screen bg-gray-950 flex items-center justify-center p-6 sm:p-12 overflow-hidden relative">
+        <div className="min-h-screen bg-gray-950 bg-grid-subtle flex items-center justify-center p-6 sm:p-12 overflow-hidden relative">
           <AnimatedBackground />
 
           {/* Glows de Fundo */}
@@ -128,7 +128,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
               <div className="w-16 h-16 sm:w-14 sm:h-14 bg-gray-900 border border-[#34d399]/20 rounded-2xl flex items-center justify-center mb-3 shadow-[0_0_35px_rgba(16,185,129,0.15)]">
                 <KeyRound className="text-[#34d399]" size={30} />
               </div>
-              <h1 className="text-2xl sm:text-xl font-extrabold text-white tracking-tight">
+              <h1 className="text-2xl sm:text-xl font-manrope font-extrabold text-white tracking-tight">
                 Recuperar <span className="text-[#34d399]">Acesso</span>
               </h1>
               <p className="text-[10px] sm:text-[8px] text-[#34d399]/60 font-bold uppercase tracking-[0.15em] mt-1.5">
@@ -203,7 +203,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
           </div>
         </div>
       ) : (
-        <div className="min-h-screen bg-gray-950 flex md:grid md:grid-cols-12 overflow-hidden relative">
+        <div className="min-h-screen bg-gray-950 bg-grid-subtle flex md:grid md:grid-cols-12 overflow-hidden relative">
           <AnimatedBackground />
           
           {/* ── Painel Esquerdo (Desktop Only - 3D Card Carousel) ── */}
@@ -244,7 +244,7 @@ const LoginScreen: React.FC<{ onLogin: (user: AuthUser) => void }> = ({ onLogin 
 
               {/* Header Desktop (Oculto no Mobile) */}
               <div className="hidden md:block mb-4 text-center">
-                <h2 className="text-xl font-extrabold text-white tracking-tight">
+                <h2 className="text-xl font-manrope font-extrabold text-white tracking-tight">
                   Portal de Acesso
                 </h2>
                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1.5">

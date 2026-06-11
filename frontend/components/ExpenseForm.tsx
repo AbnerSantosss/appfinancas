@@ -128,7 +128,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ onSave, onClose, initialData 
         
         {/* Header */}
         <div className="p-4 sm:p-5 flex justify-between items-center border-b border-white/[0.04] bg-white/[0.01] shrink-0">
-          <h3 className="text-[15px] sm:text-sm font-bold text-white uppercase tracking-wider">
+          <h3 className="text-[15px] sm:text-sm font-manrope font-bold text-white uppercase tracking-wider">
             {initialData ? 'Editar Lançamento' : 'Novo Lançamento'}
           </h3>
           <button 

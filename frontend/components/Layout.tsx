@@ -22,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-950 pb-32 md:pb-0 md:pl-64 selection:bg-emerald-500/20">
+    <div className="flex flex-col min-h-screen bg-gray-950 bg-grid-subtle pb-36 md:pb-0 md:pl-64 selection:bg-emerald-500/20">
       
       {/* ── Sidebar Desktop (Premium Glassmorphic) ─────── */}
       <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-gray-900/40 backdrop-blur-2xl border-r border-white/[0.04] p-6 shadow-2xl z-40">
@@ -68,7 +68,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
             <div className="px-2">
               <div className="flex items-center justify-between gap-2">
                 <div className="min-w-0 flex-1">
-                  <p className="text-[11px] font-bold text-white truncate">{user.name || user.email}</p>
+                  <p className="text-[11px] font-manrope font-bold text-white truncate">{user.name || user.email}</p>
                   <p className="text-[8px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">{user.role}</p>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
@@ -96,14 +96,14 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
       </aside>
 
       {/* ── Mobile Header (Premium Compact) ──────────────── */}
-      <header className="md:hidden sticky top-0 z-40 bg-gray-950/85 backdrop-blur-2xl border-b border-white/[0.06] px-4 py-2.5 flex items-center justify-between safe-top">
+      <header className="md:hidden sticky top-0 z-40 bg-gray-950/90 backdrop-blur-2xl border-b border-white/[0.04] px-4 py-3 flex items-center justify-between safe-top shadow-[0_1px_20px_rgba(0,0,0,0.3)]">
         <div className="flex items-center gap-2.5">
           <img src="/logo_hub.png" alt="HUB FINANCEIRO" className="h-8 w-auto object-contain" />
         </div>
         {user && (
           <div className="flex items-center gap-1.5">
             <div className="text-right mr-1">
-              <p className="text-[13px] font-bold text-white leading-none truncate max-w-[120px]">{user.name || user.email.split('@')[0]}</p>
+              <p className="text-[13px] font-manrope font-bold text-white leading-none truncate max-w-[120px]">{user.name || user.email.split('@')[0]}</p>
               <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mt-0.5">{user.role}</p>
             </div>
             <button
@@ -127,12 +127,12 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, setActiveTab, user
       </header>
 
       {/* ── Main Content ─────────────────────────────── */}
-      <main className="flex-1 px-3.5 pt-3 pb-4 sm:px-4 sm:pt-5 md:p-8 max-w-6xl mx-auto w-full">
+      <main className="flex-1 px-4 pt-4 pb-4 sm:px-5 sm:pt-6 md:p-10 lg:p-12 max-w-[1440px] mx-auto w-full">
         {children}
       </main>
 
       {/* ── Mobile Bottom Navigation (Floating Dock) ───── */}
-      <nav className="md:hidden fixed bottom-4 left-3 right-3 bg-gray-900/85 backdrop-blur-3xl border border-white/[0.1] px-3 py-2.5 rounded-2xl z-50 shadow-[0_8px_40px_0_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.03)] safe-bottom">
+      <nav className="md:hidden fixed bottom-4 left-3.5 right-3.5 bg-gray-900/80 backdrop-blur-3xl border border-white/[0.08] px-4 py-3 rounded-[20px] z-50 shadow-[0_8px_48px_0_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.02)] safe-bottom">
         <div className="flex items-center justify-around max-w-md mx-auto relative">
           <MobileNavItem 
             icon={<LayoutDashboard size={20} />} 

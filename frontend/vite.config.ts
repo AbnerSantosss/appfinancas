@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   server: {
-    port: 3025,
+    port: 3030,
     host: '0.0.0.0',
     proxy: {
       // Em dev, redireciona /api para o backend local
